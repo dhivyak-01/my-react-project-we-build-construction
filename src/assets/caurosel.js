@@ -1,0 +1,15 @@
+import carousel_1 from "./img/carousel-1.jpg";
+import carousel_2 from "./img/carousel-2.jpg";
+
+export const carousel = {
+  1: {
+    image: carousel_1,
+    heading: "Build Your Dream House With Us",
+    caption: "Default caption",
+  },
+  2: {
+    image: carousel_2,
+    heading: "We Are Trusted For Your Project",
+    caption: "Contact us",
+  },
+};
