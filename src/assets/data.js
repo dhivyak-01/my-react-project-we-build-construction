@@ -1,3 +1,9 @@
+// image
+import carousel_1 from "./img/carousel-1.jpg";
+import carousel_2 from "./img/carousel-2.jpg";
+
+
+
 // icons
 import { BsGeoAlt, BsEnvelopeOpen, BsPhoneVibrate } from 'react-icons/bs';
 import { FaArrowRight, FaArrowUp, FaHome, FaTools, FaCheck, FaPalette, FaPaintBrush, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaAngleRight } from 'react-icons/fa';
@@ -92,8 +98,6 @@ export const navbar = [
 
   //carousel
 
-import carousel_1 from "./img/carousel-1.jpg";
-import carousel_2 from "./img/carousel-2.jpg";
 
 export const carousel = {
   1: {

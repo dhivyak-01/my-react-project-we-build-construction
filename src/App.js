@@ -1,7 +1,8 @@
 import './App.css';
+import MainComponent from './component';
 // import CarouselFadeExample from './component/caurosel';
-import ContactSection from './component/ContactSection';
-import NavbarComponent from './component/testnav';
+// import ContactSection from './component/ContactSection';
+// import NavbarComponent from './component/testnav';
 // import SignupForm from './pages/register';
 // import NavbarComponent from './component/navebar';
 // import AppRouter from './RouterApp/RouterPage'
@@ -10,12 +11,13 @@ import NavbarComponent from './component/testnav';
 function App() {
   return (
     <div>
-      <ContactSection />
-      <NavbarComponent />
+      {/* <ContactSection /> */}
+      {/* <NavbarComponent /> */}
       {/* <SignupForm /> */}
       {/* <NavbarComponent /> */}
       {/* <CarouselFadeExample /> */}
       {/* <AppRouter /> */}
+      <MainComponent />
     </div>
   );
 }

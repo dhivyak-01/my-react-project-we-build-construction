@@ -7,7 +7,6 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SignupForm from "./pages/signup";
 import Signin from "./pages/signin";
-// import Signin from './pages/Signin';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
