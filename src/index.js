@@ -1,17 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
 // import './tailwind.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter as Router } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import SignupForm from "./pages/signup";
+import Signin from "./pages/signin";
+// import Signin from './pages/Signin';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Router>
-    <App />
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/signup" element={<SignupForm />} />
+        <Route path="/Signin" element={<Signin />} />
+      </Routes>
     </Router>
   </React.StrictMode>
 );

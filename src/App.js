@@ -1,16 +1,21 @@
 import './App.css';
-import CarouselFadeExample from './component/caurosel';
+// import CarouselFadeExample from './component/caurosel';
 import ContactSection from './component/ContactSection';
-import NavbarComponent from './component/navebar';
+import NavbarComponent from './component/testnav';
+// import SignupForm from './pages/register';
+// import NavbarComponent from './component/navebar';
+// import AppRouter from './RouterApp/RouterPage'
 
 
 function App() {
   return (
     <div>
-      <h1 className='text-customgreen'>hello </h1>
       <ContactSection />
       <NavbarComponent />
-      <CarouselFadeExample />
+      {/* <SignupForm /> */}
+      {/* <NavbarComponent /> */}
+      {/* <CarouselFadeExample /> */}
+      {/* <AppRouter /> */}
     </div>
   );
 }
