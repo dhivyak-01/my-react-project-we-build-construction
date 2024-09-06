@@ -18,10 +18,10 @@ a.nav-link.active {
 }
 
 
-@media (width: 768px) {
+/* @media (width: 768px) {
   .navbar-toggler {
     display: block; /* Show the toggler */
-    margin-right: -51%; /* Adjust the margin as required */
+    /* margin-right: -51%; Adjust the margin as required 
   }
 }
 
@@ -31,7 +31,7 @@ a.nav-link.active {
     display: block; /* Show the toggler */
     margin-right: 0; /* Set margin-right to normal or another value */
   }
-}
+} */
 
 #navbarScrollingDropdown{
   color: #ffffff;

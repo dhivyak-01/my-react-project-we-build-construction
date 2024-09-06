@@ -66,7 +66,6 @@ const NavbarComponent = () => {
 
   return (
     <Navbar
-
       variant="dark"
       expand="lg"
       className="sticky-top shadow-sm bg-light-radial p-0 bg-navebg"
@@ -83,7 +82,7 @@ const NavbarComponent = () => {
           </div>
         </div>
       </Navbar.Brand>
-      <Navbar.Toggle aria-controls="navbarScroll" />
+      <Navbar.Toggle aria-controls="navbarScroll" style={{marginRight: '23px'}} />
       <Navbar.Collapse id="navbarScroll">
         <Nav className="uppercase gap-4 d-flex ms-auto py-0 text-lg">
           {config.links.map((link, index) => (
@@ -206,47 +205,6 @@ function CarouselFadeExample() {
     </div>
   );
 }
-
-// function CarouselFadeExample() {
-//   return (
-//     <div>
-//       <Carousel fade interval={5000} controls={true} indicators={false}>
-//         {Object.keys(carousel).map((key) => {
-//           const item = carousel[key];
-//           const IconComponent = iconMap[item.icon]; // Get the icon component from the map
-
-//           return (
-//             <Carousel.Item key={key}>
-//               <img src={item.image} alt={`Slide ${key}`} />
-//               <div
-//                 className="position-absolute top-0 start-0 d-flex w-100 h-100 align-items-center"
-//                 style={{ background: "rgba(24, 29, 56, .7)" }}
-//               >
-//                 <Carousel.Caption style={{ maxWidth: "900px" }}>
-//                   <div className="align-items-center d-flex justify-content-center">
-//                     {IconComponent && (
-//                       <IconComponent className="me-3 text-customorange text-4x mb-4 d-none d-sm-block" />
-//                     )}
-//                   </div>
-//                   <div className="d-flex align-items-center justify-content-center ">
-//                     <div>
-//                       <h3 className="text-white justify-content-center font-roboto font-bold text-72px uppercase">
-//                         {item.heading}
-//                       </h3>
-//                     </div>
-//                   </div>
-//                   <button className="btn btn-primary mt-3 font-open-sans">
-//                     {item.caption}
-//                   </button>
-//                 </Carousel.Caption>
-//               </div>
-//             </Carousel.Item>
-//           );
-//         })}
-//       </Carousel>
-//     </div>
-//   );
-// }
 
 const MainComponent = () => {
   return (
