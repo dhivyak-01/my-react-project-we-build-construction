@@ -95,19 +95,47 @@ export const navbar = [
     }
   ];
 
-
+// signin
+export const signinForm = {
+    "title": "Signin Form",
+    "fields": [
+      {
+        "label": "Name",
+        "id": "fname",
+        "type": "text",
+        "required": true
+      },
+      {
+        "label": "Company",
+        "id": "lname",
+        "type": "text",
+        "required": true
+      },
+      {
+        "label": "Email",
+        "id": "email",
+        "type": "email",
+        "required": true
+      },
+      {
+        "label": "Password",
+        "id": "password",
+        "type": "password",
+        "required": true
+      }
+    ]
+  };
+  
   //carousel
-
-
 export const carousel = {
   1: {
-    icon:"home",
+    icon:'home',
     image: carousel_1,
     heading: "Build Your Dream House With Us",
-    caption: "Default caption",
+    caption: "get a quote",
   },
   2: {
-    icon:"tool",
+    icon:'tool',
     image: carousel_2,
     heading: "We Are Trusted For Your Project",
     caption: "Contact us",

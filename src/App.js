@@ -1,6 +1,6 @@
 import './App.css';
 import MainComponent from './component';
-// import CarouselFadeExample from './component/caurosel';
+// import CarouselFadeExample from './test/testnav';
 // import ContactSection from './component/ContactSection';
 // import NavbarComponent from './component/testnav';
 // import SignupForm from './pages/register';

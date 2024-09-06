@@ -61,14 +61,15 @@ const NavbarComponent = () => {
   const config = navbar[0];
 
   const isActive = (path) =>
-    location.pathname === path || (path === "/index" && location.pathname === "/");
+    location.pathname === path ||
+    (path === "/index" && location.pathname === "/");
 
   return (
     <Navbar
-      bg="dark"
+
       variant="dark"
       expand="lg"
-      className="sticky-top shadow-sm bg-light-radial p-0"
+      className="sticky-top shadow-sm bg-light-radial p-0 bg-navebg"
       style={{ height: "97px" }}
     >
       <Navbar.Brand as={Link} to="/index" className="text-white">
@@ -132,7 +133,7 @@ const NavbarComponent = () => {
         </Nav>
       </Navbar.Collapse>
       <NavDropdown
-        title="Signup/Signin"
+        title="Signin/Signup"
         id="signup-signin-dropdown"
         className="text-white font-open-sans text-xl ms-3 !bg-customorange rounded-0 py-4 d-none px-lg-5 d-lg-block"
         style={{ height: "97px", fontSize: "large", lineHeight: "49px" }}
@@ -154,54 +155,98 @@ const NavbarComponent = () => {
   );
 };
 
-const CarouselFadeExample = () => {
+const iconSizes = {
+  home: { width: '72px', height: '72px' },
+  tool: { width: '64px', height: '64px' }
+};
+
+function CarouselFadeExample() {
   return (
     <div>
       <Carousel fade interval={5000} controls={true} indicators={false}>
         {Object.keys(carousel).map((key) => {
           const item = carousel[key];
+          const IconComponent = iconMap[item.icon]; // Get the icon component from the map
+          
+          // Get the icon size based on the type
+          const iconSize = iconSizes[item.icon] || { width: '64px', height: '64px' }; // Default size
+
           return (
             <Carousel.Item key={key}>
               <img src={item.image} alt={`Slide ${key}`} />
               <div
                 className="position-absolute top-0 start-0 d-flex w-100 h-100 align-items-center"
                 style={{ background: "rgba(24, 29, 56, .7)" }}
-              ></div>
+              >
+                <Carousel.Caption className="mb-12p" style={{ maxWidth: "900px" }}>
+                  <div className="align-items-center d-flex justify-content-center">
+                    {IconComponent && (
+                      <IconComponent
+                        className="me-3 text-customorange mb-4 d-none d-sm-block"
+                        style={{ width: iconSize.width, height: iconSize.height }}
+                      />
+                    )}
+                  </div>
+                  <div className="d-flex align-items-center justify-content-center ">
+                    <div>
+                      <h3 className="text-white mb-md-4 justify-content-center font-roboto font-bold text-72px uppercase">
+                        {item.heading}
+                      </h3>
+                    </div>
+                  </div>
+                  <button className="btn  py-md-3 px-md-5 mt-2 !bg-customorange text-white uppercase !font-semibold rounded-0 font-open-sans">
+                    {item.caption}
+                  </button>
+                </Carousel.Caption>
+              </div>
             </Carousel.Item>
           );
         })}
       </Carousel>
-      <div className="nextprev">
-        <button
-          className="prev prev-white border"
-          type="button"
-          data-bs-target="#carouselFadeExample"
-          data-bs-slide="prev"
-        >
-          <span
-            className="carousel-control-prev-icon"
-            style={{ width: "22px", height: "22px" }}
-            aria-hidden="true"
-          ></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button
-          className="next next-white border"
-          type="button"
-          data-bs-target="#carouselFadeExample"
-          data-bs-slide="next"
-        >
-          <span
-            className="carousel-control-next-icon"
-            style={{ width: "22px", height: "22px" }}
-            aria-hidden="true"
-          ></span>
-          <span className="visually-hidden">Next</span>
-        </button>
-      </div>
     </div>
   );
-};
+}
+
+// function CarouselFadeExample() {
+//   return (
+//     <div>
+//       <Carousel fade interval={5000} controls={true} indicators={false}>
+//         {Object.keys(carousel).map((key) => {
+//           const item = carousel[key];
+//           const IconComponent = iconMap[item.icon]; // Get the icon component from the map
+
+//           return (
+//             <Carousel.Item key={key}>
+//               <img src={item.image} alt={`Slide ${key}`} />
+//               <div
+//                 className="position-absolute top-0 start-0 d-flex w-100 h-100 align-items-center"
+//                 style={{ background: "rgba(24, 29, 56, .7)" }}
+//               >
+//                 <Carousel.Caption style={{ maxWidth: "900px" }}>
+//                   <div className="align-items-center d-flex justify-content-center">
+//                     {IconComponent && (
+//                       <IconComponent className="me-3 text-customorange text-4x mb-4 d-none d-sm-block" />
+//                     )}
+//                   </div>
+//                   <div className="d-flex align-items-center justify-content-center ">
+//                     <div>
+//                       <h3 className="text-white justify-content-center font-roboto font-bold text-72px uppercase">
+//                         {item.heading}
+//                       </h3>
+//                     </div>
+//                   </div>
+//                   <button className="btn btn-primary mt-3 font-open-sans">
+//                     {item.caption}
+//                   </button>
+//                 </Carousel.Caption>
+//               </div>
+//             </Carousel.Item>
+//           );
+//         })}
+//       </Carousel>
+//     </div>
+//   );
+// }
 
 const MainComponent = () => {
   return (
@@ -209,7 +254,6 @@ const MainComponent = () => {
       <ContactSection />
       <NavbarComponent />
       <CarouselFadeExample />
-      
     </>
   );
 };

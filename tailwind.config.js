@@ -8,6 +8,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        navebg:'#040F28',
         customorange: '#fd5d14',
         Dropdownbg: '#d2d2d0',
         customGray: '#10B981',
@@ -25,11 +26,16 @@ module.exports = {
         '16px': '16px',
         '40px': '40px',
         '56px': '56px',
+        '64px': '64px',
+        '72px': '72px',
         'custom-1': '32.24px',
         'custom-2': '33.725px',
         'custom-3': '33.075px',
         'custom-4': '44.336px',
         'custom-5': '56px',
+      },
+      spacing: {
+        '12p': '12%', 
       },
     },
   },
