@@ -18,24 +18,21 @@ a.nav-link.active {
 }
 
 
-/* @media (width: 768px) {
-  .navbar-toggler {
-    display: block; /* Show the toggler */
-    /* margin-right: -51%; Adjust the margin as required 
+@media only screen and (max-width: 1024px) {
+  .NavDropdownbtn.text-white {
+    padding-left: 1rem !important; /* or 16px */
+    padding-right: 1rem !important; /* or 16px */
   }
 }
 
 /* Styles for screen widths less than 768px */
 @media (max-width: 768px) and (not (width: 768px)) {
   .navbar-toggler {
-    display: block; /* Show the toggler */
-    margin-right: 0; /* Set margin-right to normal or another value */
+    display: block; 
+    margin-right: 0; 
   }
 } */
 
-#navbarScrollingDropdown{
-  color: #ffffff;
-}
 
 #navbarScrollingDropdown:hover , #navbarScrollingDropdown:active{
   color: #FD5D14;
@@ -51,7 +48,6 @@ a.nav-link.active {
 }
 
 .carousel-control-prev-icon, .carousel-control-next-icon {
-  /* background-color: rgba(0, 0, 0, 0.5); Background color for icons */
   width: 30px;
   height: 30px;
 }
@@ -67,4 +63,30 @@ a.nav-link.active {
 
 .bg-customorange.text-white.px-5.ms-3{
   background-color: #FD5D14 !important;
+}
+
+
+@media (max-width: 768px) {
+  .carousel-caption {
+      margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .carousel-caption h1 {
+      font-size: 30px;
+      font-weight: 600 !important;
+  }
+}
+
+@media (max-width: 375px) {
+  .carousel-caption h1 {
+      width: 308px;
+  }
+}
+
+@media (max-width: 320px) {
+  .carousel-caption {
+      margin-bottom: -13px;
+  }
 }

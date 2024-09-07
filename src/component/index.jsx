@@ -83,7 +83,7 @@ const NavbarComponent = () => {
         </div>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="navbarScroll" style={{marginRight: '23px'}} />
-      <Navbar.Collapse id="navbarScroll">
+      <Navbar.Collapse id="navbarScroll" className="bg-light-radial bg-navebg" style={{ paddingLeft: '44px', paddingRight: '44px' }}>
         <Nav className="uppercase gap-4 d-flex ms-auto py-0 text-lg">
           {config.links.map((link, index) => (
             <Nav.Link
@@ -99,9 +99,12 @@ const NavbarComponent = () => {
           ))}
 
           <NavDropdown
-            title={config.dropdown.title}
+             title={
+              <span className={`text-white hover:!text-customorange`}>
+                {config.dropdown.title}
+              </span>
+            }
             id="navbarScrollingDropdown"
-            className="active"
           >
             {config.dropdown.items.map((item, index) => (
               <NavDropdown.Item
@@ -134,7 +137,7 @@ const NavbarComponent = () => {
       <NavDropdown
         title="Signin/Signup"
         id="signup-signin-dropdown"
-        className="text-white font-open-sans text-xl ms-3 !bg-customorange rounded-0 py-4 d-none px-lg-5 d-lg-block"
+        className="NavDropdownbtn text-white font-open-sans text-xl ms-3 !bg-customorange rounded-0 py-4 d-none px-5 d-lg-block"
         style={{ height: "97px", fontSize: "large", lineHeight: "49px" }}
       >
         {config.button.map((btn, index) => (
@@ -188,12 +191,12 @@ function CarouselFadeExample() {
                   </div>
                   <div className="d-flex align-items-center justify-content-center ">
                     <div>
-                      <h3 className="text-white mb-md-4 justify-content-center font-roboto font-bold text-72px uppercase">
+                      <h1 className="text-white display-2 mb-md-4 font-roboto !font-semi-bold uppercase">
                         {item.heading}
-                      </h3>
+                      </h1>
                     </div>
                   </div>
-                  <button className="btn  py-md-3 px-md-5 mt-2 !bg-customorange text-white uppercase !font-semibold rounded-0 font-open-sans">
+                  <button className="btn py-md-3 px-md-5 mt-2 !bg-customorange text-white uppercase !font-semibold rounded-0 font-open-sans">
                     {item.caption}
                   </button>
                 </Carousel.Caption>
