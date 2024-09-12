@@ -13,7 +13,7 @@ import Button from "react-bootstrap/Button";
 import { Link, useLocation } from "react-router-dom";
 import Carousel from "react-bootstrap/Carousel";
 import { Icon } from "@iconify/react";
-import buildingsIcon from '@iconify/icons-bi/buildings';
+import buildingsIcon from "@iconify/icons-bi/buildings";
 import iconMap from "../assets/data"; // Import the iconMap from your icons.js
 import { quickcontact } from "../assets/data";
 import { navbar } from "../assets/data";
@@ -547,7 +547,6 @@ const Professional = () => {
   );
 };
 
-
 const Testimonials = () => {
   return (
     <div className="container-fluid bg-light py-6 px-3 px-sm-4 px-md-5">
@@ -585,13 +584,19 @@ const Testimonials = () => {
                         objectFit: "cover",
                       }}
                       onError={() =>
-                        console.error(`Failed to load image at ${testimonial.image}`)
+                        console.error(
+                          `Failed to load image at ${testimonial.image}`
+                        )
                       }
                     />
                   </div>
                   <div className="col-md-7">
-                    <h4 className="text-uppercase mb-2 font-roboto !font-semibold">{testimonial.name}</h4>
-                    <p className="font-open-sans text-customwhite">{testimonial.profession}</p>
+                    <h4 className="text-uppercase mb-2 font-roboto !font-semibold">
+                      {testimonial.name}
+                    </h4>
+                    <p className="font-open-sans text-customwhite">
+                      {testimonial.profession}
+                    </p>
                     <p className="fs-5 mb-0 font-open-sans text-customwhite">
                       {tmonials.icons.map((icon, iconIndex) => (
                         <i
@@ -615,76 +620,6 @@ const Testimonials = () => {
   );
 };
 
-// const Testimonials = () => {
-//   return (
-//     <div className="container-fluid bg-light py-6 px-3 px-sm-4 px-md-5">
-//       <div className="text-center mx-auto mb-5" style={{ maxWidth: "800px" }}>
-//         <h1 className="display-5 text-uppercase mb-4 font-roboto !font-semibold">
-//           What Our <span className="text-customorange">Happy Clients</span>{" "}
-//           Say!!!
-//         </h1>
-//       </div>
-//       <div className="row gx-0 align-items-center position-relative">
-//         <div className="col-xl-4 col-lg-5 d-none d-lg-block position-relative">
-//           <img
-//             className="img-fluid w-100 h-100 background-image"
-//             src={tmonials.imgage}
-//             alt="Background"
-//             style={{ objectFit: "cover" }}
-//           />
-//         </div>
-//         <div
-//           className="col-xl-8 col-lg-7 col-md-12 position-absolute"
-//           style={{ left: "27%" }}
-//         >
-//           <Carousel interval={5000} controls={true} indicators={false}>
-//             {tmonials.fields.map((testimonial, index) => (
-//               <Carousel.Item key={index}>
-//                 <div className="row gx-4 align-items-center testimonial py-4 px-3 px-md-4">
-//                   <div className="col-md-5 d-flex justify-content-center mb-4 mb-md-0">
-//                     <img
-//                       className="img-fluid bg-customgray p-3"
-//                       src={testimonial.image}
-//                       alt={testimonial.name}
-//                       style={{
-//                         width: "100%",
-//                         maxWidth: "292px",
-//                         height: "auto",
-//                         objectFit: "cover",
-//                       }}
-//                       onError={() =>
-//                         console.error(
-//                           `Failed to load image at ${testimonial.image}`
-//                         )
-//                       }
-//                     />
-//                   </div>
-//                   <div className="col-md-7">
-//                     <h4 className="text-uppercase mb-2">{testimonial.name}</h4>
-//                     <p>{testimonial.profession}</p>
-//                     <p className="fs-5 mb-0">
-//                       {tmonials.icons.map((icon, iconIndex) => (
-//                         <i
-//                           key={iconIndex}
-//                           className="text-customorange me-2"
-//                           aria-hidden="true"
-//                         >
-//                           {React.createElement(icon.component)}
-//                         </i>
-//                       ))}
-//                       {testimonial.quote}
-//                     </p>
-//                   </div>
-//                 </div>
-//               </Carousel.Item>
-//             ))}
-//           </Carousel>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
 const BlogSection = () => {
   return (
     <Container fluid className="py-6 px-5">
@@ -697,8 +632,7 @@ const BlogSection = () => {
       <Row className="g-5">
         {blogPosts.map((post) => {
           const IconComponent = iconMap[post.icon];
-          const ArrowIconComponent = iconMap[post.arrowicon];
-
+          
           return (
             <Col lg={4} md={6} key={post.id}>
               <Card className="bg-light border-0 rounded-0">
@@ -713,7 +647,9 @@ const BlogSection = () => {
                         height="35"
                         alt={post.authorName}
                       />
-                      <span className="!text-customwhite font-open-sans">{post.authorName}</span>
+                      <span className="!text-customwhite font-open-sans">
+                        {post.authorName}
+                      </span>
                     </div>
                     <div className="d-flex align-items-center">
                       <a
@@ -729,7 +665,9 @@ const BlogSection = () => {
                       </a>
                     </div>
                   </div>
-                  <h4 className="text-uppercase mb-3 font-roboto !font-semibold">{post.title}</h4>
+                  <h4 className="text-uppercase mb-3 font-roboto !font-semibold">
+                    {post.title}
+                  </h4>
                   <div className="d-flex justify-content-start">
                     <Button
                       className="!bg-customgray border-0 !text-customorange font-open-sans text-uppercase font-semibold d-flex align-items-center"
@@ -801,7 +739,12 @@ const BlogSection = () => {
 //   );
 // };
 const Footer = () => {
-  const { quickLinks = [], popularLinks = [], icons = [], brand = {} } = footerData || {};
+  const {
+    quickLinks = [],
+    popularLinks = [],
+    icons = [],
+    brand = {},
+  } = footerData || {};
 
   return (
     <div className="footer container-fluid position-relative bg-dark bg-light-radial text-white-50 py-6 px-5">
@@ -810,45 +753,50 @@ const Footer = () => {
           <Col lg={6} className=" pe-lg-5">
             <a href="index.html" className="navbar-brand">
               <h1 className="mb-4 display-4 !font-semibold font-roboto text-uppercase text-white d-flex justify-content-start">
-              <Icon icon={buildingsIcon} className="me-2 !text-customorange" />
+                <Icon
+                  icon={buildingsIcon}
+                  className="me-2 !text-customorange"
+                />
                 {brand.name}
               </h1>
             </a>
             <p>{brand.description}</p>
-            <p  className="d-flex justify-content-start">
+            <p className="d-flex justify-content-start">
               {React.createElement(
-                icons.find(icon => icon.name === 'location')?.component,
-                { className: 'me-2' }
+                icons.find((icon) => icon.name === "location")?.component,
+                { className: "me-2" }
               )}
               {brand.address}
             </p>
-            <p  className="d-flex justify-content-start">
+            <p className="d-flex justify-content-start">
               {React.createElement(
-                icons.find(icon => icon.name === 'footerphone')?.component,
-                { className: 'me-2' }
+                icons.find((icon) => icon.name === "footerphone")?.component,
+                { className: "me-2" }
               )}
               {brand.phone}
             </p>
             <p className="d-flex justify-content-start">
               {React.createElement(
-                icons.find(icon => icon.name === 'envelope')?.component,
-                { className: 'me-2' }
+                icons.find((icon) => icon.name === "envelope")?.component,
+                { className: "me-2" }
               )}
               {brand.email}
             </p>
             <div className="d-flex justify-content-start mt-4">
-              {['twitter', 'facebook', 'linkedin', 'instagram'].map((name, index) => (
-                <a
-                  className="btn btn-lg !bg-customorange btn-lg-square rounded-0 me-2"
-                  href={`#${name}`}
-                  key={index}
-                >
-                  {React.createElement(
-                    icons.find(icon => icon.name === name)?.component,
-                    { className: 'text-white' }
-                  )}
-                </a>
-              ))}
+              {["twitter", "facebook", "linkedin", "instagram"].map(
+                (name, index) => (
+                  <a
+                    className="btn btn-lg !bg-customorange btn-lg-square rounded-0 me-2"
+                    href={`#${name}`}
+                    key={index}
+                  >
+                    {React.createElement(
+                      icons.find((icon) => icon.name === name)?.component,
+                      { className: "text-white" }
+                    )}
+                  </a>
+                )
+              )}
             </div>
           </Col>
           <Col lg={6} className=" pe-lg-5">
@@ -863,8 +811,9 @@ const Footer = () => {
                       key={index}
                     >
                       {React.createElement(
-                        icons.find(icon => icon.name === 'angle_right')?.component,
-                        { className: 'me-2' }
+                        icons.find((icon) => icon.name === "angle_right")
+                          ?.component,
+                        { className: "me-2" }
                       )}
                       {link.text}
                     </a>
@@ -872,7 +821,9 @@ const Footer = () => {
                 </div>
               </Col>
               <Col sm={6}>
-                <h4 className="text-white text-uppercase mb-4">Popular Links</h4>
+                <h4 className="text-white text-uppercase mb-4">
+                  Popular Links
+                </h4>
                 <div className="d-flex flex-column justify-content-start">
                   {popularLinks.map((link, index) => (
                     <a
@@ -881,8 +832,9 @@ const Footer = () => {
                       key={index}
                     >
                       {React.createElement(
-                        icons.find(icon => icon.name === 'angle_right')?.component,
-                        { className: 'me-2' }
+                        icons.find((icon) => icon.name === "angle_right")
+                          ?.component,
+                        { className: "me-2" }
                       )}
                       {link.text}
                     </a>
@@ -896,9 +848,12 @@ const Footer = () => {
                     type="text"
                     placeholder="Your Email Address"
                     className="border-light rounded-0"
-                    style={{ padding: '20px 30px' }}
+                    style={{ padding: "20px 30px" }}
                   />
-                  <Button variant="" className="px-4 !bg-customorange text-white !font-semibold text-open-sans uppercase rounded-0">
+                  <Button
+                    variant=""
+                    className="px-4 !bg-customorange text-white !font-semibold text-open-sans uppercase rounded-0"
+                  >
                     Sign Up
                   </Button>
                 </Form>
@@ -910,7 +865,6 @@ const Footer = () => {
     </div>
   );
 };
-
 
 const FooterBottom = () => {
   return (
