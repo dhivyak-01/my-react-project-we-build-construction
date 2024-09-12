@@ -382,7 +382,6 @@ const Professional = () => {
 };
 
 
-
 const Footer = () => {
   const {
     quickLinks = [],
