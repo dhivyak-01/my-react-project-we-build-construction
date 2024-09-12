@@ -412,7 +412,7 @@ const RequestCallBack = () => {
               </span>
             </h1>
           </div>
-          <p className="mb-5">{requestCallBackData.description}</p>
+          <p className="mb-5 font-open-sans text-customwhite">{requestCallBackData.description}</p>
           <Button variant="" className="py-3 px-5 !bg-customorange text-white">
             {requestCallBackData.buttonText}
           </Button>
