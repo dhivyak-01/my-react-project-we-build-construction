@@ -1,35 +1,15 @@
-import React from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Navbar,
-  Nav,
-  NavDropdown,
-  Form,
-  Card,
-} from "react-bootstrap";
+import React from 'react';
 import Button from "react-bootstrap/Button";
 import { Link, useLocation } from "react-router-dom";
-import Carousel from "react-bootstrap/Carousel";
 import { Icon } from "@iconify/react";
+import Carousel from "react-bootstrap/Carousel";
 import buildingsIcon from "@iconify/icons-bi/buildings";
-import iconMap from "../assets/data"; // Import the iconMap from your icons.js
-import { quickcontact } from "../assets/data";
-import { navbar } from "../assets/data";
-import { carousel } from "../assets/data";
-import { theleader } from "../assets/data";
+import iconMap from "../assets/data";
+import {quickcontact, navbar, thebest, requestCallBackData, tmonials, footerData, footerBottomData, } from "../assets/data";
 import {
-  thebest,
-  popular,
-  requestCallBackData,
-  professional,
-  tmonials,
-  blogPosts,
-  footerData,
-  footerBottomData,
-} from "../assets/data";
-import "bootstrap/dist/css/bootstrap.min.css";
+  Container, Row, Col, Navbar, Nav, NavDropdown, Form, Card,
+} from "react-bootstrap";
+
 
 const ContactSection = () => {
   return (
@@ -77,6 +57,7 @@ const ContactSection = () => {
     </Container>
   );
 };
+
 
 const NavbarComponent = () => {
   const location = useLocation();
@@ -186,148 +167,27 @@ const NavbarComponent = () => {
   );
 };
 
-const iconSizes = {
-  home: { width: "72px", height: "72px" },
-  tool: { width: "64px", height: "64px" },
-};
-
-function CarouselFadeExample() {
+const Aboute = () => {
   return (
-    <div>
-      <Carousel fade interval={5000} controls={true} indicators={false}>
-        {Object.keys(carousel).map((key) => {
-          const item = carousel[key];
-          const IconComponent = iconMap[item.icon]; // Get the icon component from the map
-
-          // Get the icon size based on the type
-          const iconSize = iconSizes[item.icon] || {
-            width: "64px",
-            height: "64px",
-          }; // Default size
-
-          return (
-            <Carousel.Item key={key}>
-              <img src={item.image} alt={`Slide ${key}`} />
-              <div
-                className="position-absolute top-0 start-0 d-flex w-100 h-100 align-items-center"
-                style={{ background: "rgba(24, 29, 56, .7)" }}
-              >
-                <Carousel.Caption
-                  className="mb-12p"
-                  style={{ maxWidth: "900px" }}
-                >
-                  <div className="align-items-center d-flex justify-content-center">
-                    {IconComponent && (
-                      <IconComponent
-                        className="me-3 text-customorange mb-4 d-none d-sm-block"
-                        style={{
-                          width: iconSize.width,
-                          height: iconSize.height,
-                        }}
-                      />
-                    )}
-                  </div>
-                  <div className="d-flex align-items-center justify-content-center ">
-                    <div>
-                      <h1 className="text-white display-2 mb-md-4 font-roboto !font-semi-bold uppercase">
-                        {item.heading}
-                      </h1>
-                    </div>
-                  </div>
-                  <button className="btn py-md-3 px-md-5 mt-2 !bg-customorange text-white uppercase !font-semibold rounded-0 font-open-sans">
-                    {item.caption}
-                  </button>
-                </Carousel.Caption>
-              </div>
-            </Carousel.Item>
-          );
-        })}
-      </Carousel>
+    <div className="container-fluid bg-gray-800 py-5 page-header d-flex flex-column justify-content-center align-items-center text-center">
+      <Container>
+        <h1 className="display-3 text-uppercase text-white mb-3 font-roboto !font-bold">service</h1>
+        <div className="d-inline-flex text-white justify-content-center align-items-center">
+          <h6 className="text-uppercase m-0">
+            <a href="/" className="text-customorange font-roboto hover:text-gray-400 no-underline">Home</a>
+          </h6>
+          <h6 className="text-white m-0 px-3">/</h6>
+          <h6 className="text-uppercase font-roboto text-white m-0 pt-1">service</h6>
+        </div>
+      </Container>
     </div>
   );
-}
+};
 
-const TheLeader = () => {
-  const leader = theleader[0]; // Access the first object in the array
 
-  const renderPoints = () => {
-    return (
-      <>
-        <p className="mb-2 flex items-center">
-          {React.createElement(iconMap[leader.icon], {
-            className: "me-3 text-customorange",
-          })}{" "}
-          {/* Ensure className is passed correctly */}
-          <div className="text-customwhite font-open-sans font-semibold">
-            {leader.ponit_1}
-          </div>
-        </p>
-        <p className="mb-2 flex items-center">
-          {React.createElement(iconMap[leader.icon], {
-            className: "me-3 text-customorange",
-          })}{" "}
-          {/* Ensure className is passed correctly */}
-          <div className="text-customwhite font-open-sans font-semibold">
-            {leader.ponit_2}
-          </div>
-        </p>
-        <p className="mb-2 flex items-center">
-          {React.createElement(iconMap[leader.icon], {
-            className: "me-3 text-customorange",
-          })}{" "}
-          {/* Ensure className is passed correctly */}
-          <div className="text-customwhite font-open-sans font-semibold">
-            {leader.ponit_3}
-          </div>
-        </p>
-      </>
-    );
-  };
-
-  return (
-    <Container fluid className="py-6 px-5">
-      <Row className="g-5">
-        <Col className="col-lg-7">
-          <h1 className="uppercase display-5 !font-semibold mb-4 font-roboto">
-            {leader.title.split("Leader")[0]}
-            <span className="text-customorange">the Leader</span>
-            {leader.title.split("Leader")[1]}
-          </h1>
-          <h4 className="uppercase text-customwhite !font-bold mb-4 font-roboto">
-            {leader.description_1}
-          </h4>
-          <p className="text-customwhite font-open-sans">
-            {leader.description_2}
-          </p>
-          <Row className="gx-5 py-2">
-            <Col className="col-sm-6 mb-2">{renderPoints()}</Col>
-            <Col className="col-sm-6 mb-2">{renderPoints()}</Col>
-          </Row>
-          <p className="mb-4 font-open-sans text-customwhite">
-            {leader.description_3}
-          </p>
-          {leader.imagesign && <img src={leader.imagesign} alt="Signature" />}
-        </Col>
-        <Col className="col-lg-5 pb-5" style={{ minHeight: "400px" }}>
-          <div
-            className="relative bg-dark-radial h-full ms-5"
-            style={{
-              backgroundImage:
-                "-webkit-repeating-radial-gradient(center center, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) 1px, transparent 1px, transparent 100%)",
-              backgroundSize: "3px 3px",
-              color: "#777777",
-            }}
-          >
-            <img
-              className="absolute w-full h-full mt-5 ms-n5 object-cover"
-              src={leader.imagegirl}
-              alt="Leader in Construction"
-            />
-          </div>
-        </Col>
-      </Row>
-    </Container>
-  );
+const iconSizes = {
+  building_1: 'w-[48px] h-[48px]',
+  right_arrow: 'w-[24px] h-[24px]',
 };
 
 const Thebest = () => {
@@ -398,6 +258,7 @@ const Thebest = () => {
   );
 };
 
+
 const RequestCallBack = () => {
   return (
     <Container fluid className="py-6 px-5">
@@ -461,91 +322,6 @@ const RequestCallBack = () => {
   );
 };
 
-const Popular = () => {
-  return (
-    <Container fluid className="bg-light py-6 px-5">
-      <div className="text-center mx-auto mb-5" style={{ maxWidth: "600px" }}>
-        <h1 className="display-5 text-uppercase mb-4 font-roboto !font-semibold">
-          Some Of Our<span className="text-customorange"> Popular</span> Dream
-          Projects
-        </h1>
-      </div>
-      <Row className="g-5">
-        {popular.fields.map((field) => (
-          <div className="col-lg-4 col-md-6" key={field.id}>
-            <div className="position-relative">
-              <img
-                src={field.image}
-                alt={field.contenttitle}
-                className="mb-4"
-              />
-              <div className="service position-absolute bg-white p-4 t-0">
-                <div className="text-start ">
-                  <h4 className="uppercase font-roboto mb-3 !font-bold text-customblack">
-                    {field.contenttitle}
-                  </h4>
-                  <p className="text-customwhite font-open-sans">
-                    {/* {iconMap[field.location] ? React.createElement(iconMap[field.icon], { className: `text-customorange `}):null} */}
-                    {field.content}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </Row>
-    </Container>
-  );
-};
-
-const Professional = () => {
-  return (
-    <Container fluid className="bg-white py-6 px-5">
-      <div className="text-center mx-auto mb-5" style={{ maxWidth: "600px" }}>
-        <h1 className="display-5 text-uppercase mb-4 font-roboto !font-semibold">
-          We Are
-          <span className="text-customorange"> Professional & Expert</span>{" "}
-          Workers
-        </h1>
-      </div>
-      <Row className="g-5">
-        {professional.fields.map((field) => (
-          <div className="col-xl-3 col-lg-4 col-md-6" key={field.id}>
-            <Row className="g-0">
-              <div className="col-10">
-                <img src={field.image} alt={field.contenttitle} className="" />
-              </div>
-              <div className="col-2">
-                <div className="h-full flex flex-col items-center justify-between bg-light p-4">
-                  {professional.icons.map((icon, index) => (
-                    <Button
-                      variant="link"
-                      href="#"
-                      key={index}
-                      className="!text-customwhite"
-                    >
-                      {React.createElement(icon.component)}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              <div className="bg-customgray p-4 t-0">
-                <div className="text-start ">
-                  <h4 className="uppercase font-roboto !font-bold text-customblack">
-                    {field.contenttitle}
-                  </h4>
-                  <p className="text-customwhite mb-0 font-open-sans">
-                    {field.content}
-                  </p>
-                </div>
-              </div>
-            </Row>
-          </div>
-        ))}
-      </Row>
-    </Container>
-  );
-};
 
 const Testimonials = () => {
   return (
@@ -620,86 +396,7 @@ const Testimonials = () => {
   );
 };
 
-const BlogSection = () => {
-  return (
-    <Container fluid className="py-6 px-5">
-      <div className="text-center mx-auto mb-5" style={{ maxWidth: "600px" }}>
-        <h1 className="display-5 text-uppercase  mb-4 font-roboto !font-semibold">
-          Latest <span className="text-customorange">Articles</span> From Our
-          Blog Post
-        </h1>
-      </div>
-      <Row className="g-5">
-        {blogPosts.map((post) => {
-          const IconComponent = iconMap[post.icon];
 
-          return (
-            <Col lg={4} md={6} key={post.id}>
-              <Card className="bg-light border-0 rounded-0">
-                <Card.Img variant="top" src={post.image} />
-                <Card.Body className="p-4">
-                  <div className="d-flex justify-content-between mb-4">
-                    <div className="d-flex align-items-center">
-                      <img
-                        className="rounded-circle me-2"
-                        src={post.authorImage}
-                        width="35"
-                        height="35"
-                        alt={post.authorName}
-                      />
-                      <span className="!text-customwhite font-open-sans">
-                        {post.authorName}
-                      </span>
-                    </div>
-                    <div className="d-flex align-items-center">
-                      <a
-                        className="btn !text-customorange d-flex align-items-center"
-                        href="#"
-                      >
-                        {IconComponent && (
-                          <IconComponent className="bi bi-arrow-right" />
-                        )}
-                        <span className="ms-2 !text-customwhite font-open-sans">
-                          {post.date}
-                        </span>
-                      </a>
-                    </div>
-                  </div>
-                  <h4 className="text-uppercase mb-3 font-roboto !font-semibold">
-                    {post.title}
-                  </h4>
-                  <div className="d-flex justify-content-start">
-                    <Button
-                      className="!bg-customgray border-0 !text-customorange font-open-sans text-uppercase font-semibold d-flex align-items-center"
-                      href="#"
-                    >
-                      <span className=" !text-customorange">
-                        {post.button}{" "}
-                      </span>
-                      <i
-                        className={`bi bi-arrow-right ${
-                          iconSizes[post.arrowicon]
-                        } text-customorange ml-2`}
-                      >
-                        {iconMap[post.arrowicon]
-                          ? React.createElement(iconMap[post.arrowicon], {
-                              className: `${
-                                iconSizes[post.arrowicon]
-                              } text-customorange`,
-                            })
-                          : null}
-                      </i>
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          );
-        })}
-      </Row>
-    </Container>
-  );
-};
 
 const Footer = () => {
   const {
@@ -784,7 +481,7 @@ const Footer = () => {
                 </div>
               </Col>
               <Col sm={6}>
-                <h4 className="text-white text-uppercase mb-4 ">
+                <h4 className="text-white text-uppercase mb-4">
                   Popular Links
                 </h4>
                 <div className="d-flex flex-column justify-content-start">
@@ -861,23 +558,18 @@ const FooterBottom = () => {
   );
 };
 
-const MainComponent = () => {
+const Service = () => {
   return (
     <>
-      <ContactSection />
-      <NavbarComponent />
-      <CarouselFadeExample />
-      <TheLeader />
-      <Thebest />
-      <RequestCallBack />
-      <Popular />
-      <Professional />
-      <Testimonials />
-      <BlogSection />
-      <Footer />
-      <FooterBottom />
+    <ContactSection />
+    <NavbarComponent />
+    <Aboute />
+    <Thebest />
+    <RequestCallBack />
+    <Testimonials />
+    <Footer />
+    <FooterBottom />
     </>
-  );
+  )
 };
-
-export default MainComponent;
+export default Service ;

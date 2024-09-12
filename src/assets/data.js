@@ -114,7 +114,7 @@ export const navbar = [
     icon: "building_1",
     brand: "WEBUILD",
     links: [
-      { to: "/index", label: "Home" },
+      { to: "/", label: "Home" },
       { to: "/about", label: "About" },
       { to: "/service", label: "Service" },
     ],
@@ -519,3 +519,186 @@ export const footerBottomData = {
     linkText: "HTML Codex"
   }
 };
+
+
+export const professionalteam = {
+  title: "We Are Professional & Expert Workers",
+  fields: [
+    {
+      id: "1",
+      image: team_1,
+      contenttitle: "Adam Phillips",
+      content: "CEO & Founder",
+    },
+    {
+      id: "2",
+      image: team_2,
+      contenttitle: "Dylan Adams",
+      content: "Civil Engineer",
+    },
+    {
+      id: "3",
+      image: team_3,
+      contenttitle: "Jhon Doe",
+      content: "Interior Designer",
+    },
+    {
+      id: "4",
+      image: team_4,
+      contenttitle: "Josh Dunn",
+      content: "Painter",
+    },
+    {
+      id: "5",
+      image: team_1,
+      contenttitle: "Adam Phillips",
+      content: "CEO & Founder",
+    },
+    {
+      id: "6",
+      image: team_2,
+      contenttitle: "Dylan Adams",
+      content: "Civil Engineer",
+    },
+    {
+      id: "7",
+      image: team_3,
+      contenttitle: "Jhon Doe",
+      content: "Interior Designer",
+    },
+    {
+      id: "8",
+      image: team_4,
+      contenttitle: "Josh Dunn",
+      content: "Painter",
+    },
+
+  ],
+  icons: [
+    {
+      name: "twitter",
+      component: FaTwitter,
+    },
+    {
+      name: "facebook",
+      component: FaFacebookF,
+    },
+    {
+      name: "linkedin",
+      component: FaLinkedinIn,
+    },
+    {
+      name: "instagram",
+      component: FaInstagram,
+    },
+    {
+      name: "youtube",
+      component: FaYoutube,
+    }
+  ],
+};
+
+
+
+
+export const blogPostsgrid = [
+  {
+    id: 1,
+    image: blog_1,
+    authorImage: user,
+    authorName: "John Doe",
+    icon:'calendar',
+    date: "01 Jan, 2045",
+    title: "Rebum diam clita lorem erat magna est erat",
+    button:"read more",
+    arrowicon:'right_arrow'
+  },
+  {
+    id: 2,
+    image: blog_2,
+    authorImage: user,
+    authorName: "John Doe",
+    icon:'calendar',
+    date: "01 Jan, 2045",
+    title: "Rebum diam clita lorem erat magna est erat",
+    button:"read more",
+    arrowicon:'right_arrow'
+  },
+  {
+    id: 3,
+    image: blog_3,
+    authorImage: user,
+    authorName: "John Doe",
+    icon:'calendar',
+    date: "01 Jan, 2045",
+    title: "Rebum diam clita lorem erat magna est erat",
+    button:"read more",
+    arrowicon:'right_arrow'
+  },
+  {
+    id: 4,
+    image: blog_1,
+    authorImage: user,
+    authorName: "John Doe",
+    icon:'calendar',
+    date: "01 Jan, 2045",
+    title: "Rebum diam clita lorem erat magna est erat",
+    button:"read more",
+    arrowicon:'right_arrow'
+  },
+  {
+    id: 5,
+    image: blog_2,
+    authorImage: user,
+    authorName: "John Doe",
+    icon:'calendar',
+    date: "01 Jan, 2045",
+    title: "Rebum diam clita lorem erat magna est erat",
+    button:"read more",
+    arrowicon:'right_arrow'
+  },
+  {
+    id: 6,
+    image: blog_3,
+    authorImage: user,
+    authorName: "John Doe",
+    icon:'calendar',
+    date: "01 Jan, 2045",
+    title: "Rebum diam clita lorem erat magna est erat",
+    button:"read more",
+    arrowicon:'right_arrow'
+  },
+  {
+    id: 7,
+    image: blog_1,
+    authorImage: user,
+    authorName: "John Doe",
+    icon:'calendar',
+    date: "01 Jan, 2045",
+    title: "Rebum diam clita lorem erat magna est erat",
+    button:"read more",
+    arrowicon:'right_arrow'
+  },
+  {
+    id: 8,
+    image: blog_2,
+    authorImage: user,
+    authorName: "John Doe",
+    icon:'calendar',
+    date: "01 Jan, 2045",
+    title: "Rebum diam clita lorem erat magna est erat",
+    button:"read more",
+    arrowicon:'right_arrow'
+  },
+  {
+    id: 9,
+    image: blog_3,
+    authorImage: user,
+    authorName: "John Doe",
+    icon:'calendar',
+    date: "01 Jan, 2045",
+    title: "Rebum diam clita lorem erat magna est erat",
+    button:"read more",
+    arrowicon:'right_arrow'
+  }
+];

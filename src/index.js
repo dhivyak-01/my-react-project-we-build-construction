@@ -7,7 +7,15 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SignupForm from "./pages/signup";
 import Signin from "./pages/signin";
+import About from "./pages/about";
+import Service from "./pages/Service";
+import Project from "./pages/Project";
+import TheTeam from "./pages/TheTeam"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import TestimonialHeader from "./pages/Testimonial";
+import Bloggrid from "./pages/BlogGrid";
+import Blogdetail from "./pages/BlogDetail";
+import Contact from "./pages/Contact";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -17,6 +25,14 @@ root.render(
         <Route path="/" element={<App />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/Signin" element={<Signin />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/service" element={<Service />} />
+        <Route path="/project" element={<Project />} />
+        <Route path="/team" element={<TheTeam />} />
+        <Route path="/testimonial" element={<TestimonialHeader />} />
+        <Route path="/blog" element={<Bloggrid />} />
+        <Route path="/detail" element={<Blogdetail />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
   </React.StrictMode>

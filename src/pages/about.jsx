@@ -1,35 +1,15 @@
-import React from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Navbar,
-  Nav,
-  NavDropdown,
-  Form,
-  Card,
-} from "react-bootstrap";
+import React from 'react';
 import Button from "react-bootstrap/Button";
 import { Link, useLocation } from "react-router-dom";
-import Carousel from "react-bootstrap/Carousel";
 import { Icon } from "@iconify/react";
 import buildingsIcon from "@iconify/icons-bi/buildings";
-import iconMap from "../assets/data"; // Import the iconMap from your icons.js
-import { quickcontact } from "../assets/data";
-import { navbar } from "../assets/data";
-import { carousel } from "../assets/data";
-import { theleader } from "../assets/data";
+import iconMap from "../assets/data";
+// import {  } from "../assets/data";
+import {quickcontact, navbar, theleader, requestCallBackData, professional, footerData, footerBottomData, } from "../assets/data";
 import {
-  thebest,
-  popular,
-  requestCallBackData,
-  professional,
-  tmonials,
-  blogPosts,
-  footerData,
-  footerBottomData,
-} from "../assets/data";
-import "bootstrap/dist/css/bootstrap.min.css";
+  Container, Row, Col, Navbar, Nav, NavDropdown, Form, Card,
+} from "react-bootstrap";
+
 
 const ContactSection = () => {
   return (
@@ -186,66 +166,23 @@ const NavbarComponent = () => {
   );
 };
 
-const iconSizes = {
-  home: { width: "72px", height: "72px" },
-  tool: { width: "64px", height: "64px" },
-};
-
-function CarouselFadeExample() {
+const Aboute = () => {
   return (
-    <div>
-      <Carousel fade interval={5000} controls={true} indicators={false}>
-        {Object.keys(carousel).map((key) => {
-          const item = carousel[key];
-          const IconComponent = iconMap[item.icon]; // Get the icon component from the map
-
-          // Get the icon size based on the type
-          const iconSize = iconSizes[item.icon] || {
-            width: "64px",
-            height: "64px",
-          }; // Default size
-
-          return (
-            <Carousel.Item key={key}>
-              <img src={item.image} alt={`Slide ${key}`} />
-              <div
-                className="position-absolute top-0 start-0 d-flex w-100 h-100 align-items-center"
-                style={{ background: "rgba(24, 29, 56, .7)" }}
-              >
-                <Carousel.Caption
-                  className="mb-12p"
-                  style={{ maxWidth: "900px" }}
-                >
-                  <div className="align-items-center d-flex justify-content-center">
-                    {IconComponent && (
-                      <IconComponent
-                        className="me-3 text-customorange mb-4 d-none d-sm-block"
-                        style={{
-                          width: iconSize.width,
-                          height: iconSize.height,
-                        }}
-                      />
-                    )}
-                  </div>
-                  <div className="d-flex align-items-center justify-content-center ">
-                    <div>
-                      <h1 className="text-white display-2 mb-md-4 font-roboto !font-semi-bold uppercase">
-                        {item.heading}
-                      </h1>
-                    </div>
-                  </div>
-                  <button className="btn py-md-3 px-md-5 mt-2 !bg-customorange text-white uppercase !font-semibold rounded-0 font-open-sans">
-                    {item.caption}
-                  </button>
-                </Carousel.Caption>
-              </div>
-            </Carousel.Item>
-          );
-        })}
-      </Carousel>
+    <div className="container-fluid bg-gray-800 py-5 page-header d-flex flex-column justify-content-center align-items-center text-center">
+      <Container>
+        <h1 className="display-3 text-uppercase text-white mb-3 font-roboto !font-bold">about</h1>
+        <div className="d-inline-flex text-white justify-content-center align-items-center">
+          <h6 className="text-uppercase m-0">
+            <a href="/" className="text-customorange font-roboto hover:text-gray-400 no-underline">Home</a>
+          </h6>
+          <h6 className="text-white m-0 px-3">/</h6>
+          <h6 className="text-uppercase font-roboto text-white m-0 pt-1">about</h6>
+        </div>
+      </Container>
     </div>
   );
-}
+};
+
 
 const TheLeader = () => {
   const leader = theleader[0]; // Access the first object in the array
@@ -330,73 +267,6 @@ const TheLeader = () => {
   );
 };
 
-const Thebest = () => {
-  return (
-    <Container fluid className="bg-light py-6 px-5">
-      <div className="text-center mx-auto mb-5" style={{ maxWidth: "600px" }}>
-        <h1 className="display-5 text-uppercase mb-4 font-roboto !font-semibold">
-          We Provide <span className="text-customorange">The Best</span>{" "}
-          Construction Services
-        </h1>
-      </div>
-      <Row className="g-5">
-        {thebest.fields.map((field) => (
-          <div className="col-lg-4 col-md-6" key={field.id}>
-            <div className="service-item bg-white d-flex flex-column align-items-center text-center rounded">
-              <img
-                src={field.image}
-                alt={field.contenttitle}
-                className="img-fluid"
-              />
-              <div className="service-icon bg-white ">
-                {iconMap[field.icon]
-                  ? React.createElement(iconMap[field.icon], {
-                      className: `text-customorange ${
-                        field.icon === "building_2"
-                          ? "w-[42px] h-[48px]"
-                          : field.icon === "home"
-                          ? "w-[54px] h-[48px]"
-                          : "w-[48px] h-[48px]"
-                      }`,
-                    })
-                  : null}
-              </div>
-              <div className="px-4 pb-4">
-                <h4 className="text-uppercase mb-3 font-roboto !font-bold">
-                  {field.contenttitle}
-                </h4>
-                <p className="font-open-sans text-customwhite">
-                  {field.content}
-                </p>
-                <div className="d-flex justify-content-center">
-                  <Button
-                    className="bg-white border-0 !text-customorange font-open-sans text-uppercase font-semibold d-flex align-items-center"
-                    href="#"
-                  >
-                    <span>{field.button} </span>
-                    <i
-                      className={`bi bi-arrow-right ${
-                        iconSizes[field.arrowicon]
-                      } text-customorange ml-2`}
-                    >
-                      {iconMap[field.arrowicon]
-                        ? React.createElement(iconMap[field.arrowicon], {
-                            className: `${
-                              iconSizes[field.arrowicon]
-                            } text-customorange`,
-                          })
-                        : null}
-                    </i>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </Row>
-    </Container>
-  );
-};
 
 const RequestCallBack = () => {
   return (
@@ -461,42 +331,6 @@ const RequestCallBack = () => {
   );
 };
 
-const Popular = () => {
-  return (
-    <Container fluid className="bg-light py-6 px-5">
-      <div className="text-center mx-auto mb-5" style={{ maxWidth: "600px" }}>
-        <h1 className="display-5 text-uppercase mb-4 font-roboto !font-semibold">
-          Some Of Our<span className="text-customorange"> Popular</span> Dream
-          Projects
-        </h1>
-      </div>
-      <Row className="g-5">
-        {popular.fields.map((field) => (
-          <div className="col-lg-4 col-md-6" key={field.id}>
-            <div className="position-relative">
-              <img
-                src={field.image}
-                alt={field.contenttitle}
-                className="mb-4"
-              />
-              <div className="service position-absolute bg-white p-4 t-0">
-                <div className="text-start ">
-                  <h4 className="uppercase font-roboto mb-3 !font-bold text-customblack">
-                    {field.contenttitle}
-                  </h4>
-                  <p className="text-customwhite font-open-sans">
-                    {/* {iconMap[field.location] ? React.createElement(iconMap[field.icon], { className: `text-customorange `}):null} */}
-                    {field.content}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </Row>
-    </Container>
-  );
-};
 
 const Professional = () => {
   return (
@@ -547,159 +381,7 @@ const Professional = () => {
   );
 };
 
-const Testimonials = () => {
-  return (
-    <div className="container-fluid bg-light py-6 px-3 px-sm-4 px-md-5">
-      <div className="text-center mx-auto mb-5" style={{ maxWidth: "800px" }}>
-        <h1 className="display-5 text-uppercase mb-4 font-roboto !font-semibold">
-          What Our <span className="text-customorange">Happy Clients</span>{" "}
-          Say!!!
-        </h1>
-      </div>
-      <div className="row gx-0 align-items-center position-relative">
-        {/* Background Image for Larger Screens */}
-        <div className="col-xl-4 col-lg-5 d-none d-lg-block position-relative">
-          <img
-            className="img-fluid w-100 h-100 background-image"
-            src={tmonials.imgage}
-            alt="Background"
-            style={{ objectFit: "cover", height: "100%" }}
-          />
-        </div>
-        {/* Carousel Container */}
-        <div className="col-xl-8 col-lg-7 col-md-12 position-relative">
-          <Carousel interval={5000} controls={true} indicators={false}>
-            {tmonials.fields.map((testimonial, index) => (
-              <Carousel.Item key={index}>
-                <div className="row gx-0 align-items-center testimonial py-4 px-3 px-md-4">
-                  <div className="col-md-5 d-flex justify-content-center mb-4 mb-md-0">
-                    <img
-                      className="img-fluid bg-customgray p-3"
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      style={{
-                        width: "100%",
-                        maxWidth: "292px",
-                        height: "auto",
-                        objectFit: "cover",
-                      }}
-                      onError={() =>
-                        console.error(
-                          `Failed to load image at ${testimonial.image}`
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="col-md-7">
-                    <h4 className="text-uppercase mb-2 font-roboto !font-semibold">
-                      {testimonial.name}
-                    </h4>
-                    <p className="font-open-sans text-customwhite">
-                      {testimonial.profession}
-                    </p>
-                    <p className="fs-5 mb-0 font-open-sans text-customwhite">
-                      {tmonials.icons.map((icon, iconIndex) => (
-                        <i
-                          key={iconIndex}
-                          className="text-customorange me-2"
-                          aria-hidden="true"
-                        >
-                          {React.createElement(icon.component)}
-                        </i>
-                      ))}
-                      {testimonial.quote}
-                    </p>
-                  </div>
-                </div>
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        </div>
-      </div>
-    </div>
-  );
-};
 
-const BlogSection = () => {
-  return (
-    <Container fluid className="py-6 px-5">
-      <div className="text-center mx-auto mb-5" style={{ maxWidth: "600px" }}>
-        <h1 className="display-5 text-uppercase  mb-4 font-roboto !font-semibold">
-          Latest <span className="text-customorange">Articles</span> From Our
-          Blog Post
-        </h1>
-      </div>
-      <Row className="g-5">
-        {blogPosts.map((post) => {
-          const IconComponent = iconMap[post.icon];
-
-          return (
-            <Col lg={4} md={6} key={post.id}>
-              <Card className="bg-light border-0 rounded-0">
-                <Card.Img variant="top" src={post.image} />
-                <Card.Body className="p-4">
-                  <div className="d-flex justify-content-between mb-4">
-                    <div className="d-flex align-items-center">
-                      <img
-                        className="rounded-circle me-2"
-                        src={post.authorImage}
-                        width="35"
-                        height="35"
-                        alt={post.authorName}
-                      />
-                      <span className="!text-customwhite font-open-sans">
-                        {post.authorName}
-                      </span>
-                    </div>
-                    <div className="d-flex align-items-center">
-                      <a
-                        className="btn !text-customorange d-flex align-items-center"
-                        href="#"
-                      >
-                        {IconComponent && (
-                          <IconComponent className="bi bi-arrow-right" />
-                        )}
-                        <span className="ms-2 !text-customwhite font-open-sans">
-                          {post.date}
-                        </span>
-                      </a>
-                    </div>
-                  </div>
-                  <h4 className="text-uppercase mb-3 font-roboto !font-semibold">
-                    {post.title}
-                  </h4>
-                  <div className="d-flex justify-content-start">
-                    <Button
-                      className="!bg-customgray border-0 !text-customorange font-open-sans text-uppercase font-semibold d-flex align-items-center"
-                      href="#"
-                    >
-                      <span className=" !text-customorange">
-                        {post.button}{" "}
-                      </span>
-                      <i
-                        className={`bi bi-arrow-right ${
-                          iconSizes[post.arrowicon]
-                        } text-customorange ml-2`}
-                      >
-                        {iconMap[post.arrowicon]
-                          ? React.createElement(iconMap[post.arrowicon], {
-                              className: `${
-                                iconSizes[post.arrowicon]
-                              } text-customorange`,
-                            })
-                          : null}
-                      </i>
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          );
-        })}
-      </Row>
-    </Container>
-  );
-};
 
 const Footer = () => {
   const {
@@ -784,7 +466,7 @@ const Footer = () => {
                 </div>
               </Col>
               <Col sm={6}>
-                <h4 className="text-white text-uppercase mb-4 ">
+                <h4 className="text-white text-uppercase mb-4">
                   Popular Links
                 </h4>
                 <div className="d-flex flex-column justify-content-start">
@@ -861,23 +543,18 @@ const FooterBottom = () => {
   );
 };
 
-const MainComponent = () => {
+const About = () => {
   return (
     <>
-      <ContactSection />
-      <NavbarComponent />
-      <CarouselFadeExample />
-      <TheLeader />
-      <Thebest />
-      <RequestCallBack />
-      <Popular />
-      <Professional />
-      <Testimonials />
-      <BlogSection />
-      <Footer />
-      <FooterBottom />
+    <ContactSection />
+    <NavbarComponent />
+    <Aboute />
+    <TheLeader />
+    <RequestCallBack />
+    <Professional />
+    <Footer />
+    <FooterBottom />
     </>
-  );
+  )
 };
-
-export default MainComponent;
+export default About ;
