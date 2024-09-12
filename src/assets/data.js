@@ -54,6 +54,7 @@ import {
   FaInstagram,
 } from "react-icons/fa";
 import { FaQuoteLeft, FaCalendarAlt } from "react-icons/fa";
+import { Icon } from '@iconify/react';
 import buildingsIcon from "@iconify/icons-bi/buildings"; // Correct import for Iconify icon
 
 const iconMap = {
@@ -416,14 +417,14 @@ export const tmonials = {
       "name": "Client Name",
       "profession": "Profession",
       "icon":'quote',
-      "quote": "Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut labore et tempor diam tempor erat. Erat dolor rebum sit ipsum."
+      "quote": " Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut labore et tempor diam tempor erat. Erat dolor rebum sit ipsum."
       },
     {
       "image": testimonial_2,
       "name": "Client Name",
       "profession": "Profession",
       "icon":'quote',
-      "quote":"Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut labore et tempor diam tempor erat. Erat dolor rebum sit ipsum."
+      "quote":" Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut labore et tempor diam tempor erat. Erat dolor rebum sit ipsum."
      }
   ],
   icons: [
@@ -480,7 +481,7 @@ export const footerData = {
     address: "123 Street, New York, USA",
     phone: "+012 345 67890",
     email: "info@example.com",
-    icon: "twitter"
+    icon: buildingsIcon
   },
   quickLinks: [
     { text: "Home", link: "/" },
@@ -504,7 +505,8 @@ export const footerData = {
     { name: "footerphone", component: FaPhoneAlt },
     { name: "envelope", component: FaEnvelope },
     { name: "angle_right", component: FaAngleRight },
-    { name: "location", component: BsGeoAlt }
+    { name: "location", component: BsGeoAlt },
+    { name: 'buildingsIcon', component: Icon, iconData: buildingsIcon },
   ]
 };
 

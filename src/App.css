@@ -169,3 +169,28 @@ a.nav-link.active {
     margin-left: -90px; /* Adjust margin-left for smaller screens if needed */
   }
 }
+
+
+@media (min-width: 992px) {
+  .footer::after {
+      position: absolute;
+      content: "";
+      width: 1px;
+      height: 100%;
+      top: 0;
+      left: 50%;
+      background:#fd5d14;
+  }
+}
+
+
+.footer-shape::before {
+  position: absolute;
+  content: "";
+  width: 80px;
+  height: 100%;
+  top: 0;
+  left: -40px;
+  background: #fd5d14;
+  transform: skew(40deg);
+}

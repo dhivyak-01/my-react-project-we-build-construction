@@ -13,6 +13,7 @@ import Button from "react-bootstrap/Button";
 import { Link, useLocation } from "react-router-dom";
 import Carousel from "react-bootstrap/Carousel";
 import { Icon } from "@iconify/react";
+import buildingsIcon from '@iconify/icons-bi/buildings';
 import iconMap from "../assets/data"; // Import the iconMap from your icons.js
 import { quickcontact } from "../assets/data";
 import { navbar } from "../assets/data";
@@ -546,58 +547,6 @@ const Professional = () => {
   );
 };
 
-// const Testimonials = () => {
-//   return (
-//     <div className="container-fluid bg-light py-6 px-5">
-//       <div className="text-center mx-auto mb-5" style={{ maxWidth: '600px' }}>
-//         <h1 className="display-5 text-uppercase mb-4 font-roboto !font-semibold">
-//           What Our <span className="text-customorange">Happy Clients</span> Say!!!
-//         </h1>
-//       </div>
-//       <div className="row gx-0 align-items-center position-relative">
-//         <div className="col-xl-4 col-lg-5 d-none d-lg-block position-relative">
-//           <img
-//             className="img-fluid w-100 h-100 background-image"
-//             src={tmonials.imgage}
-//             alt="Background"
-//           />
-//           {/* Overlay container for images */}
-//           <div className="overlay-container position-absolute top-0 start-0 w-100 h-100">
-//             <Carousel interval={5000} controls={true} indicators={false}>
-//               {tmonials.fields.map((testimonial, index) => (
-//                 <Carousel.Item key={index}>
-//                   <div className="d-flex align-items-center justify-content-start position-relative">
-//                     <img
-//                       className="img-fluid testimonial-image bg-customgray p-lg-3 mb-4 mb-md-0"
-//                       src={testimonial.image}
-//                       alt={testimonial.name}
-//                       style={{ marginLeft: '-90px' }} // Apply margin-left for overlay effect
-//                     />
-//                     <div className="testimonial-text ms-3">
-//                       <h4 className="text-uppercase mb-0">{testimonial.name}</h4>
-//                       <p>{testimonial.profession}</p>
-//                       <p className="fs-5 mb-0">
-//                         {tmonials.icons.map((icon) => (
-//                           <i className="text-customorange me-2" aria-hidden="true" key={icon.name}>
-//                             {React.createElement(icon.component)}
-//                           </i>
-//                         ))}
-//                         {testimonial.quote}
-//                       </p>
-//                     </div>
-//                   </div>
-//                 </Carousel.Item>
-//               ))}
-//             </Carousel>
-//           </div>
-//         </div>
-//         <div className="col-xl-8 col-lg-7 col-md-12">
-//           {/* This column might be adjusted based on your layout requirements */}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 
 const Testimonials = () => {
   return (
@@ -609,22 +558,21 @@ const Testimonials = () => {
         </h1>
       </div>
       <div className="row gx-0 align-items-center position-relative">
+        {/* Background Image for Larger Screens */}
         <div className="col-xl-4 col-lg-5 d-none d-lg-block position-relative">
           <img
             className="img-fluid w-100 h-100 background-image"
             src={tmonials.imgage}
             alt="Background"
-            style={{ objectFit: "cover" }}
+            style={{ objectFit: "cover", height: "100%" }}
           />
         </div>
-        <div
-          className="col-xl-8 col-lg-7 col-md-12 position-absolute"
-          style={{ left: "27%" }}
-        >
+        {/* Carousel Container */}
+        <div className="col-xl-8 col-lg-7 col-md-12 position-relative">
           <Carousel interval={5000} controls={true} indicators={false}>
             {tmonials.fields.map((testimonial, index) => (
               <Carousel.Item key={index}>
-                <div className="row gx-4 align-items-center testimonial py-4 px-3 px-md-4">
+                <div className="row gx-0 align-items-center testimonial py-4 px-3 px-md-4">
                   <div className="col-md-5 d-flex justify-content-center mb-4 mb-md-0">
                     <img
                       className="img-fluid bg-customgray p-3"
@@ -637,16 +585,14 @@ const Testimonials = () => {
                         objectFit: "cover",
                       }}
                       onError={() =>
-                        console.error(
-                          `Failed to load image at ${testimonial.image}`
-                        )
+                        console.error(`Failed to load image at ${testimonial.image}`)
                       }
                     />
                   </div>
                   <div className="col-md-7">
-                    <h4 className="text-uppercase mb-2">{testimonial.name}</h4>
-                    <p>{testimonial.profession}</p>
-                    <p className="fs-5 mb-0">
+                    <h4 className="text-uppercase mb-2 font-roboto !font-semibold">{testimonial.name}</h4>
+                    <p className="font-open-sans text-customwhite">{testimonial.profession}</p>
+                    <p className="fs-5 mb-0 font-open-sans text-customwhite">
                       {tmonials.icons.map((icon, iconIndex) => (
                         <i
                           key={iconIndex}
@@ -668,40 +614,64 @@ const Testimonials = () => {
     </div>
   );
 };
+
 // const Testimonials = () => {
 //   return (
 //     <div className="container-fluid bg-light py-6 px-3 px-sm-4 px-md-5">
-//       <div className="text-center mx-auto mb-5" style={{ maxWidth: '600px' }}>
-//         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-//           What Our <span className="text-primary">Happy Clients</span> Say!!!
+//       <div className="text-center mx-auto mb-5" style={{ maxWidth: "800px" }}>
+//         <h1 className="display-5 text-uppercase mb-4 font-roboto !font-semibold">
+//           What Our <span className="text-customorange">Happy Clients</span>{" "}
+//           Say!!!
 //         </h1>
 //       </div>
-//       <div className="relative flex flex-wrap items-center">
-//         <div className="hidden lg:block lg:w-1/3 relative">
+//       <div className="row gx-0 align-items-center position-relative">
+//         <div className="col-xl-4 col-lg-5 d-none d-lg-block position-relative">
 //           <img
-//             className="w-full h-full object-cover"
+//             className="img-fluid w-100 h-100 background-image"
 //             src={tmonials.imgage}
 //             alt="Background"
+//             style={{ objectFit: "cover" }}
 //           />
 //         </div>
-//         <div className="lg:w-2/3 w-full lg:absolute lg:left-1/2 lg:-translate-x-1/2">
+//         <div
+//           className="col-xl-8 col-lg-7 col-md-12 position-absolute"
+//           style={{ left: "27%" }}
+//         >
 //           <Carousel interval={5000} controls={true} indicators={false}>
 //             {tmonials.fields.map((testimonial, index) => (
 //               <Carousel.Item key={index}>
-//                 <div className="flex flex-wrap p-4 lg:p-8 bg-light">
-//                   <div className="lg:w-1/3 w-full mb-4 lg:mb-0 flex justify-center">
+//                 <div className="row gx-4 align-items-center testimonial py-4 px-3 px-md-4">
+//                   <div className="col-md-5 d-flex justify-content-center mb-4 mb-md-0">
 //                     <img
-//                       className="w-3/4 lg:w-3/5 h-auto object-cover bg-gray-100 p-4"
+//                       className="img-fluid bg-customgray p-3"
 //                       src={testimonial.image}
 //                       alt={testimonial.name}
-//                       onError={() => console.error(`Failed to load image at ${testimonial.image}`)}
+//                       style={{
+//                         width: "100%",
+//                         maxWidth: "292px",
+//                         height: "auto",
+//                         objectFit: "cover",
+//                       }}
+//                       onError={() =>
+//                         console.error(
+//                           `Failed to load image at ${testimonial.image}`
+//                         )
+//                       }
 //                     />
 //                   </div>
-//                   <div className="lg:w-2/3 w-full">
-//                     <h4 className="text-xl font-semibold text-gray-800 mb-2">{testimonial.name}</h4>
-//                     <p className="text-gray-600">{testimonial.profession}</p>
-//                     <p className="text-lg mt-2">
-//                       <i className="fa fa-2x fa-quote-left text-primary mr-2"></i>
+//                   <div className="col-md-7">
+//                     <h4 className="text-uppercase mb-2">{testimonial.name}</h4>
+//                     <p>{testimonial.profession}</p>
+//                     <p className="fs-5 mb-0">
+//                       {tmonials.icons.map((icon, iconIndex) => (
+//                         <i
+//                           key={iconIndex}
+//                           className="text-customorange me-2"
+//                           aria-hidden="true"
+//                         >
+//                           {React.createElement(icon.component)}
+//                         </i>
+//                       ))}
 //                       {testimonial.quote}
 //                     </p>
 //                   </div>
@@ -731,7 +701,7 @@ const BlogSection = () => {
 
           return (
             <Col lg={4} md={6} key={post.id}>
-              <Card className="bg-light">
+              <Card className="bg-light border-0 rounded-0">
                 <Card.Img variant="top" src={post.image} />
                 <Card.Body className="p-4">
                   <div className="d-flex justify-content-between mb-4">
@@ -743,7 +713,7 @@ const BlogSection = () => {
                         height="35"
                         alt={post.authorName}
                       />
-                      <span>{post.authorName}</span>
+                      <span className="!text-customwhite font-open-sans">{post.authorName}</span>
                     </div>
                     <div className="d-flex align-items-center">
                       <a
@@ -753,16 +723,16 @@ const BlogSection = () => {
                         {IconComponent && (
                           <IconComponent className="bi bi-arrow-right" />
                         )}
-                        <span className="ms-2 !text-customwhite">
+                        <span className="ms-2 !text-customwhite font-open-sans">
                           {post.date}
                         </span>
                       </a>
                     </div>
                   </div>
-                  <h4 className="text-uppercase mb-3">{post.title}</h4>
-                  <div className="d-flex justify-content-center">
+                  <h4 className="text-uppercase mb-3 font-roboto !font-semibold">{post.title}</h4>
+                  <div className="d-flex justify-content-start">
                     <Button
-                      className="bg-white border-0 !text-customorange font-open-sans text-uppercase font-semibold d-flex align-items-center"
+                      className="!bg-customgray border-0 !text-customorange font-open-sans text-uppercase font-semibold d-flex align-items-center"
                       href="#"
                     >
                       <span className=" !text-customorange">
@@ -836,14 +806,11 @@ const Footer = () => {
   return (
     <div className="footer container-fluid position-relative bg-dark bg-light-radial text-white-50 py-6 px-5">
       <Container>
-        <Row className="g-5">
-          <Col lg={6} className="pe-lg-5">
+        <Row className="g-5 ">
+          <Col lg={6} className=" pe-lg-5">
             <a href="index.html" className="navbar-brand">
-              <h1 className="m-0 display-4 text-uppercase text-white d-flex justify-content-start">
-                {React.createElement(
-                  icons.find(icon => icon.name === brand.icon)?.component,
-                  { className: 'me-2' }
-                )}
+              <h1 className="mb-4 display-4 !font-semibold font-roboto text-uppercase text-white d-flex justify-content-start">
+              <Icon icon={buildingsIcon} className="me-2 !text-customorange" />
                 {brand.name}
               </h1>
             </a>
@@ -872,7 +839,7 @@ const Footer = () => {
             <div className="d-flex justify-content-start mt-4">
               {['twitter', 'facebook', 'linkedin', 'instagram'].map((name, index) => (
                 <a
-                  className="btn btn-lg btn-primary btn-lg-square rounded-0 me-2"
+                  className="btn btn-lg !bg-customorange btn-lg-square rounded-0 me-2"
                   href={`#${name}`}
                   key={index}
                 >
@@ -884,7 +851,7 @@ const Footer = () => {
               ))}
             </div>
           </Col>
-          <Col lg={6} className="ps-lg-5">
+          <Col lg={6} className=" pe-lg-5">
             <Row className="g-5">
               <Col sm={6}>
                 <h4 className="text-white text-uppercase mb-4">Quick Links</h4>
@@ -928,10 +895,10 @@ const Footer = () => {
                   <Form.Control
                     type="text"
                     placeholder="Your Email Address"
-                    className="border-light me-2"
+                    className="border-light rounded-0"
                     style={{ padding: '20px 30px' }}
                   />
-                  <Button variant="primary" className="px-4">
+                  <Button variant="" className="px-4 !bg-customorange text-white !font-semibold text-open-sans uppercase rounded-0">
                     Sign Up
                   </Button>
                 </Form>
@@ -949,13 +916,13 @@ const FooterBottom = () => {
   return (
     <Container
       fluid
-      className="bg-dark bg-light-radial text-white border-top border-primary px-0"
+      className="bg-dark bg-light-radial text-white border-top !border-customorange px-0"
     >
       <Row className="d-flex flex-column flex-md-row justify-content-between">
         <Col md={7} className="py-4 px-5 text-center text-md-start">
           <p className="mb-0">
             ©{" "}
-            <a className="text-primary" href="#">
+            <a className="text-customorange" href="#">
               {footerBottomData.siteName}
             </a>
             . All Rights Reserved.
@@ -963,7 +930,7 @@ const FooterBottom = () => {
         </Col>
         <Col
           md={5}
-          className="py-4 px-5 bg-primary footer-shape position-relative text-center text-md-end"
+          className="py-4 px-5 bg-customorange footer-shape position-relative text-center text-md-end"
         >
           <p className="mb-0">
             {footerBottomData.designCredit.text}{" "}
