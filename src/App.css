@@ -90,3 +90,82 @@ a.nav-link.active {
       margin-bottom: -13px;
   }
 }
+
+
+.service-item .service-icon {
+  margin-top: -50px;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+}
+
+.service  {
+  width: 67%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+ top:257px;
+ left:59px
+}
+
+.portfolio-title {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 120px;
+    padding: 0 30px;
+    right: 30px;
+    left: 30px;
+    bottom: -60px;
+    background: #FFFFFF;
+    z-index: 3;
+}
+
+
+.page-header {
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(rgba(4, 15, 40, .7), rgba(4, 15, 40, .7)), url(../img/carousel-1.jpg) center center no-repeat;
+  background-size: cover;
+}
+
+
+
+/* Add these styles to your CSS file */
+
+.position-relative {
+  position: relative;
+}
+
+.background-image {
+  z-index: 1; /* Ensure background image is behind the overlay */
+}
+
+.overlay-container {
+  z-index: 2; /* Ensure overlay content is above the background image */
+  pointer-events: none; /* Prevent interaction with the overlay container */
+}
+
+.testimonial-image {
+  position: absolute; /* Ensure the image is positioned absolutely within the container */
+}
+
+.testimonial-text {
+  position: relative; /* Ensures text remains in the correct position */
+  z-index: 3; /* Makes sure text is above other content */
+}
+
+@media (max-width: 992px) {
+  .testimonial-image {
+    margin-left: -90px; /* Adjust margin-left for smaller screens if needed */
+  }
+}

@@ -40,6 +40,35 @@ module.exports = {
       fontWeight: {
         'semi-bold': 600,
       },
+      padding: {
+        '6': '90px', // Add this line to customize the value of `py-6`
+      },
+      margin: {
+        'n5': '-3rem',
+      },
+      width: {
+        'building_2': '42px',
+        'home': '54px',
+        'paintplate': '48px',
+        'tool': '48px',
+        'brush': '48px',
+        'compass': '48px',
+        '56': '224px',
+        '72': '279px',
+        '64': '329px',
+        '80': '266px',
+        '96': '249.05px',
+        '112': '312.66px',
+        '144': '561.55px',
+      },
+      height: {
+        'building_2': '48px',
+        'home': '48px',
+        'paintplate': '48px',
+        'tool': '48px',
+        'brush': '48px',
+        'compass': '48px',
+      },
     },
   },
   plugins: [],
