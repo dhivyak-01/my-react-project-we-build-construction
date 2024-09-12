@@ -632,7 +632,7 @@ const BlogSection = () => {
       <Row className="g-5">
         {blogPosts.map((post) => {
           const IconComponent = iconMap[post.icon];
-          
+
           return (
             <Col lg={4} md={6} key={post.id}>
               <Card className="bg-light border-0 rounded-0">
@@ -700,44 +700,7 @@ const BlogSection = () => {
     </Container>
   );
 };
-// const BlogSection = () => {
-//   return (
-//     <Container fluid className="py-6 px-5">
-//       <div className="text-center mx-auto mb-5" style={{ maxWidth: '600px' }}>
-//         <h1 className="display-5 text-uppercase mb-4">
-//           Latest <span className="text-primary">Articles</span> From Our Blog Post
-//         </h1>
-//       </div>
-//       <Row className="g-5">
-//         {blogPosts.map(post => (
-//           <Col lg={4} md={6} key={post.id}>
-//             <Card className="bg-light">
-//               <Card.Img variant="top" src={post.image} alt="" />
-//               <Card.Body className="p-4">
-//                 <div className="d-flex justify-content-between mb-4">
-//                   <div className="d-flex align-items-center">
-//                     <img className="rounded-circle me-2" src={post.authorImage} width="35" height="35" alt="" />
-//                     <span>{post.authorName}</span>
-//                   </div>
-//                   <div className="d-flex align-items-center">
-//                     <span className="ms-3">
-//                       <i className="far fa-calendar-alt text-primary me-2"></i>
-//                       {post.date}
-//                     </span>
-//                   </div>
-//                 </div>
-//                 <h4 className="text-uppercase mb-3">{post.title}</h4>
-//                 <a className="text-uppercase fw-bold" href={post.link}>
-//                   Read More <i className="bi bi-arrow-right"></i>
-//                 </a>
-//               </Card.Body>
-//             </Card>
-//           </Col>
-//         ))}
-//       </Row>
-//     </Container>
-//   );
-// };
+
 const Footer = () => {
   const {
     quickLinks = [],
@@ -760,25 +723,25 @@ const Footer = () => {
                 {brand.name}
               </h1>
             </a>
-            <p>{brand.description}</p>
+            <p className="font-open-sans">{brand.description}</p>
             <p className="d-flex justify-content-start">
               {React.createElement(
                 icons.find((icon) => icon.name === "location")?.component,
-                { className: "me-2" }
+                { className: "me-2 mt-1.5" }
               )}
               {brand.address}
             </p>
             <p className="d-flex justify-content-start">
               {React.createElement(
                 icons.find((icon) => icon.name === "footerphone")?.component,
-                { className: "me-2" }
+                { className: "me-2 mt-1.5" }
               )}
               {brand.phone}
             </p>
             <p className="d-flex justify-content-start">
               {React.createElement(
                 icons.find((icon) => icon.name === "envelope")?.component,
-                { className: "me-2" }
+                { className: "me-2 mt-1.5" }
               )}
               {brand.email}
             </p>
