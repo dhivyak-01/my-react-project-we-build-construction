@@ -16,6 +16,8 @@ import TestimonialHeader from "./pages/Testimonial";
 import Bloggrid from "./pages/BlogGrid";
 import Blogdetail from "./pages/BlogDetail";
 import Contact from "./pages/Contact";
+import Adminlogin from "./admin/adminlogin";
+import Adminpanel from "./admin/Adminpanel";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -25,6 +27,8 @@ root.render(
         <Route path="/" element={<App />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/Signin" element={<Signin />} />
+        <Route path="/adminlogin" element={<Adminlogin />} />
+        <Route path="/adminlogin" element={<Adminpanel />} />
         <Route path="/about" element={<About />} />
         <Route path="/service" element={<Service />} />
         <Route path="/project" element={<Project />} />

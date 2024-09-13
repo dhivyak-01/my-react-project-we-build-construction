@@ -132,6 +132,7 @@ export const navbar = [
     button: [
       { to: "/signup", label: "Signup" },
       { to: "/Signin", label: "Signin" },
+      { to: "/adminlogin", label: "Admin Login" },
     ],
     quoteButton: {
       label: "Signup/Signin",
