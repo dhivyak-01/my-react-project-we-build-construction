@@ -717,3 +717,61 @@ export const contactrouter = {
     buttonText: "Send Message"
   }
 };
+
+
+
+// data.js
+export const blogDatadatail = {
+  blogDetail: {
+    image: blog_2,
+    title: "Diam dolor duo ipsum clita sed lorem tempor. Clita kasd diam justo diam lorem sed amet sed rebum eos.",
+    content: [
+      "Sadipscing labore amet rebum est et justo gubergren. Et eirmod ipsum sit diam ut magna lorem. Nonumy vero labore lorem sanctus rebum et lorem magna kasd...",
+      "Voluptua est takimata stet invidunt sed rebum nonumy stet...",
+      "Diam dolor est labore duo invidunt ipsum clita et, sed et lorem voluptua tempor invidunt at est sanctus sanctus..."
+    ]
+  },
+  comments: [
+    {
+      id: 1,
+      user: 'John Doe',
+      date: '01 Jan 2045',
+      text: 'Diam amet duo labore stet elitr invidunt ea clita ipsum...',
+      image: user
+    },
+    {
+      id: 2,
+      user: 'Jane Smith',
+      date: '02 Jan 2045',
+      text: 'Sadipscing labore amet rebum est et justo gubergren...',
+      image: user
+    },
+    {
+      id: 3,
+      user: 'Alex Johnson',
+      date: '03 Jan 2045',
+      text: 'Diam amet duo labore stet elitr invidunt ea clita ipsum...',
+      image: user
+    }
+  ],
+  recentPosts: [
+    { id: 1, image: blog_1, title: 'Lorem ipsum dolor sit amet consec adipis' },
+    { id: 2, image: blog_2, title: 'Rebum diam lorem sed amet ipsum est' },
+    { id: 3, image: blog_3, title: 'Magna est et stet dolor lorem ipsum' },
+    { id: 4, image: blog_1, title: 'Lorem ipsum dolor sit amet consec adipis' },
+    { id: 5, image: blog_2, title: 'Rebum diam lorem sed amet ipsum est' },
+    { id: 6, image: blog_3, title: 'Magna est et stet dolor lorem ipsum' }
+  ],
+  categories: ['Web Design', 'Web Development', 'Web Development', 'Keyword Research', 'Email Marketing'],
+  tags: ['Design', 'Development', 'Marketing', 'SEO', 'Writing', 'Consulting','Design', 'Development', 'Marketing', 'SEO', 'Writing', 'Consulting']
+};
+
+
+
+
+export const plainTextData = {
+  title: 'Plain Text',
+  content: 'Vero sea et accusam justo dolor accusam lorem consetetur, dolores sit amet sit dolor clita kasd justo, diam accusam no sea ut tempor magna takimata, amet sit et diam dolor ipsum amet diam.',
+  buttonText: 'Read More',
+  buttonLink: '#'
+};
