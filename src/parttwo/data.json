@@ -1,0 +1,374 @@
+{
+  "contactInfo": [
+    {
+      "id": 1,
+      "location_icon": "location",
+      "heading": "our office",
+      "description": "123 Street, New York, USA"
+    },
+    {
+      "id": 2,
+      "email_icon": "email",
+      "heading": "email us",
+      "description": "info@example.com"
+    },
+    {
+      "id": 3,
+      "phone_icon": "phone",
+      "heading": "call us",
+      "description": "+012 345 6789"
+    }
+  ],
+  "navbar": [
+    {
+      "icon": "building_1",
+      "brand": "WEBUILD",
+      "links": [
+        { "to": "/", "label": "Home" },
+        { "to": "/about", "label": "About" },
+        { "to": "/service", "label": "Service" }
+      ],
+      "dropdown": {
+        "title": "Pages",
+        "items": [
+          { "to": "/project", "label": "Our Project" },
+          { "to": "/team", "label": "The Team" },
+          { "to": "/testimonial", "label": "Testimonial" },
+          { "to": "/blog", "label": "Blog Grid" },
+          { "to": "/detail", "label": "Blog Detail" }
+        ]
+      },
+      "links1": [
+        { "to": "/contact", "label": "Contact" }
+      ],
+      "button": [
+        { "to": "/signup", "label": "Signup" },
+        { "to": "/Signin", "label": "Signin" },
+        { "to": "/adminlogin", "label": "Admin Login" }
+      ],
+      "quoteButton": {
+        "label": "Signup/Signin",
+        "link": ""
+      }
+    }
+  ],
+  "carousel": {
+    "1": {
+      "icon": "home",
+      "image": "carousel_1",
+      "heading": "Build Your Dream House With Us",
+      "caption": "get a quote"
+    },
+    "2": {
+      "icon": "tool",
+      "image": "carousel_2",
+      "heading": "We Are Trusted For Your Project",
+      "caption": "Contact us"
+    }
+  },
+  "theleader" : [
+  {
+    "title": "We are Leader in Construction Industry",
+    "description_1": "It was a time of elitr at rebum at at clita. Diam pain diam diam very time diam diam diam diam and labor them",
+    "description_2": "It was time for the vines to settle down. Let the pain be long, and let it be settled in time. Some of them have a lot of work to do. Clita was the very thing, but it was not the work of the people. Saint Clita two just and time",
+    "icon": "check",
+    "ponit_1": "Perfect Planning",
+    "ponit_2": "Professional Workers",
+    "ponit_3": "First Working Process",
+    "description_3": "It was time for the vines to settle down. Let the pain be long, and let it be settled in time. I'm going to do some homework and work on them",
+    "imagesign": "signature",
+    "imagegirl": "about"
+  }
+],
+"thebest": {
+    "title": "We Provide The Best Construction Services",
+    "fields": [
+      {
+        "id": "1",
+        "image": "service-1",
+        "contenttitle": "Building Construction",
+        "content": "Two with pain and a diam, but he himself will stand two diam. I'm going to do it as I'm going to do it but it was but it's going to be a big elitr amet kasd diam two",
+        "icon": "building_2",
+        "button": "read more",
+        "arrowicon": "right_arrow"
+      },
+      {
+        "id": "2",
+        "image": "service-2",
+        "contenttitle": "House Renovation",
+        "content": "Two with pain and a diam, but he himself will stand two diam. I'm going to do it as I'm going to do it but it was but it's going to be a big elitr amet kasd diam two",
+        "icon": "home",
+        "button": "read more",
+        "arrowicon": "right_arrow"
+      },
+      {
+        "id": "3",
+        "image": "service-3",
+        "contenttitle": "Architecture Design",
+        "content": "Two with pain and a diam, but he himself will stand two diam. I'm going to do it as I'm going to do it but it was but it's going to be a big elitr amet kasd diam two",
+        "icon": "compass",
+        "button": "read more",
+        "arrowicon": "right_arrow"
+      },
+      {
+        "id": "4",
+        "image": "service-4",
+        "contenttitle": "Interior Design",
+        "content": "Two with pain and a diam, but he himself will stand two diam. I'm going to do it as I'm going to do it but it was but it's going to be a big elitr amet kasd diam two",
+        "icon": "paintplate",
+        "button": "read more",
+        "arrowicon": "right_arrow"
+      },
+      {
+        "id": "5",
+        "image": "service-5",
+        "contenttitle": "Fixing & Support",
+        "content": "Two with pain and a diam, but he himself will stand two diam. I'm going to do it as I'm going to do it but it was but it's going to be a big elitr amet kasd diam two",
+        "icon": "tool",
+        "button": "read more",
+        "arrowicon": "right_arrow"
+      },
+      {
+        "id": "6",
+        "image": "service-6",
+        "contenttitle": "Painting",
+        "content": "Two with pain and a diam, but he himself will stand two diam. I'm going to do it as I'm going to do it but it was but it's going to be a big elitr amet kasd diam two",
+        "icon": "brush",
+        "button": "read more",
+        "arrowicon": "right_arrow"
+      }
+    ]
+  },
+  "requestCallBackData": {
+    "header": {
+      "title": "Request A Call Back",
+      "highlight": "Call Back"
+    },
+    "description": "Nonumy ipsum amet tempor takimata vero ea elitr. Diam diam ut et eos duo duo sed. Lorem elitr sadipscing eos et ut et stet justo, sit dolore et voluptua labore. Ipsum erat et ea ipsum magna sadipscing lorem. Sit lorem sea sanctus eos. Sanctus sit tempor dolores ipsum stet justo sit erat ea, sed diam sanctus takimata sit. Et at voluptua amet erat justo amet ea ipsum eos, eirmod accusam sea sed ipsum kasd ut.",
+    "buttonText": "Get A Quote",
+    "formFields": [
+      {
+        "type": "text",
+        "placeholder": "Your Name",
+        "style": {
+          "height": "55px"
+        }
+      },
+      {
+        "type": "email",
+        "placeholder": "Your Email",
+        "style": {
+          "height": "55px"
+        }
+      },
+      {
+        "type": "text",
+        "placeholder": "Call Back Date",
+        "style": {
+          "height": "55px"
+        }
+      },
+      {
+        "type": "text",
+        "placeholder": "Call Back Time",
+        "style": {
+          "height": "55px"
+        }
+      },
+      {
+        "type": "textarea",
+        "placeholder": "Message",
+        "rows": 5
+      }
+    ],
+    "submitButtonText": "Submit Request"
+  },
+  "popularData":{
+    "title": "Some Of Our Popular Dream Projects",
+    "fields": [
+      {
+        "id": "1",
+        "image": "portfolio_1",  
+        "contenttitle": "Project Name",
+        "locationicon": "Location",
+        "content": "123 Street, New York, USA"
+      },
+      {
+        "id": "2",
+        "image": "portfolio_2",  
+        "contenttitle": "Project Name",
+        "locationicon": "Location",
+        "content": "123 Street, New York, USA"
+      },
+      {
+        "id": "3",
+        "image": "portfolio_3",  
+        "contenttitle": "Project Name",
+        "locationicon": "Location",
+        "content": "123 Street, New York, USA"
+      },
+      {
+        "id": "4",
+        "image": "portfolio_4",  
+        "contenttitle": "Project Name",
+        "locationicon": "Location",
+        "content": "123 Street, New York, USA"
+      },
+      {
+        "id": "5",
+        "image": "portfolio_5",  
+        "contenttitle": "Project Name",
+        "locationicon": "Location",
+        "content": "123 Street, New York, USA"
+      },
+      {
+        "id": "6",
+        "image": "portfolio_6", 
+        "contenttitle": "Project Name ",
+        "locationicon": "Location",
+        "content": "123 Street, New York, USA"
+      }
+    ]
+  },
+  "professionalteam": {
+    "title": "We Are Professional & Expert Workers",
+    "fields": [
+      {
+        "id": "1",
+        "image": "team_1",
+        "contenttitle": "Adam Phillips",
+        "content": "CEO & Founder"
+      },
+      {
+        "id": "2",
+        "image": "team_2",
+        "contenttitle": "Dylan Adams",
+        "content": "Civil Engineer"
+      },
+      {
+        "id": "3",
+        "image": "team_3",
+        "contenttitle": "Jhon Doe",
+        "content": "Interior Designer"
+      },
+      {
+        "id": "4",
+        "image": "team_4",
+        "contenttitle": "Josh Dunn",
+        "content": "Painter"
+      }
+    ],
+    "icons": [
+      {
+        "name": "twitter"
+      },
+      {
+        "name": "facebook"
+      },
+      {
+        "name": "linkedin"
+      },
+      {
+        "name": "insta"
+      },
+      {
+        "name": "youtube"
+      }
+    ]
+  },
+"tmonials":  {
+    "imgage": "testimonial",
+    "fields": [
+      {
+        "image": "testimonial_1",
+        "name": "Client Name",
+        "profession": "Profession",
+        "icon": "quote",
+        "quote": "Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut labore et tempor diam tempor erat. Erat dolor rebum sit ipsum."
+      },
+      {
+        "image": "testimonial_2",
+        "name": "Client Name",
+        "profession": "Profession",
+        "icon": "quote",
+        "quote": "Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut labore et tempor diam tempor erat. Erat dolor rebum sit ipsum."
+      }
+    ],
+    "icons": [
+      {
+        "name": "quote",
+        "component": "FaQuoteLeft"
+      }
+    ]
+  },
+  "blogPosts": [
+    {
+      "id": 1,
+      "image": "blog_1",
+      "authorImage": "user",
+      "authorName": "John Doe",
+      "icon": "calendar",
+      "date": "01 Jan, 2045",
+      "title": "Rebum diam clita lorem erat magna est erat",
+      "button": "read more",
+      "arrowicon": "right_arrow"
+    },
+    {
+      "id": 2,
+      "image": "blog_2",
+      "authorImage": "user",
+      "authorName": "John Doe",
+      "icon": "calendar",
+      "date": "01 Jan, 2045",
+      "title": "Rebum diam clita lorem erat magna est erat",
+      "button": "read more",
+      "arrowicon": "right_arrow"
+    },
+    {
+      "id": 3,
+      "image": "blog_3",
+      "authorImage": "user",
+      "authorName": "John Doe",
+      "icon": "calendar",
+      "date": "01 Jan, 2045",
+      "title": "Rebum diam clita lorem erat magna est erat",
+      "button": "read more",
+      "arrowicon": "right_arrow"
+    }
+  ],
+    "footerData":{
+      "brand": {
+        "name": "WEBUILD",
+        "description": "Aliquyam sed elitr elitr erat sed diam ipsum eirmod eos lorem nonumy. Tempor sea ipsum diam sed clita dolore eos dolores magna erat dolore sed stet justo et dolor.",
+        "address": "123 Street, New York, USA",
+        "phone": "+012 345 67890",
+        "email": "info@example.com",
+        "icon": "path/to/buildingsIcon.png"  
+      },
+      "quickLinks": [
+        { "text": "Home", "link": "/" },
+        { "text": "About", "link": "/about" },
+        { "text": "Our Services", "link": "/service" },
+        { "text": "Meet The Team", "link": "/team" },
+        { "text": "Contact Us", "link": "/contact" }
+      ],
+      "popularLinks": [
+        { "text": "Home", "link": "/" },
+        { "text": "About Us", "link": "/about" },
+        { "text": "Our Services", "link": "/service" },
+        { "text": "Meet The Team", "link": "/team" },
+        { "text": "Contact Us", "link": "/contact" }
+      ],
+      "icons": [
+        { "name": "twitter", "component": "FaTwitter" },
+        { "name": "facebook", "component": "FaFacebookF" },
+        { "name": "linkedin", "component": "FaLinkedinIn" },
+        { "name": "instagram", "component": "FaInstagram" },
+        { "name": "footerphone", "component": "FaPhoneAlt" },
+        { "name": "envelope", "component": "FaEnvelope" },
+        { "name": "angle_right", "component": "FaAngleRight" },
+        { "name": "location", "component": "BsGeoAlt" },
+        { "name": "buildingsIcon", "component": "Icon", "iconData": "path/to/buildingsIcon.png" } 
+      ]
+    }
+}

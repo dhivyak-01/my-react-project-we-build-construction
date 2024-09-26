@@ -1,0 +1,58 @@
+.text-customorange {
+    color: #f7931a; /* Change to your desired orange color */
+  }
+  
+  .text-customblack {
+    color: #212529; /* Change to your desired black color */
+  }
+  
+  .text-customwhite {
+    color: #ffffff; /* Change to your desired white color */
+  }
+
+
+.contact-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem 5%;
+    flex-wrap: wrap; /* Allows responsiveness */
+}
+
+.contact-item {
+    flex: 1;
+    text-align: center;
+    padding: 1rem;
+    border-left: 1px solid #ccc; /* Left border for the first two items */
+}
+
+.contact-item:first-child {
+    border-left: none; /* Remove left border for the first item */
+}
+
+.contact-item:last-child {
+    border-right: none; /* Remove right border for the last item */
+}
+
+.icon {
+    font-size: 2rem; /* Size of the icons */
+    color: #fd5d14; /* Primary color */
+    margin-bottom: 0.5rem; /* Spacing below the icon */
+}
+
+.title {
+    text-transform: uppercase; /* Uppercase text */
+    font-weight: bold; /* Bold text */
+}
+
+@media (max-width: 992px) {
+    .contact-container {
+        flex-direction: column; /* Stack items vertically on smaller screens */
+    }
+    .contact-item {
+        border-left: none; /* Remove left border for all items */
+        border-bottom: 1px solid #ccc; /* Add bottom border for separation */
+    }
+    .contact-item:last-child {
+        border-bottom: none; /* Remove bottom border for the last item */
+    }
+}
