@@ -7,7 +7,7 @@ import iconMap from "../assets/data";
 // import {  } from "../assets/data";
 import {quickcontact, navbar, theleader, requestCallBackData, professional, footerData, footerBottomData, } from "../assets/data";
 import {
-  Container, Row, Col, Navbar, Nav, NavDropdown, Form, Card,
+  Container, Row, Col, Navbar, Nav, NavDropdown, Form,
 } from "react-bootstrap";
 
 

@@ -4,9 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const SignupForm = () => {
   return (
-    <Container className="min-h-screen flex items-center justify-center bg-cover bg-center bg-registerbg" >
+    <Container fluid className="min-h-screen flex items-center justify-center bg-cover bg-center bg-registerbg" >
       <div className="bg-white bg-opacity-30 p-8 rounded-lg shadow-lg backdrop-blur-md max-w-lg w-full">
-        <h2 className="text-center text-gray-800 mb-6 text-2xl font-semibold">SignUp Form</h2>
+        <h2 className="text-center text-gray-800 mb-6 text-2xl font-semibold">User SignUp Form</h2>
         <Form>
           <Row className="mb-3">
             <Col>
@@ -57,14 +57,14 @@ const SignupForm = () => {
             <Form.Label>city</Form.Label>
             <Form.Control as="select" required>
               <option disabled selected>Select city</option>
-              <option value="Full Stack">...........</option>
-              <option value="Frontend">...........</option>
-              <option value="Backend">...........</option>
-              <option value="Machine Learning">...........</option>
-              <option value="Digital Marketing">...........</option>
+              <option value="Full Stack">Coimbator</option>
+              <option value="Frontend">Erode</option>
+              <option value="Backend">Thiruppur</option>
+              <option value="Machine Learning">Selam</option>
+              <option value="Digital Marketing">Krishnagiri</option>
             </Form.Control>
           </Form.Group>
-          <Button type="submit" className="w-full !bg-customorange border-0 text-white">Submit</Button>
+          <Button type="submit" className="w-full !bg-customorange border-0 text-white">Register</Button>
         </Form>
       </div>
     </Container>

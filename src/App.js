@@ -1,14 +1,14 @@
 import "./App.css";
-// import MainComponent from "./component";
-import MainComponentpartone from "./partone";
-// import PortfolioSection from './test/imageseparation';
+
+import MainComponent from "./component";
+// import NavbarComponent from "./test/navebar";
+
 
 function App() {
   return (
     <div>
-      {/* <MainComponent /> */}
-      {/* <PortfolioSection /> */}
-      <MainComponentpartone />
+      <MainComponent />
+      {/* <NavbarComponent /> */}
     </div>
   );
 }

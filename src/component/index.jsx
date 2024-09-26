@@ -86,6 +86,8 @@ const NavbarComponent = () => {
     location.pathname === path ||
     (path === "/index" && location.pathname === "/");
 
+    console.log("Navbar config:", config);
+
   return (
     <Navbar
       variant="dark"
@@ -129,7 +131,7 @@ const NavbarComponent = () => {
 
           <NavDropdown
             title={
-              <span className={`text-white hover:!text-customorange`}>
+              <span className={`text-white hover:!text-customorange navdropdown`}>
                 {config.dropdown.title}
               </span>
             }
@@ -140,7 +142,7 @@ const NavbarComponent = () => {
                 key={index}
                 as={Link}
                 to={item.to}
-                className={`NavDropdownItem hover:!bg-Dropdownbg ${
+                className={`NavDropdownItem bg-white hover:!bg-Dropdownbg ${
                   isActive(item.to) ? "active" : ""
                 }`}
               >
@@ -164,7 +166,7 @@ const NavbarComponent = () => {
         </Nav>
       </Navbar.Collapse>
       <NavDropdown
-        title="Signin/Signup"
+        title="Login/Signup"
         id="signup-signin-dropdown"
         className="NavDropdownbtn text-white font-open-sans text-xl ms-3 !bg-customorange rounded-0 py-4 d-none px-5 d-lg-block"
         style={{ height: "97px", fontSize: "large", lineHeight: "49px" }}
@@ -265,7 +267,7 @@ const TheLeader = () => {
         <p className="mb-2 flex items-center">
           {React.createElement(iconMap[leader.icon], {
             className: "me-3 text-customorange",
-          })}{" "}
+          })}
           {/* Ensure className is passed correctly */}
           <div className="text-customwhite font-open-sans font-semibold">
             {leader.ponit_2}
@@ -274,7 +276,7 @@ const TheLeader = () => {
         <p className="mb-2 flex items-center">
           {React.createElement(iconMap[leader.icon], {
             className: "me-3 text-customorange",
-          })}{" "}
+          })}
           {/* Ensure className is passed correctly */}
           <div className="text-customwhite font-open-sans font-semibold">
             {leader.ponit_3}

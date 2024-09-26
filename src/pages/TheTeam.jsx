@@ -1,37 +1,13 @@
-// import React from 'react';
-// import { Container } from 'react-bootstrap';
-
-// const TheTeam = () => {
-//   return (
-//     <div className="container-fluid bg-gray-800 py-5 page-header">
-//       <Container>
-//         <h1 className="display-3 text-uppercase text-white mb-3">Testimonial</h1>
-//         <div className="d-inline-flex text-white">
-//           <h6 className="text-uppercase m-0">
-//             <a href="/" className="text-white hover:text-gray-400">Home</a>
-//           </h6>
-//           <h6 className="text-white m-0 px-3">/</h6>
-//           <h6 className="text-uppercase text-white m-0">Testimonial</h6>
-//         </div>
-//       </Container>
-//     </div>
-//   );
-// };
-
-// export default TheTeam;
-
-
-
 import React from 'react';
 import Button from "react-bootstrap/Button";
 import { Link, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import Carousel from "react-bootstrap/Carousel";
+// import Carousel from "react-bootstrap/Carousel";
 import buildingsIcon from "@iconify/icons-bi/buildings";
 import iconMap from "../assets/data";
 import {quickcontact, navbar, professionalteam,  footerData, footerBottomData, } from "../assets/data";
 import {
-  Container, Row, Col, Navbar, Nav, NavDropdown, Form, Card,
+  Container, Row, Col, Navbar, Nav, NavDropdown, Form,
 } from "react-bootstrap";
 
 

@@ -17,6 +17,10 @@ a.nav-link.active {
   background-color: #FD5D14 !important; /* Customize this color as needed */
 }
 
+.nav-item.nav-link, .navdropdown , #navbarScrollingDropdown, .NavDropdownItem
+{
+  visibility: visible;
+}
 
 @media only screen and (max-width: 1024px) {
   .NavDropdownbtn.text-white {
@@ -193,4 +197,20 @@ a.nav-link.active {
   left: -40px;
   background: #fd5d14;
   transform: skew(40deg);
+}
+
+
+thead.table-header
+{
+  background-color: #fd5d14 !important;
+}
+
+.custom-padding {
+  padding: 26px;
+  padding-top: 65px;
+}
+
+.form-image-width{
+  margin-bottom: '10px';
+  width: 299px !important;
 }

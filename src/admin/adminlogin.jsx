@@ -1,69 +1,57 @@
-import React, { useState } from 'react';
-import { Form, Button, Container, Row } from 'react-bootstrap';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from "react";
+import { Form, Button, Container, Row } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+// Import the configuration object
+import { adminlogin } from '../assets/data'; // Adjust the path accordingly
 
-const Adminlogin = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
-  const navigate = useNavigate(); // Initialize navigate function
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:5000/login', { email, password });
-      setSuccess(response.data.message);
-      setError(null);
-      // Redirect to Admin Panel
-      navigate('/adminpanel'); // Use navigate instead of history.push
-    } catch (error) {
-      setError(error.response.data.message);
-      setSuccess(null);
-    }
-  };
-
+const AdminLogin = () => {
   return (
-    <Container className="min-h-screen d-flex align-items-center justify-content-center bg-cover bg-center bg-registerbg">
-      <div className="bg-white bg-opacity-30 p-8 rounded-lg shadow-lg backdrop-blur-md max-w-lg w-100">
-        <h2 className="text-center text-gray-800 mb-6 text-2xl font-semibold">
-          Admin Login
+    <Container fluid className="min-h-screen flex items-center justify-center bg-cover bg-center bg-registerbg">
+      <div className="bg-white bg-opacity-30 p-8 rounded-lg shadow-lg backdrop-blur-md max-w-lg w-full">
+        <h2 className="text-center text-customorange mb-6 text-2xl font-semibold">
+          {adminlogin.title}
         </h2>
-        {error && <div className="alert alert-danger">{error}</div>}
-        {success && <div className="alert alert-success">{success}</div>}
-        <Form onSubmit={handleSubmit}>
-          <Row className="mb-3">
-            <Form.Group controlId="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control 
-                type="email" 
-                required 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-              />
-            </Form.Group>
-          </Row>
-          <Form.Group className="mb-3">
-            <Form.Label>Password</Form.Label>
-            <Form.Control 
-              type="password" 
-              required 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-            />
-          </Form.Group>
-          <Button type="submit" className="w-100 border-0 bg-customorange text-white">
-            Login
-          </Button>
+        <Form>
+          {adminlogin.fields.map((field) => (
+            <Row className="mb-3" key={field.id}>
+              <Form.Group controlId={field.id}>
+                <Form.Label>{field.label}</Form.Label>
+                <Form.Control
+                  type={field.type}
+                  required={field.required}
+                />
+              </Form.Group>
+            </Row>
+          ))}
+          {adminlogin.button.map((btn) => (
+            <Button 
+              key={btn.to}
+              type="submit" 
+              className="w-full !bg-customorange text-white border-0"
+              onClick={() => window.location.href = btn.to} // Redirects to the specified route
+            >
+              {btn.label}
+            </Button>
+          ))}
         </Form>
       </div>
     </Container>
   );
 };
 
-export default Adminlogin;
+export default AdminLogin;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -75,24 +63,40 @@ export default Adminlogin;
 // import React, { useState } from 'react';
 // import { Form, Button, Container, Row } from 'react-bootstrap';
 // import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
+// // Import the configuration object
+// import { adminlogin } from '../assets/data'; // Adjust the path accordingly
+
 // const Adminlogin = () => {
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
+//   const [formData, setFormData] = useState({
+//     email: '',
+//     password: '',
+//   });
 //   const [error, setError] = useState(null);
 //   const [success, setSuccess] = useState(null);
+//   const navigate = useNavigate();
+
+//   const handleChange = (e) => {
+//     const { id, value } = e.target;
+//     setFormData((prevState) => ({
+//       ...prevState,
+//       [id]: value,
+//     }));
+//   };
 
 //   const handleSubmit = async (event) => {
 //     event.preventDefault();
 //     try {
-//       const response = await axios.post('http://localhost:5000/login', { email, password });
-//       setSuccess(response.data.message);
+//       const response = await axios.post('http://localhost:5000/login', formData);
+//       setSuccess(response.data.message || 'Login successful');
 //       setError(null);
-//       // Handle successful login (e.g., redirect to admin panel)
-//       // e.g., window.location.href = '/adminpanel';
+//       navigate('/adminpanel');
 //     } catch (error) {
-//       setError(error.response.data.message);
+//       // Check if error.response and error.response.data exist before accessing them
+//       const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
+//       setError(errorMessage);
 //       setSuccess(null);
 //     }
 //   };
@@ -101,34 +105,33 @@ export default Adminlogin;
 //     <Container className="min-h-screen d-flex align-items-center justify-content-center bg-cover bg-center bg-registerbg">
 //       <div className="bg-white bg-opacity-30 p-8 rounded-lg shadow-lg backdrop-blur-md max-w-lg w-100">
 //         <h2 className="text-center text-gray-800 mb-6 text-2xl font-semibold">
-//           Admin Login
+//           {adminlogin.title}
 //         </h2>
 //         {error && <div className="alert alert-danger">{error}</div>}
 //         {success && <div className="alert alert-success">{success}</div>}
 //         <Form onSubmit={handleSubmit}>
-//           <Row className="mb-3">
-//             <Form.Group controlId="email">
-//               <Form.Label>Email</Form.Label>
-//               <Form.Control 
-//                 type="email" 
-//                 required 
-//                 value={email} 
-//                 onChange={(e) => setEmail(e.target.value)} 
-//               />
-//             </Form.Group>
-//           </Row>
-//           <Form.Group className="mb-3">
-//             <Form.Label>Password</Form.Label>
-//             <Form.Control 
-//               type="password" 
-//               required 
-//               value={password} 
-//               onChange={(e) => setPassword(e.target.value)} 
-//             />
-//           </Form.Group>
-//           <Button type="submit" className="w-100 border-0 bg-customorange text-white">
-//             Login
-//           </Button>
+//           {adminlogin.fields.map((field) => (
+//             <Row className="mb-3" key={field.id}>
+//               <Form.Group controlId={field.id}>
+//                 <Form.Label>{field.label}</Form.Label>
+//                 <Form.Control
+//                   type={field.type}
+//                   required={field.required}
+//                   value={formData[field.id] || ''}
+//                   onChange={handleChange}
+//                 />
+//               </Form.Group>
+//             </Row>
+//           ))}
+//           {adminlogin.button.map((btn, index) => (
+//             <Button
+//               key={index}
+//               type="submit"
+//               className="w-100 border-0 bg-customorange text-white"
+//             >
+//               {btn.label}
+//             </Button>
+//           ))}
 //         </Form>
 //       </div>
 //     </Container>
@@ -136,3 +139,4 @@ export default Adminlogin;
 // };
 
 // export default Adminlogin;
+

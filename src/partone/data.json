@@ -138,5 +138,237 @@
         "arrowicon": "right_arrow"
       }
     ]
-  }
+  },
+  "requestCallBackData": {
+    "header": {
+      "title": "Request A Call Back",
+      "highlight": "Call Back"
+    },
+    "description": "Nonumy ipsum amet tempor takimata vero ea elitr. Diam diam ut et eos duo duo sed. Lorem elitr sadipscing eos et ut et stet justo, sit dolore et voluptua labore. Ipsum erat et ea ipsum magna sadipscing lorem. Sit lorem sea sanctus eos. Sanctus sit tempor dolores ipsum stet justo sit erat ea, sed diam sanctus takimata sit. Et at voluptua amet erat justo amet ea ipsum eos, eirmod accusam sea sed ipsum kasd ut.",
+    "buttonText": "Get A Quote",
+    "formFields": [
+      {
+        "type": "text",
+        "placeholder": "Your Name",
+        "style": {
+          "height": "55px"
+        }
+      },
+      {
+        "type": "email",
+        "placeholder": "Your Email",
+        "style": {
+          "height": "55px"
+        }
+      },
+      {
+        "type": "text",
+        "placeholder": "Call Back Date",
+        "style": {
+          "height": "55px"
+        }
+      },
+      {
+        "type": "text",
+        "placeholder": "Call Back Time",
+        "style": {
+          "height": "55px"
+        }
+      },
+      {
+        "type": "textarea",
+        "placeholder": "Message",
+        "rows": 5
+      }
+    ],
+    "submitButtonText": "Submit Request"
+  },
+  "popularData":{
+    "title": "Some Of Our Popular Dream Projects",
+    "fields": [
+      {
+        "id": "1",
+        "image": "portfolio_1",  
+        "contenttitle": "Project Name",
+        "locationicon": "Location",
+        "content": "123 Street, New York, USA"
+      },
+      {
+        "id": "2",
+        "image": "portfolio_2",  
+        "contenttitle": "Project Name",
+        "locationicon": "Location",
+        "content": "123 Street, New York, USA"
+      },
+      {
+        "id": "3",
+        "image": "portfolio_3",  
+        "contenttitle": "Project Name",
+        "locationicon": "Location",
+        "content": "123 Street, New York, USA"
+      },
+      {
+        "id": "4",
+        "image": "portfolio_4",  
+        "contenttitle": "Project Name",
+        "locationicon": "Location",
+        "content": "123 Street, New York, USA"
+      },
+      {
+        "id": "5",
+        "image": "portfolio_5",  
+        "contenttitle": "Project Name",
+        "locationicon": "Location",
+        "content": "123 Street, New York, USA"
+      },
+      {
+        "id": "6",
+        "image": "portfolio_6", 
+        "contenttitle": "Project Name ",
+        "locationicon": "Location",
+        "content": "123 Street, New York, USA"
+      }
+    ]
+  },
+  "professionalteam": {
+    "title": "We Are Professional & Expert Workers",
+    "fields": [
+      {
+        "id": "1",
+        "image": "team_1",
+        "contenttitle": "Adam Phillips",
+        "content": "CEO & Founder"
+      },
+      {
+        "id": "2",
+        "image": "team_2",
+        "contenttitle": "Dylan Adams",
+        "content": "Civil Engineer"
+      },
+      {
+        "id": "3",
+        "image": "team_3",
+        "contenttitle": "Jhon Doe",
+        "content": "Interior Designer"
+      },
+      {
+        "id": "4",
+        "image": "team_4",
+        "contenttitle": "Josh Dunn",
+        "content": "Painter"
+      }
+    ],
+    "icons": [
+      {
+        "name": "twitter"
+      },
+      {
+        "name": "facebook"
+      },
+      {
+        "name": "linkedin"
+      },
+      {
+        "name": "insta"
+      },
+      {
+        "name": "youtube"
+      }
+    ]
+  },
+"tmonials":  {
+    "imgage": "testimonial",
+    "fields": [
+      {
+        "image": "testimonial_1",
+        "name": "Client Name",
+        "profession": "Profession",
+        "icon": "quote",
+        "quote": "Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut labore et tempor diam tempor erat. Erat dolor rebum sit ipsum."
+      },
+      {
+        "image": "testimonial_2",
+        "name": "Client Name",
+        "profession": "Profession",
+        "icon": "quote",
+        "quote": "Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut labore et tempor diam tempor erat. Erat dolor rebum sit ipsum."
+      }
+    ],
+    "icons": [
+      {
+        "name": "quote",
+        "component": "FaQuoteLeft"
+      }
+    ]
+  },
+  "blogPosts": [
+    {
+      "id": 1,
+      "image": "blog_1",
+      "authorImage": "user",
+      "authorName": "John Doe",
+      "icon": "calendar",
+      "date": "01 Jan, 2045",
+      "title": "Rebum diam clita lorem erat magna est erat",
+      "button": "read more",
+      "arrowicon": "right_arrow"
+    },
+    {
+      "id": 2,
+      "image": "blog_2",
+      "authorImage": "user",
+      "authorName": "John Doe",
+      "icon": "calendar",
+      "date": "01 Jan, 2045",
+      "title": "Rebum diam clita lorem erat magna est erat",
+      "button": "read more",
+      "arrowicon": "right_arrow"
+    },
+    {
+      "id": 3,
+      "image": "blog_3",
+      "authorImage": "user",
+      "authorName": "John Doe",
+      "icon": "calendar",
+      "date": "01 Jan, 2045",
+      "title": "Rebum diam clita lorem erat magna est erat",
+      "button": "read more",
+      "arrowicon": "right_arrow"
+    }
+  ],
+    "footerData":{
+      "brand": {
+        "name": "WEBUILD",
+        "description": "Aliquyam sed elitr elitr erat sed diam ipsum eirmod eos lorem nonumy. Tempor sea ipsum diam sed clita dolore eos dolores magna erat dolore sed stet justo et dolor.",
+        "address": "123 Street, New York, USA",
+        "phone": "+012 345 67890",
+        "email": "info@example.com",
+        "icon": "path/to/buildingsIcon.png"  
+      },
+      "quickLinks": [
+        { "text": "Home", "link": "/" },
+        { "text": "About", "link": "/about" },
+        { "text": "Our Services", "link": "/service" },
+        { "text": "Meet The Team", "link": "/team" },
+        { "text": "Contact Us", "link": "/contact" }
+      ],
+      "popularLinks": [
+        { "text": "Home", "link": "/" },
+        { "text": "About Us", "link": "/about" },
+        { "text": "Our Services", "link": "/service" },
+        { "text": "Meet The Team", "link": "/team" },
+        { "text": "Contact Us", "link": "/contact" }
+      ],
+      "icons": [
+        { "name": "twitter", "component": "FaTwitter" },
+        { "name": "facebook", "component": "FaFacebookF" },
+        { "name": "linkedin", "component": "FaLinkedinIn" },
+        { "name": "instagram", "component": "FaInstagram" },
+        { "name": "footerphone", "component": "FaPhoneAlt" },
+        { "name": "envelope", "component": "FaEnvelope" },
+        { "name": "angle_right", "component": "FaAngleRight" },
+        { "name": "location", "component": "BsGeoAlt" },
+        { "name": "buildingsIcon", "component": "Icon", "iconData": "path/to/buildingsIcon.png" } 
+      ]
+    }
 }
