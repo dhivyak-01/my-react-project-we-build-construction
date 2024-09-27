@@ -8,16 +8,17 @@ import {
   Form,
   Table,
   Card,
-  Pagination, Modal
+  Pagination,
+  Modal,
 } from "react-bootstrap";
 import { AdminpanelData } from "../assets/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faBars } from "@fortawesome/free-solid-svg-icons";
 import { AiFillDashboard } from "react-icons/ai";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { faFilePdf, faFileCsv } from '@fortawesome/free-solid-svg-icons';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import { faFilePdf, faFileCsv } from "@fortawesome/free-solid-svg-icons";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import "../App.css";
 
 const DashboardContent = (
@@ -151,19 +152,18 @@ const AddUserForm = ({ onAddUser, initialData }) => {
     if (type === "file") {
       const file = files[0];
       if (file) {
-        // Check file size (2MB = 2 * 1024 * 1024 bytes)
         if (file.size > 2 * 1024 * 1024) {
           alert("File size exceeds 2MB. Please select a smaller file.");
-          return; // Exit if file size exceeds limit
+          return;
         }
 
         setFormData({ ...formData, [name]: file });
 
         if (file.type.startsWith("image/")) {
-          const newAvatarPreview = URL.createObjectURL(file); // Create a URL for image files
-          setAvatarPreview(newAvatarPreview); // Update preview for the selected image
+          const newAvatarPreview = URL.createObjectURL(file);
+          setAvatarPreview(newAvatarPreview);
         } else if (file.type === "application/pdf") {
-          setAvatarPreview(null); // No preview for PDF files
+          setAvatarPreview(null);
         }
       }
     } else {
@@ -173,22 +173,21 @@ const AddUserForm = ({ onAddUser, initialData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match.");
       return;
     }
-  
+
     const formDataToSubmit = new FormData();
     for (const key in formData) {
       formDataToSubmit.append(key, formData[key]);
     }
-  
+
     try {
       let response;
-  
+
       if (initialData) {
-        // Update existing user
         response = await fetch(
           `http://localhost:5000/api/users/${initialData._id}`,
           {
@@ -197,24 +196,22 @@ const AddUserForm = ({ onAddUser, initialData }) => {
           }
         );
       } else {
-        // Add new user
         response = await fetch("http://localhost:5000/api/users", {
           method: "POST",
           body: formDataToSubmit,
         });
       }
-  
+
       const data = await response.json();
-  
+
       if (!response.ok) throw new Error(data.error || "Failed to submit user data");
-  
+
       alert(initialData ? "User updated successfully!" : "User added successfully!");
-      onAddUser(data.user); // Update the state with the new/updated user
+      onAddUser(data.user);
     } catch (error) {
       console.error("Error:", error);
-      alert(`Error: ${error.message}`); // Notify user about the error
+      alert(`Error: ${error.message}`);
     } finally {
-      // Reset form data
       setFormData({
         fname: "",
         lname: "",
@@ -227,27 +224,21 @@ const AddUserForm = ({ onAddUser, initialData }) => {
         password: "",
         confirmPassword: "",
       });
-      setAvatarPreview(null); // Reset preview
+      setAvatarPreview(null);
       setFileInputKey((prevKey) => prevKey + 1);
     }
   };
 
   return (
-    <Col xs lg="12" className="p-6 !bg-back2" >
-      <Card
-        className="!bg-back ps-3"
-        style={{ width: "900px", height: "50px" }}
-      >
+    <Col xs lg="12" className="p-6 !bg-back2">
+      <Card className="!bg-back ps-3">
         <h1 className="pt-2 text-25px">Add Users</h1>
       </Card>
-      <Card
-        className="!bg-back ps-3 mt-5"
-        style={{ width: "900px", height: "846px" }}
-      >
+      <Card className="!bg-back ps-3 mt-5">
         <Form onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Col>
-              <Form.Group style={{ paddingLeft: "95px" }}>
+              <Form.Group>
                 <Form.Label className="mt-12">First Name</Form.Label>
                 <Form.Control
                   type="text"
@@ -256,8 +247,9 @@ const AddUserForm = ({ onAddUser, initialData }) => {
                   placeholder="Johnny"
                   required
                   onChange={handleChange}
+                  pattern="^[A-Za-z]+$" // Only letters allowed
+                  title="First name should contain only letters."
                   style={{ width: "90%" }}
-                  className="mt-2 mb-3"
                 />
               </Form.Group>
             </Col>
@@ -271,15 +263,16 @@ const AddUserForm = ({ onAddUser, initialData }) => {
                   placeholder="Nelson"
                   required
                   onChange={handleChange}
+                  pattern="^[A-Za-z]+$" // Only letters allowed
+                  title="Last name should contain only letters."
                   style={{ width: "70%" }}
-                  className="mt-2 mb-3"
                 />
               </Form.Group>
             </Col>
           </Row>
           <Row className="mb-3">
             <Col>
-              <Form.Group style={{ paddingLeft: "95px" }}>
+              <Form.Group>
                 <Form.Label>Date</Form.Label>
                 <Form.Control
                   type="date"
@@ -288,7 +281,6 @@ const AddUserForm = ({ onAddUser, initialData }) => {
                   required
                   onChange={handleChange}
                   style={{ width: "90%" }}
-                  className="mt-2 mb-3"
                 />
               </Form.Group>
             </Col>
@@ -304,7 +296,7 @@ const AddUserForm = ({ onAddUser, initialData }) => {
                     required
                     onChange={handleChange}
                     defaultChecked
-                    className="me-3" // Adds margin to the right
+                    className="me-3"
                   />
                   <Form.Check
                     type="radio"
@@ -313,7 +305,7 @@ const AddUserForm = ({ onAddUser, initialData }) => {
                     value="Female"
                     required
                     onChange={handleChange}
-                    className="me-3" // Adds margin to the right
+                    className="me-3"
                   />
                   <Form.Check
                     type="radio"
@@ -329,7 +321,7 @@ const AddUserForm = ({ onAddUser, initialData }) => {
           </Row>
           <Row className="mb-3">
             <Col>
-              <Form.Group style={{ paddingLeft: "95px" }}>
+              <Form.Group>
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
@@ -337,8 +329,9 @@ const AddUserForm = ({ onAddUser, initialData }) => {
                   value={formData.email}
                   required
                   onChange={handleChange}
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" // Simple email validation
+                  title="Please enter a valid email address."
                   style={{ width: "90%" }}
-                  className="mt-2 mb-3"
                 />
               </Form.Group>
             </Col>
@@ -351,15 +344,16 @@ const AddUserForm = ({ onAddUser, initialData }) => {
                   value={formData.phoneno}
                   required
                   onChange={handleChange}
+                  pattern="^\d{10}$" // 10-digit phone number
+                  title="Phone number must be 10 digits."
                   style={{ width: "70%" }}
-                  className="mt-2 mb-3"
                 />
               </Form.Group>
             </Col>
           </Row>
           <Row className="mb-3">
             <Col>
-              <Form.Group style={{ paddingLeft: "95px" }}>
+              <Form.Group>
                 <Form.Label>Create Password</Form.Label>
                 <Form.Control
                   type="password"
@@ -367,8 +361,9 @@ const AddUserForm = ({ onAddUser, initialData }) => {
                   value={formData.password}
                   required
                   onChange={handleChange}
+                  minLength="6" // Minimum length for password
+                  title="Password must be at least 6 characters long."
                   style={{ width: "90%" }}
-                  className="mt-2 mb-3"
                 />
               </Form.Group>
             </Col>
@@ -381,30 +376,26 @@ const AddUserForm = ({ onAddUser, initialData }) => {
                   value={formData.confirmPassword}
                   required
                   onChange={handleChange}
+                  minLength="6" // Minimum length for password
+                  title="Please confirm your password."
                   style={{ width: "70%" }}
-                  className="mt-2 mb-3"
                 />
               </Form.Group>
             </Col>
           </Row>
           <Row className="mb-3">
             <Col>
-              <Form.Group className="mb-3" style={{ paddingLeft: "95px" }}>
+              <Form.Group>
                 <Form.Label htmlFor="city">City</Form.Label>
-                {/* Link label to the dropdown */}
                 <Form.Control
                   as="select"
                   name="city"
                   required
                   onChange={handleChange}
-                  value={formData.city} // Bind the selected value to formData
+                  value={formData.city}
                   style={{ width: "90%" }}
-                  className="mt-2 mb-3"
                 >
-                  <option value="" disabled>
-                    Select city
-                  </option>
-                  {/* Default unselected option */}
+                  <option value="" disabled>Select city</option>
                   <option value="Coimbatore">Coimbatore</option>
                   <option value="Erode">Erode</option>
                   <option value="Thiruppur">Thiruppur</option>
@@ -423,7 +414,6 @@ const AddUserForm = ({ onAddUser, initialData }) => {
                   accept="image/*, application/pdf"
                   onChange={handleChange}
                   style={{ width: "70%" }}
-                  className="mt-2 mb-3"
                 />
                 {avatarPreview && (
                   <img
@@ -454,15 +444,12 @@ const AddUserForm = ({ onAddUser, initialData }) => {
   );
 };
 
-
 const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [viewUser, setViewUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
-
 
   useEffect(() => {
     console.log("Users updated:", users);
@@ -513,7 +500,9 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
   };
 
   // Sort users with the newest first and then reverse them
-  const sortedUsers = [...users].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const sortedUsers = [...users].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
   const reversedUsers = sortedUsers.reverse(); // Reverse to show newest first
 
   const totalPages = Math.ceil(reversedUsers.length / itemsPerPage);
@@ -522,7 +511,6 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
   const indexOfLastUser = currentPage * itemsPerPage;
   const indexOfFirstUser = indexOfLastUser - itemsPerPage;
   const currentUsers = reversedUsers.slice(indexOfFirstUser, indexOfLastUser);
-
 
   const handleViewUser = (user) => {
     setViewUser(user);
@@ -534,76 +522,88 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
     setViewUser(null);
   };
 
-
   const downloadCSV = () => {
-    const data = selectedUsers.map(userId => {
-      const user = users.find(user => user._id === userId);
+    const data = selectedUsers.map((userId) => {
+      const user = users.find((user) => user._id === userId);
       return {
         Id: user._id,
-        'First Name': user.fname,
-        'Last Name': user.lname,
+        "First Name": user.fname,
+        "Last Name": user.lname,
         Email: user.email,
-        'Phone No': user.phoneno,
+        "Phone No": user.phoneno,
         City: user.city,
       };
     });
-  
+
     // Create CSV headers
-    const csvHeaders = ['Id', 'First Name', 'Last Name', 'Email', 'Phone No', 'City'];
+    const csvHeaders = [
+      "Id",
+      "First Name",
+      "Last Name",
+      "Email",
+      "Phone No",
+      "City",
+    ];
     const csvRows = [];
-  
+
     // Push headers to the CSV
-    csvRows.push(csvHeaders.join(','));
-  
+    csvRows.push(csvHeaders.join(","));
+
     // Push each user's data to the CSV
-    data.forEach(user => {
-      csvRows.push([
-        user.Id,
-        user['First Name'],
-        user['Last Name'],
-        user.Email,
-        user['Phone No'],
-        user.City,
-      ].join(','));
+    data.forEach((user) => {
+      csvRows.push(
+        [
+          user.Id,
+          user["First Name"],
+          user["Last Name"],
+          user.Email,
+          user["Phone No"],
+          user.City,
+        ].join(",")
+      );
     });
-  
+
     // Create a Blob from the CSV data
-    const csvString = csvRows.join('\n');
-    const blob = new Blob([csvString], { type: 'text/csv' });
-  
+    const csvString = csvRows.join("\n");
+    const blob = new Blob([csvString], { type: "text/csv" });
+
     // Create a link to download the Blob
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
-    link.setAttribute('download', 'users.csv');
-  
+    link.setAttribute("download", "users.csv");
+
     // Append link to the body and trigger click
     document.body.appendChild(link);
     link.click();
-  
+
     // Clean up
     document.body.removeChild(link);
   };
-  
+
   const downloadPDF = async () => {
     const doc = new jsPDF();
-    const headers = [['Id', 'First Name', 'Last Name', 'Email', 'Phone No', 'City', 'Avatar']];
-    
-    const data = await Promise.all(selectedUsers.map(async (userId, index) => {
-      const user = users.find(user => user._id === userId);
-      const imageUrl = `http://localhost:5000/${user.avatar}`;
-      const img = await loadImage(imageUrl);
-  
-      return [
-        index + 1,
-        user.fname,
-        user.lname,
-        user.email,
-        user.phoneno,
-        user.city,
-        img,
-      ];
-    }));
-  
+    const headers = [
+      ["Id", "First Name", "Last Name", "Email", "Phone No", "City", "Avatar"],
+    ];
+
+    const data = await Promise.all(
+      selectedUsers.map(async (userId, index) => {
+        const user = users.find((user) => user._id === userId);
+        const imageUrl = `http://localhost:5000/${user.avatar}`;
+        const img = await loadImage(imageUrl);
+
+        return [
+          index + 1,
+          user.fname,
+          user.lname,
+          user.email,
+          user.phoneno,
+          user.city,
+          img,
+        ];
+      })
+    );
+
     doc.autoTable({
       head: headers,
       body: data,
@@ -613,14 +613,21 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
           const img = data.cell.raw;
           const imgWidth = 20; // Adjust width as needed
           const imgHeight = 20; // Adjust height as needed
-          doc.addImage(img, 'JPEG', data.cell.x + 1, data.cell.y + 1, imgWidth, imgHeight); // Adjust positions as needed
+          doc.addImage(
+            img,
+            "JPEG",
+            data.cell.x + 1,
+            data.cell.y + 1,
+            imgWidth,
+            imgHeight
+          ); // Adjust positions as needed
         }
       },
     });
-  
-    doc.save('users.pdf');
+
+    doc.save("users.pdf");
   };
-  
+
   const loadImage = (src) => {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -629,31 +636,46 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
       img.onerror = reject;
     });
   };
-  
-  
+
   return (
-    <Col xs lg="12" className="custom-padding !bg-back2" style={{ width: "1362px" }}>
+    <Col
+      xs
+      lg="12"
+      className="custom-padding !bg-back2"
+      style={{ width: "1362px" }}
+    >
       <Card className="!bg-back ps-3 " style={{ padding: "10px" }}>
         <div className="d-flex justify-content-between align-items-start">
-  <h1 className="pt-1 text-25px mb-0">Manage Users</h1>
-  <div>
-  <Button variant="primary" onClick={downloadCSV} style={{ marginRight: '10px' }}>
-      <FontAwesomeIcon icon={faFileCsv} />
-    </Button>
-  <Button variant="success" onClick={downloadPDF} style={{ marginRight: '10px' }}>
-      <FontAwesomeIcon icon={faFilePdf} style={{ marginRight: '5px' }} />
-    </Button>
-    <Button
-      variant="danger"
-      onClick={handleDeleteSelected}
-      disabled={selectedUsers.length === 0}
-      style={{ width: "40px" }}
-    >
-      <FontAwesomeIcon icon={faTrash} />
-    </Button>
-  </div>
-    </div>
-</Card>
+          <h1 className="pt-1 text-25px mb-0">Manage Users</h1>
+          <div>
+            <Button
+              variant="primary"
+              onClick={downloadCSV}
+              style={{ marginRight: "10px" }}
+            >
+              <FontAwesomeIcon icon={faFileCsv} />
+            </Button>
+            <Button
+              variant="success"
+              onClick={downloadPDF}
+              style={{ marginRight: "10px" }}
+            >
+              <FontAwesomeIcon
+                icon={faFilePdf}
+                style={{ marginRight: "5px" }}
+              />
+            </Button>
+            <Button
+              variant="danger"
+              onClick={handleDeleteSelected}
+              disabled={selectedUsers.length === 0}
+              style={{ width: "40px" }}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </Button>
+          </div>
+        </div>
+      </Card>
       <Table striped bordered hover style={{ marginTop: "47px" }}>
         <thead className="table-header">
           <tr>
@@ -661,7 +683,10 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
               <input
                 type="checkbox"
                 onChange={handleSelectAll}
-                checked={selectedUsers.length === reversedUsers.length && reversedUsers.length > 0}
+                checked={
+                  selectedUsers.length === reversedUsers.length &&
+                  reversedUsers.length > 0
+                }
               />
             </th>
             <th>Id</th>
@@ -694,7 +719,8 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
                     onChange={() => handleSelectUser(user._id)}
                   />
                 </td>
-                <td>{(currentPage - 1) * itemsPerPage + index + 1}</td> {/* Adjust index for pagination */}
+                <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>{" "}
+                {/* Adjust index for pagination */}
                 <td>
                   <img
                     src={`http://localhost:5000/${user.avatar}`}
@@ -710,10 +736,12 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
                 <td>{user.phoneno}</td>
                 <td>{user.city}</td>
                 <td>
-                  {user.password ? user.password.substring(0, 10) + "..." : "Not Set"}
+                  {user.password
+                    ? user.password.substring(0, 10) + "..."
+                    : "Not Set"}
                 </td>
                 <td>
-                <Button
+                  <Button
                     variant="info"
                     onClick={() => handleViewUser(user)}
                     style={{ marginRight: "20px" }}
@@ -765,23 +793,43 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
         </Pagination>
       </div>
 
-
-        {/* Modal for viewing user details */}
-        <Modal show={showModal} onHide={handleCloseModal}>
+      {/* Modal for viewing user details */}
+      <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>User Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {viewUser && (
             <div>
-              <p><strong>First Name:</strong> {viewUser.fname}</p>
-              <p><strong>Last Name:</strong> {viewUser.lname}</p>
-              <p><strong>Date of Birth:</strong> {viewUser.dob}</p>
-              <p><strong>Gender:</strong> {viewUser.gender}</p>
-              <p><strong>Email:</strong> {viewUser.email}</p>
-              <p><strong>Phone No:</strong> {viewUser.phoneno}</p>
-              <p><strong>City:</strong> {viewUser.city}</p>
-              <p><strong>Avatar:</strong> <img src={`http://localhost:5000/${viewUser.avatar}`} alt={`${viewUser.fname} ${viewUser.lname}`} style={{ width: "50px" }} /></p>
+              <p>
+                <strong>First Name:</strong> {viewUser.fname}
+              </p>
+              <p>
+                <strong>Last Name:</strong> {viewUser.lname}
+              </p>
+              <p>
+                <strong>Date of Birth:</strong> {viewUser.dob}
+              </p>
+              <p>
+                <strong>Gender:</strong> {viewUser.gender}
+              </p>
+              <p>
+                <strong>Email:</strong> {viewUser.email}
+              </p>
+              <p>
+                <strong>Phone No:</strong> {viewUser.phoneno}
+              </p>
+              <p>
+                <strong>City:</strong> {viewUser.city}
+              </p>
+              <p>
+                <strong>Avatar:</strong>{" "}
+                <img
+                  src={`http://localhost:5000/${viewUser.avatar}`}
+                  alt={`${viewUser.fname} ${viewUser.lname}`}
+                  style={{ width: "50px" }}
+                />
+              </p>
             </div>
           )}
         </Modal.Body>
@@ -794,9 +842,6 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
     </Col>
   );
 };
-
-
-
 
 const Admin = () => {
   const [activeButton, setActiveButton] = useState("Dashboard");
