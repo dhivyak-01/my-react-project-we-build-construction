@@ -14,7 +14,8 @@ module.exports = {
         customgray: '#f4f6f8',
         adnavcolour:'#fe9160',
         green:'#33ff33',
-        back:'#cacfd2 ',
+        back:'#accfe1',
+        back2:'#ecf0f1',
         white:'#ffffff',
       },
       backgroundImage: {

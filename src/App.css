@@ -214,3 +214,8 @@ thead.table-header
   margin-bottom: '10px';
   width: 299px !important;
 }
+
+.footer-border-color {
+  border-top: 1px solid ;
+  border-color: #FD5D14;
+}

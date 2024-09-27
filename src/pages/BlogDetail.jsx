@@ -292,9 +292,9 @@ const Blog = () => {
                 </Col>
                 <Col xs={12}>
                   <Button
-                    variant="primary"
+                    variant=""
                     type="submit"
-                    className="w-100 py-3"
+                    className="w-100 py-3 !bg-customorange"
                   >
                     Leave Your Comment
                   </Button>
@@ -372,8 +372,8 @@ const Blog = () => {
               <p>{plainTextData.content}</p>
               <Button
                 href={plainTextData.buttonLink}
-                variant="primary"
-                className="py-2 px-4"
+                variant=""
+                className="py-2 px-4 !bg-customorange"
               >
                 {plainTextData.buttonText}
               </Button>
@@ -394,7 +394,7 @@ const Footer = () => {
   } = footerData || {};
 
   return (
-    <div className="footer container-fluid position-relative bg-dark bg-light-radial text-white-50 py-6 px-5">
+    <div className="footer container-fluid position-relative bg-navebg bg-light-radial text-white-50 py-6 px-5">
       <Container>
         <Row className="g-5 ">
           <Col lg={6} className=" pe-lg-5">
@@ -517,7 +517,7 @@ const FooterBottom = () => {
   return (
     <Container
       fluid
-      className="bg-dark bg-light-radial text-white border-top !border-customorange px-0"
+      className="bg-navebg bg-light-radial text-white footer-border-color px-0"
     >
       <Row className="d-flex flex-column flex-md-row justify-content-between">
         <Col md={7} className="py-4 px-5 text-center text-md-start">

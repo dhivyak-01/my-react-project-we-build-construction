@@ -15,7 +15,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faBars } from "@fortawesome/free-solid-svg-icons";
 import { AiFillDashboard } from "react-icons/ai";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-// import { hashPassword } from './utils';
+import { faFilePdf, faFileCsv } from '@fortawesome/free-solid-svg-icons';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import "../App.css";
 
 const DashboardContent = (
@@ -533,12 +535,114 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
   };
 
 
-
+  const downloadCSV = () => {
+    const data = selectedUsers.map(userId => {
+      const user = users.find(user => user._id === userId);
+      return {
+        Id: user._id,
+        'First Name': user.fname,
+        'Last Name': user.lname,
+        Email: user.email,
+        'Phone No': user.phoneno,
+        City: user.city,
+      };
+    });
+  
+    // Create CSV headers
+    const csvHeaders = ['Id', 'First Name', 'Last Name', 'Email', 'Phone No', 'City'];
+    const csvRows = [];
+  
+    // Push headers to the CSV
+    csvRows.push(csvHeaders.join(','));
+  
+    // Push each user's data to the CSV
+    data.forEach(user => {
+      csvRows.push([
+        user.Id,
+        user['First Name'],
+        user['Last Name'],
+        user.Email,
+        user['Phone No'],
+        user.City,
+      ].join(','));
+    });
+  
+    // Create a Blob from the CSV data
+    const csvString = csvRows.join('\n');
+    const blob = new Blob([csvString], { type: 'text/csv' });
+  
+    // Create a link to download the Blob
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute('download', 'users.csv');
+  
+    // Append link to the body and trigger click
+    document.body.appendChild(link);
+    link.click();
+  
+    // Clean up
+    document.body.removeChild(link);
+  };
+  
+  const downloadPDF = async () => {
+    const doc = new jsPDF();
+    const headers = [['Id', 'First Name', 'Last Name', 'Email', 'Phone No', 'City', 'Avatar']];
+    
+    const data = await Promise.all(selectedUsers.map(async (userId, index) => {
+      const user = users.find(user => user._id === userId);
+      const imageUrl = `http://localhost:5000/${user.avatar}`;
+      const img = await loadImage(imageUrl);
+  
+      return [
+        index + 1,
+        user.fname,
+        user.lname,
+        user.email,
+        user.phoneno,
+        user.city,
+        img,
+      ];
+    }));
+  
+    doc.autoTable({
+      head: headers,
+      body: data,
+      didParseCell: (data) => {
+        // Draw the image in the last column with fixed dimensions
+        if (data.column.index === 6) {
+          const img = data.cell.raw;
+          const imgWidth = 20; // Adjust width as needed
+          const imgHeight = 20; // Adjust height as needed
+          doc.addImage(img, 'JPEG', data.cell.x + 1, data.cell.y + 1, imgWidth, imgHeight); // Adjust positions as needed
+        }
+      },
+    });
+  
+    doc.save('users.pdf');
+  };
+  
+  const loadImage = (src) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+    });
+  };
+  
+  
   return (
     <Col xs lg="12" className="custom-padding !bg-back2" style={{ width: "1362px" }}>
       <Card className="!bg-back ps-3 " style={{ padding: "10px" }}>
         <div className="d-flex justify-content-between align-items-start">
   <h1 className="pt-1 text-25px mb-0">Manage Users</h1>
+  <div>
+  <Button variant="primary" onClick={downloadCSV} style={{ marginRight: '10px' }}>
+      <FontAwesomeIcon icon={faFileCsv} />
+    </Button>
+  <Button variant="success" onClick={downloadPDF} style={{ marginRight: '10px' }}>
+      <FontAwesomeIcon icon={faFilePdf} style={{ marginRight: '5px' }} />
+    </Button>
     <Button
       variant="danger"
       onClick={handleDeleteSelected}
@@ -547,6 +651,7 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
     >
       <FontAwesomeIcon icon={faTrash} />
     </Button>
+  </div>
     </div>
 </Card>
       <Table striped bordered hover style={{ marginTop: "47px" }}>
