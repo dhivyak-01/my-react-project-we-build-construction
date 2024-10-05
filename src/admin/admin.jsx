@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { format } from "date-fns";
+import moment from 'moment';
 import {
   Col,
   Container,
@@ -17,6 +18,8 @@ import { faAngleRight, faBars } from "@fortawesome/free-solid-svg-icons";
 import { AiFillDashboard } from "react-icons/ai";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faFilePdf, faFileCsv } from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import "../App.css";
@@ -107,10 +110,14 @@ const DashboardContent = (
 const AddUserForm = ({ onAddUser, initialData }) => {
   console.log("AddUserForm rendered");
   const [fileInputKey, setFileInputKey] = useState(0);
+
+  const [isEditing, setIsEditing] = useState(!!initialData); // Check if we're editing
+  // const [showPassword, setShowPassword] = useState(false); // Control password visibility
+
   const [formData, setFormData] = useState({
     fname: initialData?.fname || "",
     lname: initialData?.lname || "",
-    dob: initialData?.dob || "",
+    dob: initialData?.dob ? moment(initialData.dob, 'MM/DD/YYYY').format('YYYY-MM-DD') : "",
     gender: initialData?.gender || "Male",
     email: initialData?.email || "",
     phoneno: initialData?.phoneno || "",
@@ -122,10 +129,15 @@ const AddUserForm = ({ onAddUser, initialData }) => {
 
   useEffect(() => {
     if (initialData) {
+      console.log("Initial Data:", initialData);
+        
+        const formattedDob = initialData.dob
+            ? moment(initialData.dob, 'MM/DD/YYYY').format('YYYY-MM-DD') // Use moment for formatting
+            : "";
       setFormData({
         fname: initialData.fname,
         lname: initialData.lname,
-        dob: initialData.dob,
+        dob: formattedDob,
         gender: initialData.gender,
         email: initialData.email,
         phoneno: initialData.phoneno,
@@ -134,7 +146,7 @@ const AddUserForm = ({ onAddUser, initialData }) => {
         password: "",
         confirmPassword: "",
       });
-      setAvatarPreview(
+            setAvatarPreview(
         initialData.avatar
           ? `http://localhost:5000/${initialData.avatar}`
           : null
@@ -148,7 +160,7 @@ const AddUserForm = ({ onAddUser, initialData }) => {
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
-
+  
     if (type === "file") {
       const file = files[0];
       if (file) {
@@ -156,38 +168,71 @@ const AddUserForm = ({ onAddUser, initialData }) => {
           alert("File size exceeds 2MB. Please select a smaller file.");
           return;
         }
-
         setFormData({ ...formData, [name]: file });
-
         if (file.type.startsWith("image/")) {
           const newAvatarPreview = URL.createObjectURL(file);
           setAvatarPreview(newAvatarPreview);
-        } else if (file.type === "application/pdf") {
-          setAvatarPreview(null);
         }
       }
+    } else if (name === "dob") {
+      // Ensure the date is in 'YYYY-MM-DD' format for storage
+      setFormData({ ...formData, [name]: value });
     } else {
+      // Handle all other fields
       setFormData({ ...formData, [name]: value });
     }
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    // Check for password match
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match.");
       return;
     }
-
-    const formDataToSubmit = new FormData();
-    for (const key in formData) {
-      formDataToSubmit.append(key, formData[key]);
-    }
-
+  
     try {
+      // Check for uniqueness
+      const uniqueCheckResponse = await fetch(
+        `http://localhost:5000/api/users/check-unique`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: formData.email,
+            phoneno: formData.phoneno,
+            excludeId: isEditing ? initialData._id : null,
+          }),
+        }
+      );
+  
+      if (!uniqueCheckResponse.ok) {
+        throw new Error("Failed to check uniqueness");
+      }
+  
+      const uniquenessData = await uniqueCheckResponse.json();
+      if (!uniquenessData.isEmailUnique) {
+        alert("Email is already used.");
+        return;
+      }
+      if (!uniquenessData.isPhoneNoUnique) {
+        alert("Phone number is already used.");
+        return;
+      }
+  
+      // Prepare form data for submission
+      const formDataToSubmit = new FormData();
+      formDataToSubmit.append('dob', formData.dob); // Already in 'YYYY-MM-DD' format
+  
+      for (const key in formData) {
+        if (key !== 'dob') {
+          formDataToSubmit.append(key, formData[key]);
+        }
+      }
+  
       let response;
-
-      if (initialData) {
+      if (isEditing) {
         response = await fetch(
           `http://localhost:5000/api/users/${initialData._id}`,
           {
@@ -201,17 +246,17 @@ const AddUserForm = ({ onAddUser, initialData }) => {
           body: formDataToSubmit,
         });
       }
-
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to submit user data");
+      }
+  
       const data = await response.json();
-
-      if (!response.ok) throw new Error(data.error || "Failed to submit user data");
-
-      alert(initialData ? "User updated successfully!" : "User added successfully!");
+      alert(`User ${isEditing ? "updated" : "added"} successfully!`);
       onAddUser(data.user);
-    } catch (error) {
-      console.error("Error:", error);
-      alert(`Error: ${error.message}`);
-    } finally {
+  
+      // Reset form data
       setFormData({
         fname: "",
         lname: "",
@@ -225,20 +270,24 @@ const AddUserForm = ({ onAddUser, initialData }) => {
         confirmPassword: "",
       });
       setAvatarPreview(null);
-      setFileInputKey((prevKey) => prevKey + 1);
+    } catch (error) {
+      console.error("Error:", error);
+      alert(`Error: ${error.message}`);
     }
   };
 
   return (
     <Col xs lg="12" className="p-6 !bg-back2">
       <Card className="!bg-back ps-3">
-        <h1 className="pt-2 text-25px">Add Users</h1>
+        <h1 className="pt-2 text-25px">
+          {isEditing ? "Edit User" : "Add Users"}
+        </h1>
       </Card>
       <Card className="!bg-back ps-3 mt-5">
         <Form onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Col>
-              <Form.Group>
+              <Form.Group className="formleft">
                 <Form.Label className="mt-12">First Name</Form.Label>
                 <Form.Control
                   type="text"
@@ -271,19 +320,19 @@ const AddUserForm = ({ onAddUser, initialData }) => {
             </Col>
           </Row>
           <Row className="mb-3">
-            <Col>
-              <Form.Group>
-                <Form.Label>Date</Form.Label>
-                <Form.Control
-                  type="date"
-                  name="dob"
-                  value={formData.dob}
-                  required
-                  onChange={handleChange}
-                  style={{ width: "90%" }}
-                />
-              </Form.Group>
-            </Col>
+          <Col>
+          <Form.Group className="formleft">
+    <Form.Label>Date of Birth</Form.Label>
+    <Form.Control
+  type="date"
+  name="dob"
+  value={formData.dob}
+  required
+  onChange={handleChange}
+  style={{ width: "90%" }}
+/>
+</Form.Group>
+</Col>
             <Col>
               <Form.Group>
                 <Form.Label className="mt-2 mb-3">Gender</Form.Label>
@@ -321,7 +370,7 @@ const AddUserForm = ({ onAddUser, initialData }) => {
           </Row>
           <Row className="mb-3">
             <Col>
-              <Form.Group>
+              <Form.Group className="formleft">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
@@ -353,16 +402,16 @@ const AddUserForm = ({ onAddUser, initialData }) => {
           </Row>
           <Row className="mb-3">
             <Col>
-              <Form.Group>
+              <Form.Group className="formleft">
                 <Form.Label>Create Password</Form.Label>
                 <Form.Control
-                  type="password"
+                  type="password" // Keep this as "password" to show asterisks
                   name="password"
-                  value={formData.password}
-                  required
+                  value={formData.password} // Leave it empty for security
                   onChange={handleChange}
-                  minLength="6" // Minimum length for password
+                  minLength="6"
                   title="Password must be at least 6 characters long."
+                  placeholder={isEditing ? "*******" : ""}
                   style={{ width: "90%" }}
                 />
               </Form.Group>
@@ -371,13 +420,13 @@ const AddUserForm = ({ onAddUser, initialData }) => {
               <Form.Group>
                 <Form.Label>Confirm Password</Form.Label>
                 <Form.Control
-                  type="password"
+                  type="password" // Keep this as "password" to show asterisks
                   name="confirmPassword"
-                  value={formData.confirmPassword}
-                  required
+                  value={formData.confirmPassword} // Leave it empty for security
                   onChange={handleChange}
-                  minLength="6" // Minimum length for password
+                  minLength="6"
                   title="Please confirm your password."
+                  placeholder={isEditing ? "*******" : ""}
                   style={{ width: "70%" }}
                 />
               </Form.Group>
@@ -385,7 +434,7 @@ const AddUserForm = ({ onAddUser, initialData }) => {
           </Row>
           <Row className="mb-3">
             <Col>
-              <Form.Group>
+              <Form.Group className="formleft">
                 <Form.Label htmlFor="city">City</Form.Label>
                 <Form.Control
                   as="select"
@@ -395,7 +444,9 @@ const AddUserForm = ({ onAddUser, initialData }) => {
                   value={formData.city}
                   style={{ width: "90%" }}
                 >
-                  <option value="" disabled>Select city</option>
+                  <option value="" disabled>
+                    Select city
+                  </option>
                   <option value="Coimbatore">Coimbatore</option>
                   <option value="Erode">Erode</option>
                   <option value="Thiruppur">Thiruppur</option>
@@ -423,6 +474,7 @@ const AddUserForm = ({ onAddUser, initialData }) => {
                       width: "100px",
                       height: "100px",
                       marginBottom: "10px",
+                      marginTop: "10px",
                     }}
                   />
                 )}
@@ -433,7 +485,7 @@ const AddUserForm = ({ onAddUser, initialData }) => {
             <Button
               type="submit"
               className="w-full mt-5 border-0 text-white"
-              style={{ width: "200px" }}
+              style={{ width: "200px", marginBottom: "50px" }}
             >
               Submit
             </Button>
@@ -451,36 +503,48 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
   const [viewUser, setViewUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+  const [searchText, setSearchText] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [filteredSortedUsers, setFilteredAndSortedUsers] = useState(users);
+
   useEffect(() => {
     console.log("Users updated:", users);
   }, [users]);
 
-  // Fetch users (unchanged)
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/api/users");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        console.log("Fetched users:", data);
-        setUsers(data);
-      } catch (error) {
-        console.error("Error fetching users:", error);
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/users");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-    };
-
-    fetchUsers();
-  }, [setUsers]);
-
-  const handleSelectAll = (e) => {
-    if (e.target.checked) {
-      setSelectedUsers(users.map((user) => user._id));
-    } else {
-      setSelectedUsers([]);
+      const data = await response.json();
+      console.log("Fetched users:", data);
+      setUsers(data.reverse()); // Reverse the users
+    } catch (error) {
+      console.error("Error fetching users:", error);
     }
   };
+
+  // Fetch users on mount
+  useEffect(() => {
+    fetchUsers();
+  }, []); // Runs once when the component mounts
+
+  // Add user function
+  const handleUserAdded = () => {
+    fetchUsers(); // Refresh users when a new user is added
+  };
+
+const handleSelectAll = (e) => {
+  if (e.target.checked) {
+    // Select all users in the current view
+    setSelectedUsers(currentUsers.map((user) => user._id));
+  } else {
+    // Deselect all users
+    setSelectedUsers([]);
+  }
+};
 
   const handleSelectUser = (userId) => {
     setSelectedUsers((prevSelected) => {
@@ -499,18 +563,52 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
     setSelectedUsers([]);
   };
 
-  // Sort users with the newest first and then reverse them
-  const sortedUsers = [...users].sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-  );
-  const reversedUsers = sortedUsers.reverse(); // Reverse to show newest first
+  const handleSearch = () => {
+    const result = filterUsers(); // Call your filter function
+    setFilteredAndSortedUsers(result); // Update the state with filtered results
+    setCurrentPage(1); // Reset to the first page after filtering
+  };
 
-  const totalPages = Math.ceil(reversedUsers.length / itemsPerPage);
+  const filterUsers = () => {
+    let filteredUsers = [...users];
 
-  // Get users for the current page
+    // Text search filter
+    if (searchText) {
+        const lowercasedSearchText = searchText.toLowerCase();
+        filteredUsers = filteredUsers.filter((user) =>
+            Object.values(user).some((value) =>
+                value.toString().toLowerCase().includes(lowercasedSearchText)
+            )
+        );
+    }
+
+    // Date range filter
+    if (startDate && endDate) {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        if (!isNaN(start) && !isNaN(end)) {
+            filteredUsers = filteredUsers.filter((user) => {
+                const userDate = new Date(user.createdAt);
+                return userDate >= start && userDate <= end;
+            });
+        } else {
+            console.error("Invalid date range provided");
+        }
+    }
+
+    // Sort filtered users by createdAt in descending order
+    return filteredUsers.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+};
+
+  const filteredAndSortedUsers = filterUsers();
+
+  const totalPages = Math.ceil(filteredAndSortedUsers.length / itemsPerPage);
   const indexOfLastUser = currentPage * itemsPerPage;
   const indexOfFirstUser = indexOfLastUser - itemsPerPage;
-  const currentUsers = reversedUsers.slice(indexOfFirstUser, indexOfLastUser);
+  const currentUsers = filteredAndSortedUsers.slice(
+    indexOfFirstUser,
+    indexOfLastUser
+  );
 
   const handleViewUser = (user) => {
     setViewUser(user);
@@ -642,11 +740,33 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
       xs
       lg="12"
       className="custom-padding !bg-back2"
-      style={{ width: "1362px" }}
+      style={{ width: "1382px" }}
     >
       <Card className="!bg-back ps-3 " style={{ padding: "10px" }}>
         <div className="d-flex justify-content-between align-items-start">
           <h1 className="pt-1 text-25px mb-0">Manage Users</h1>
+          <div className="mt-3">
+          <input
+          type="text"
+          placeholder="Search..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+        <Button onClick={handleSearch} style={{ marginLeft: "10px" }}>
+          <FontAwesomeIcon icon={faSearch} style={{ marginRight: "5px" }} />
+          Search
+        </Button>
+          </div>
           <div>
             <Button
               variant="primary"
@@ -680,20 +800,19 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
         <thead className="table-header">
           <tr>
             <th>
-              <input
-                type="checkbox"
-                onChange={handleSelectAll}
-                checked={
-                  selectedUsers.length === reversedUsers.length &&
-                  reversedUsers.length > 0
-                }
-              />
+            <input
+    type="checkbox"
+    onChange={handleSelectAll}
+    checked={
+      selectedUsers.length === currentUsers.length && currentUsers.length > 0
+    }
+  />
             </th>
             <th>Id</th>
             <th>Image</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Date</th>
+            <th>Date(MM-DD-YYYY)</th>
             <th>Gender</th>
             <th>Email</th>
             <th>Phone No</th>
@@ -713,11 +832,11 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
             currentUsers.map((user, index) => (
               <tr key={user._id}>
                 <td>
-                  <input
-                    type="checkbox"
-                    checked={selectedUsers.includes(user._id)}
-                    onChange={() => handleSelectUser(user._id)}
-                  />
+                <input
+    type="checkbox"
+    checked={selectedUsers.includes(user._id)}
+    onChange={() => handleSelectUser(user._id)}
+  />
                 </td>
                 <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>{" "}
                 {/* Adjust index for pagination */}
@@ -730,7 +849,7 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
                 </td>
                 <td>{user.fname}</td>
                 <td>{user.lname}</td>
-                <td>{user.dob}</td>
+                <td>{user.dob ? moment(user.dob).format('MM-DD-YYYY') : 'N/A'}</td>
                 <td>{user.gender}</td>
                 <td>{user.email}</td>
                 <td>{user.phoneno}</td>
@@ -745,6 +864,7 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
                     variant="info"
                     onClick={() => handleViewUser(user)}
                     style={{ marginRight: "20px" }}
+                    disabled={!selectedUsers.includes(user._id)} // Disable if not selected
                   >
                     View
                   </Button>
@@ -752,6 +872,7 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
                     variant="warning"
                     onClick={() => onEditUser(user)}
                     style={{ marginRight: "20px" }}
+                    disabled={!selectedUsers.includes(user._id)} // Disable if not selected
                   >
                     Edit
                   </Button>
@@ -761,6 +882,7 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
                       console.log("Deleting user with ID:", user._id);
                       onDeleteUser(user._id);
                     }}
+                    disabled={!selectedUsers.includes(user._id)} // Disable if not selected
                   >
                     Delete
                   </Button>
@@ -857,17 +979,18 @@ const Admin = () => {
     try {
       const response = await fetch("http://localhost:5000/api/users");
       if (!response.ok) {
-        throw new Error("Failed to fetch users");
+        throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      setUsers(data); // Update users state
+      console.log("Fetched users:", data);
+      setUsers(data);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
   useEffect(() => {
-    fetchUsers(); // Fetch users on component mount
+    fetchUsers(); // Call fetchUsers inside useEffect
   }, []);
 
   const handleButtonClick = (buttonName) => {
@@ -887,22 +1010,59 @@ const Admin = () => {
         dob: format(new Date(newUser.dob), "yyyy-MM-dd"), // Adjust date format if needed
       };
 
-      let response;
+      // Check for uniqueness
+      const isEditing = editIndex !== null;
 
-      if (editIndex) {
+      // Fetch uniqueness
+      let uniqueCheckResponse;
+      if (isEditing) {
+        uniqueCheckResponse = await fetch(
+          `http://localhost:5000/api/users/check-unique`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: formattedUser.email, phoneno: formattedUser.phoneno, excludeId: editIndex }),
+          }
+        );
+      } else {
+        uniqueCheckResponse = await fetch(
+          `http://localhost:5000/api/users/check-unique`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: formattedUser.email, phoneno: formattedUser.phoneno }),
+          }
+        );
+      }
+
+      if (!uniqueCheckResponse.ok) {
+        throw new Error("Failed to check uniqueness");
+      }
+
+      const uniquenessData = await uniqueCheckResponse.json();
+
+      if (!uniquenessData.isEmailUnique) {
+        alert("Email is already used.");
+        return;
+      }
+
+      if (!uniquenessData.isPhoneNoUnique) {
+        alert("Phone number is already used.");
+        return;
+      }
+
+      // Add or update user in DB
+      let response;
+      if (isEditing) {
         response = await fetch(`http://localhost:5000/api/users/${editIndex}`, {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formattedUser),
         });
       } else {
         response = await fetch("http://localhost:5000/api/users", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formattedUser),
         });
       }
@@ -911,32 +1071,21 @@ const Admin = () => {
         throw new Error("Failed to submit user data");
       }
 
-      const userData = await response.json();
-      console.log("User data received:", userData); // Log the received data
+      // Fetch updated user list after adding/updating
+      await fetchUsers();
 
-      if (editIndex) {
-        // Update the existing user in the state
-        setUsers((prevUsers) =>
-          prevUsers.map((user) => (user._id === editIndex ? userData : user))
-        );
-      } else {
-        // Add the new user to the state
-        setUsers((prevUsers) => [...prevUsers, userData]);
-      }
-
-      // Reset editIndex and any form state as needed
+      // Reset edit index
       setEditIndex(null);
-      // Optionally reset your form data here if applicable
     } catch (error) {
       console.error("Error adding or updating user:", error);
     }
   };
-
+  
   const handleEditUser = (user) => {
     setEditIndex(user._id); // Set the ID or any unique identifier
     setActiveButton("Add User"); // Change to "Add User" to open the form
   };
-
+  console.log("Current Users State:", users);
   const handleDeleteUser = async (userId) => {
     try {
       const response = await fetch(
@@ -973,6 +1122,7 @@ const Admin = () => {
             users={users}
             onEditUser={handleEditUser}
             onDeleteUser={handleDeleteUser}
+            setUsers={setUsers}
           />
         );
       default:

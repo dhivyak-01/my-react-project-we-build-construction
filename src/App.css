@@ -219,3 +219,11 @@ thead.table-header
   border-top: 1px solid ;
   border-color: #FD5D14;
 }
+
+.formleft
+{
+  margin-left: 94px;
+}
+.date-control{
+   width: 320px;
+}

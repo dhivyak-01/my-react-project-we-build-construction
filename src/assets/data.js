@@ -315,12 +315,12 @@ export const requestCallBackData = {
       style: { height: "55px" },
     },
     {
-      type: "text",
+      type: "date",
       placeholder: "Call Back Date",
       style: { height: "55px" },
     },
     {
-      type: "text",
+      type: "time",
       placeholder: "Call Back Time",
       style: { height: "55px" },
     },

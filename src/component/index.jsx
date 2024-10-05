@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{ useState } from "react";
 import {
   Container,
   Row,
@@ -400,54 +400,180 @@ const Thebest = () => {
   );
 };
 
+// const RequestCallBack = () => {
+//   return (
+//     <Container fluid className="py-6 px-5">
+//       <Row className="gx-5">
+//         <Col lg={4} className="mb-5 mb-lg-0">
+//           <div className="mb-4">
+//             <h1 className="text-4xl font-bold uppercase mb-4">
+//               {requestCallBackData.header.title}
+//               <span className="text-customorange">
+//                 {" "}
+//                 {requestCallBackData.header.highlight}
+//               </span>
+//             </h1>
+//           </div>
+//           <p className="mb-5 font-open-sans text-customwhite">{requestCallBackData.description}</p>
+//           <Button variant="" className="py-3 px-5 !bg-customorange text-white">
+//             {requestCallBackData.buttonText}
+//           </Button>
+//         </Col>
+//         <Col lg={8}>
+//           <div className="bg-gray-100 text-center p-5 rounded-lg">
+//             <Form>
+//               <Row className="g-3">
+//                 {requestCallBackData.formFields.map((field, index) => (
+//                   <Col
+//                     xs={12}
+//                     sm={field.type === "textarea" ? 12 : 6}
+//                     key={index}
+//                   >
+//                     {field.type === "textarea" ? (
+//                       <Form.Control
+//                         as="textarea"
+//                         rows={field.rows}
+//                         placeholder={field.placeholder}
+//                         className="border-0 py-3"
+//                       />
+//                     ) : (
+//                       <Form.Control
+//                         type={field.type}
+//                         placeholder={field.placeholder}
+//                         style={field.style}
+//                         className="border-0 py-3"
+//                       />
+//                     )}
+//                   </Col>
+//                 ))}
+//                 <Col xs={12}>
+//                   <Button
+//                     variant="!bg-customorange"
+//                     className="w-full py-3 !bg-customorange text-white"
+//                   >
+//                     {requestCallBackData.submitButtonText}
+//                   </Button>
+//                 </Col>
+//               </Row>
+//             </Form>
+//           </div>
+//         </Col>
+//       </Row>
+//     </Container>
+//   );
+// };
+
+
+
+
+
+
+
+
+
+
+
+
 const RequestCallBack = () => {
+  const [formData, setFormData] = useState({
+    yourname: '',        // Matches "Your Name"
+    youremail: '',      // Matches "Your Email"
+    callbackdate: '',   // Matches "Call Back Date"
+    callbacktime: '',   // Matches "Call Back Time"
+    message: '',        // Matches "Message"  
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+    console.log(`Changing ${name} to ${value}`);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log('Submitting form with data:', formData);
+
+    try {
+      const response = await fetch('/api/callbacks/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorDetails = await response.text();
+        throw new Error(`Network response was not ok: ${errorDetails}`);
+      }
+
+      const result = await response.json();
+      console.log('Request submitted successfully:', result);
+    } catch (error) {
+      console.error('Error submitting request:', error);
+    }
+  };
+
   return (
     <Container fluid className="py-6 px-5">
       <Row className="gx-5">
         <Col lg={4} className="mb-5 mb-lg-0">
-          <div className="mb-4">
-            <h1 className="text-4xl font-bold uppercase mb-4">
-              {requestCallBackData.header.title}
-              <span className="text-customorange">
-                {" "}
-                {requestCallBackData.header.highlight}
-              </span>
-            </h1>
-          </div>
-          <p className="mb-5 font-open-sans text-customwhite">{requestCallBackData.description}</p>
+          <h1 className="text-4xl font-bold uppercase mb-4">
+            {requestCallBackData.header.title}
+            <span className="text-customorange">
+              {" "}{requestCallBackData.header.highlight}
+            </span>
+          </h1>
+          <p className="mb-5 font-open-sans text-customwhite">
+            {requestCallBackData.description}
+          </p>
           <Button variant="" className="py-3 px-5 !bg-customorange text-white">
             {requestCallBackData.buttonText}
           </Button>
         </Col>
         <Col lg={8}>
           <div className="bg-gray-100 text-center p-5 rounded-lg">
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <Row className="g-3">
-                {requestCallBackData.formFields.map((field, index) => (
-                  <Col
-                    xs={12}
-                    sm={field.type === "textarea" ? 12 : 6}
-                    key={index}
-                  >
-                    {field.type === "textarea" ? (
-                      <Form.Control
-                        as="textarea"
-                        rows={field.rows}
-                        placeholder={field.placeholder}
-                        className="border-0 py-3"
-                      />
-                    ) : (
-                      <Form.Control
-                        type={field.type}
-                        placeholder={field.placeholder}
-                        style={field.style}
-                        className="border-0 py-3"
-                      />
-                    )}
-                  </Col>
-                ))}
+                {requestCallBackData.formFields.map((field, index) => {
+                  const fieldName = field.placeholder.toLowerCase().replace(/\s/g, '');
+                  console.log(`Field name: ${fieldName}`);
+
+                  return (
+                    <Col
+                      xs={12}
+                      sm={field.type === "textarea" ? 12 : 6}
+                      key={index}
+                    >
+                      {field.type === "textarea" ? (
+                        <Form.Control
+                          as="textarea"
+                          rows={field.rows}
+                          placeholder={field.placeholder}
+                          name={fieldName}
+                          value={formData[fieldName]}
+                          onChange={handleChange}
+                          className="border-0 py-3"
+                        />
+                      ) : (
+                        <Form.Control
+                          type={field.type}
+                          placeholder={field.placeholder}
+                          name={fieldName}
+                          value={formData[fieldName]}
+                          onChange={handleChange}
+                          className="border-0 py-3"
+                        />
+                      )}
+                    </Col>
+                  );
+                })}
                 <Col xs={12}>
                   <Button
+                    type="submit"
                     variant="!bg-customorange"
                     className="w-full py-3 !bg-customorange text-white"
                   >
@@ -462,6 +588,18 @@ const RequestCallBack = () => {
     </Container>
   );
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 const Popular = () => {
   return (
