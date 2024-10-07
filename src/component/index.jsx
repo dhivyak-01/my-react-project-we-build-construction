@@ -497,7 +497,7 @@ const RequestCallBack = () => {
     console.log('Submitting form with data:', formData);
 
     try {
-      const response = await fetch('/api/callbacks/submit', {
+      const response = await fetch('http://localhost:5000/api/callbacks/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -512,8 +512,10 @@ const RequestCallBack = () => {
 
       const result = await response.json();
       console.log('Request submitted successfully:', result);
+      alert('Your request has been submitted successfully!');
     } catch (error) {
       console.error('Error submitting request:', error);
+      alert(`Error submitting your request: ${error.message}`);
     }
   };
 

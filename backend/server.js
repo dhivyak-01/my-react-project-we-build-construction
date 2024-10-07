@@ -187,6 +187,8 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const callbackRoutes = require('./routes/callBackRoutes'); // Import callback routes
+const authRoutes = require('./routes/auth');
+
 
 const app = express();
 app.use(cors());
@@ -198,11 +200,15 @@ connectDB();
 // Use user routes
 app.use('/api/users', userRoutes);
 
-// Use callback request routes
-app.use('/api/callbacks', callbackRoutes); // Add callback routes
+// Register routes
+app.use('/api/callbacks', callbackRoutes);
 
 // Serve uploaded files statically
 app.use('/uploads', express.static('uploads'));
+
+// Use authentication routes
+app.use('/api/auth', authRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

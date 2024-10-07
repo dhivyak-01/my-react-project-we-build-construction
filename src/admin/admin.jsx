@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { format } from "date-fns";
-import moment from 'moment';
+import moment from "moment";
 import {
   Col,
   Container,
@@ -19,7 +19,7 @@ import { AiFillDashboard } from "react-icons/ai";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faFilePdf, faFileCsv } from "@fortawesome/free-solid-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-
+import { FaTrash } from "react-icons/fa";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import "../App.css";
@@ -117,7 +117,9 @@ const AddUserForm = ({ onAddUser, initialData }) => {
   const [formData, setFormData] = useState({
     fname: initialData?.fname || "",
     lname: initialData?.lname || "",
-    dob: initialData?.dob ? moment(initialData.dob, 'MM/DD/YYYY').format('YYYY-MM-DD') : "",
+    dob: initialData?.dob
+      ? moment(initialData.dob, "MM/DD/YYYY").format("YYYY-MM-DD")
+      : "",
     gender: initialData?.gender || "Male",
     email: initialData?.email || "",
     phoneno: initialData?.phoneno || "",
@@ -130,10 +132,10 @@ const AddUserForm = ({ onAddUser, initialData }) => {
   useEffect(() => {
     if (initialData) {
       console.log("Initial Data:", initialData);
-        
-        const formattedDob = initialData.dob
-            ? moment(initialData.dob, 'MM/DD/YYYY').format('YYYY-MM-DD') // Use moment for formatting
-            : "";
+
+      const formattedDob = initialData.dob
+        ? moment(initialData.dob, "MM/DD/YYYY").format("YYYY-MM-DD") // Use moment for formatting
+        : "";
       setFormData({
         fname: initialData.fname,
         lname: initialData.lname,
@@ -146,7 +148,7 @@ const AddUserForm = ({ onAddUser, initialData }) => {
         password: "",
         confirmPassword: "",
       });
-            setAvatarPreview(
+      setAvatarPreview(
         initialData.avatar
           ? `http://localhost:5000/${initialData.avatar}`
           : null
@@ -160,7 +162,7 @@ const AddUserForm = ({ onAddUser, initialData }) => {
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
-  
+
     if (type === "file") {
       const file = files[0];
       if (file) {
@@ -182,16 +184,16 @@ const AddUserForm = ({ onAddUser, initialData }) => {
       setFormData({ ...formData, [name]: value });
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Check for password match
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match.");
       return;
     }
-  
+
     try {
       // Check for uniqueness
       const uniqueCheckResponse = await fetch(
@@ -206,11 +208,11 @@ const AddUserForm = ({ onAddUser, initialData }) => {
           }),
         }
       );
-  
+
       if (!uniqueCheckResponse.ok) {
         throw new Error("Failed to check uniqueness");
       }
-  
+
       const uniquenessData = await uniqueCheckResponse.json();
       if (!uniquenessData.isEmailUnique) {
         alert("Email is already used.");
@@ -220,17 +222,17 @@ const AddUserForm = ({ onAddUser, initialData }) => {
         alert("Phone number is already used.");
         return;
       }
-  
+
       // Prepare form data for submission
       const formDataToSubmit = new FormData();
-      formDataToSubmit.append('dob', formData.dob); // Already in 'YYYY-MM-DD' format
-  
+      formDataToSubmit.append("dob", formData.dob); // Already in 'YYYY-MM-DD' format
+
       for (const key in formData) {
-        if (key !== 'dob') {
+        if (key !== "dob") {
           formDataToSubmit.append(key, formData[key]);
         }
       }
-  
+
       let response;
       if (isEditing) {
         response = await fetch(
@@ -246,16 +248,16 @@ const AddUserForm = ({ onAddUser, initialData }) => {
           body: formDataToSubmit,
         });
       }
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to submit user data");
       }
-  
+
       const data = await response.json();
       alert(`User ${isEditing ? "updated" : "added"} successfully!`);
       onAddUser(data.user);
-  
+
       // Reset form data
       setFormData({
         fname: "",
@@ -320,19 +322,19 @@ const AddUserForm = ({ onAddUser, initialData }) => {
             </Col>
           </Row>
           <Row className="mb-3">
-          <Col>
-          <Form.Group className="formleft">
-    <Form.Label>Date of Birth</Form.Label>
-    <Form.Control
-  type="date"
-  name="dob"
-  value={formData.dob}
-  required
-  onChange={handleChange}
-  style={{ width: "90%" }}
-/>
-</Form.Group>
-</Col>
+            <Col>
+              <Form.Group className="formleft">
+                <Form.Label>Date of Birth</Form.Label>
+                <Form.Control
+                  type="date"
+                  name="dob"
+                  value={formData.dob}
+                  required
+                  onChange={handleChange}
+                  style={{ width: "90%" }}
+                />
+              </Form.Group>
+            </Col>
             <Col>
               <Form.Group>
                 <Form.Label className="mt-2 mb-3">Gender</Form.Label>
@@ -536,15 +538,15 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
     fetchUsers(); // Refresh users when a new user is added
   };
 
-const handleSelectAll = (e) => {
-  if (e.target.checked) {
-    // Select all users in the current view
-    setSelectedUsers(currentUsers.map((user) => user._id));
-  } else {
-    // Deselect all users
-    setSelectedUsers([]);
-  }
-};
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      // Select all users in the current view
+      setSelectedUsers(currentUsers.map((user) => user._id));
+    } else {
+      // Deselect all users
+      setSelectedUsers([]);
+    }
+  };
 
   const handleSelectUser = (userId) => {
     setSelectedUsers((prevSelected) => {
@@ -574,31 +576,33 @@ const handleSelectAll = (e) => {
 
     // Text search filter
     if (searchText) {
-        const lowercasedSearchText = searchText.toLowerCase();
-        filteredUsers = filteredUsers.filter((user) =>
-            Object.values(user).some((value) =>
-                value.toString().toLowerCase().includes(lowercasedSearchText)
-            )
-        );
+      const lowercasedSearchText = searchText.toLowerCase();
+      filteredUsers = filteredUsers.filter((user) =>
+        Object.values(user).some((value) =>
+          value.toString().toLowerCase().includes(lowercasedSearchText)
+        )
+      );
     }
 
     // Date range filter
     if (startDate && endDate) {
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-        if (!isNaN(start) && !isNaN(end)) {
-            filteredUsers = filteredUsers.filter((user) => {
-                const userDate = new Date(user.createdAt);
-                return userDate >= start && userDate <= end;
-            });
-        } else {
-            console.error("Invalid date range provided");
-        }
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      if (!isNaN(start) && !isNaN(end)) {
+        filteredUsers = filteredUsers.filter((user) => {
+          const userDate = new Date(user.createdAt);
+          return userDate >= start && userDate <= end;
+        });
+      } else {
+        console.error("Invalid date range provided");
+      }
     }
 
     // Sort filtered users by createdAt in descending order
-    return filteredUsers.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-};
+    return filteredUsers.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+  };
 
   const filteredAndSortedUsers = filterUsers();
 
@@ -746,26 +750,26 @@ const handleSelectAll = (e) => {
         <div className="d-flex justify-content-between align-items-start">
           <h1 className="pt-1 text-25px mb-0">Manage Users</h1>
           <div className="mt-3">
-          <input
-          type="text"
-          placeholder="Search..."
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
-        <Button onClick={handleSearch} style={{ marginLeft: "10px" }}>
-          <FontAwesomeIcon icon={faSearch} style={{ marginRight: "5px" }} />
-          Search
-        </Button>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+            <Button onClick={handleSearch} style={{ marginLeft: "10px" }}>
+              <FontAwesomeIcon icon={faSearch} style={{ marginRight: "5px" }} />
+              Search
+            </Button>
           </div>
           <div>
             <Button
@@ -796,17 +800,23 @@ const handleSelectAll = (e) => {
           </div>
         </div>
       </Card>
-      <Table striped bordered hover style={{ marginTop: "47px" }}>
+      <Table
+        striped
+        bordered
+        hover
+        style={{ marginTop: "47px", width: "1334px" }}
+      >
         <thead className="table-header">
           <tr>
             <th>
-            <input
-    type="checkbox"
-    onChange={handleSelectAll}
-    checked={
-      selectedUsers.length === currentUsers.length && currentUsers.length > 0
-    }
-  />
+              <input
+                type="checkbox"
+                onChange={handleSelectAll}
+                checked={
+                  selectedUsers.length === currentUsers.length &&
+                  currentUsers.length > 0
+                }
+              />
             </th>
             <th>Id</th>
             <th>Image</th>
@@ -832,11 +842,11 @@ const handleSelectAll = (e) => {
             currentUsers.map((user, index) => (
               <tr key={user._id}>
                 <td>
-                <input
-    type="checkbox"
-    checked={selectedUsers.includes(user._id)}
-    onChange={() => handleSelectUser(user._id)}
-  />
+                  <input
+                    type="checkbox"
+                    checked={selectedUsers.includes(user._id)}
+                    onChange={() => handleSelectUser(user._id)}
+                  />
                 </td>
                 <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>{" "}
                 {/* Adjust index for pagination */}
@@ -849,7 +859,9 @@ const handleSelectAll = (e) => {
                 </td>
                 <td>{user.fname}</td>
                 <td>{user.lname}</td>
-                <td>{user.dob ? moment(user.dob).format('MM-DD-YYYY') : 'N/A'}</td>
+                <td>
+                  {user.dob ? moment(user.dob).format("MM-DD-YYYY") : "N/A"}
+                </td>
                 <td>{user.gender}</td>
                 <td>{user.email}</td>
                 <td>{user.phoneno}</td>
@@ -965,6 +977,195 @@ const handleSelectAll = (e) => {
   );
 };
 
+const CallBackRequest = () => {
+  const [callbacks, setCallbacks] = useState([]);
+  const [viewedCallback, setViewedCallback] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
+
+  useEffect(() => {
+    const fetchCallbacks = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/callbacks");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("Fetched callbacks:", data.callbacks); // Check the structure of the data
+        setCallbacks(data.callbacks);
+      } catch (error) {
+        console.error("Failed to fetch callbacks:", error);
+      }
+    };
+
+    fetchCallbacks();
+  }, []);
+
+  const handleToggleRead = async (id, isRead) => {
+    const response = await fetch(
+      `http://localhost:5000/api/callbacks/${id}/read`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isRead: !isRead }),
+      }
+    );
+
+    if (response.ok) {
+      const updatedCallback = await response.json();
+      setCallbacks((prev) =>
+        prev.map((cb) => (cb._id === id ? updatedCallback : cb))
+      );
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const response = await fetch(`http://localhost:5000/api/callbacks/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      setCallbacks((prev) => prev.filter((cb) => cb._id !== id));
+      if (viewedCallback && viewedCallback._id === id) {
+        setViewedCallback(null);
+      }
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    for (const id of selectedIds) {
+      await handleDelete(id);
+    }
+    setSelectedIds([]);
+  };
+
+  const handleView = (callback) => {
+    setViewedCallback(callback);
+    handleToggleRead(callback._id, callback.isRead); // Toggle read status on view
+  };
+
+  const handleClose = () => {
+    setViewedCallback(null);
+  };
+
+  const handleSelectAll = (event) => {
+    if (event.target.checked) {
+      setSelectedIds(callbacks.map((cb) => cb._id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleSelect = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  return (
+    <Col xs lg="12" className="custom-padding !bg-back2">
+      <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
+        <div className="d-flex justify-content-between align-items-start">
+          <h1 className="pt-1 text-25px mb-0">Manage Users Request</h1>
+          <Button
+            variant="danger"
+            onClick={handleDeleteSelected}
+            disabled={selectedIds.length === 0}
+            style={{ marginLeft: "10px" }}
+          >
+            <FaTrash />
+          </Button>
+        </div>
+      </Card>
+      <Table striped bordered hover style={{ marginTop: "47px" }}>
+        <thead className="table-header">
+          <tr>
+            <th>
+              <input
+                type="checkbox"
+                checked={
+                  selectedIds.length === callbacks.length &&
+                  callbacks.length > 0
+                }
+                onChange={handleSelectAll}
+              />
+            </th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Callback Date</th>
+            <th>Callback Time</th>
+            <th>Message</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {callbacks.map((callback) => (
+            <tr key={callback._id}>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={selectedIds.includes(callback._id)}
+                  onChange={() => handleSelect(callback._id)}
+                />
+              </td>
+              <td>{callback.yourname}</td>
+              <td>{callback.youremail}</td>
+              <td>{callback.callbackdate}</td>
+              <td>{callback.callbacktime}</td>
+              <td>{callback.message}</td>
+              <td>
+                <Button variant="primary" onClick={() => handleView(callback)}>
+                  View
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => handleDelete(callback._id)}
+                  style={{ marginLeft: "5px" }}
+                >
+                  Delete
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      {/* Modal for viewing request details */}
+      <Modal show={viewedCallback !== null} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Request Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {viewedCallback && (
+            <div>
+              <p>
+                <strong>Name:</strong> {viewedCallback.yourname}
+              </p>
+              <p>
+                <strong>Email:</strong> {viewedCallback.youremail}
+              </p>
+              <p>
+                <strong>Callback Date:</strong> {viewedCallback.callbackdate}
+              </p>
+              <p>
+                <strong>Callback Time:</strong> {viewedCallback.callbacktime}
+              </p>
+              <p>
+                <strong>Message:</strong> {viewedCallback.message}
+              </p>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Col>
+  );
+};
+
 const Admin = () => {
   const [activeButton, setActiveButton] = useState("Dashboard");
   const [users, setUsers] = useState([]);
@@ -1021,7 +1222,11 @@ const Admin = () => {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: formattedUser.email, phoneno: formattedUser.phoneno, excludeId: editIndex }),
+            body: JSON.stringify({
+              email: formattedUser.email,
+              phoneno: formattedUser.phoneno,
+              excludeId: editIndex,
+            }),
           }
         );
       } else {
@@ -1030,7 +1235,10 @@ const Admin = () => {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: formattedUser.email, phoneno: formattedUser.phoneno }),
+            body: JSON.stringify({
+              email: formattedUser.email,
+              phoneno: formattedUser.phoneno,
+            }),
           }
         );
       }
@@ -1080,7 +1288,7 @@ const Admin = () => {
       console.error("Error adding or updating user:", error);
     }
   };
-  
+
   const handleEditUser = (user) => {
     setEditIndex(user._id); // Set the ID or any unique identifier
     setActiveButton("Add User"); // Change to "Add User" to open the form
@@ -1125,6 +1333,8 @@ const Admin = () => {
             setUsers={setUsers}
           />
         );
+      case "Manage Request":
+        return <CallBackRequest />;
       default:
         console.log(`No content found for: ${activeButton}`);
         return null;

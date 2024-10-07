@@ -17,20 +17,20 @@ import Bloggrid from "./pages/BlogGrid";
 import Blogdetail from "./pages/BlogDetail";
 import Contact from "./pages/Contact";
 import Adminlogin from "./admin/adminlogin";
-// import Adminpanel from "./admin/Adminpanel";
 import Admin from "./admin/admin"
-
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './context/ProtectedRoute';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <>
+  <AuthProvider>
     <Router>
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/Signin" element={<Signin />} />
         <Route path="/adminlogin" element={<Adminlogin />} />
-        <Route path="/Admin" element={<Admin />} />
+        <Route path="/admin" element={<ProtectedRoute component={Admin} />} />
         <Route path="/about" element={<About />} />
         <Route path="/service" element={<Service />} />
         <Route path="/project" element={<Project />} />
@@ -41,7 +41,7 @@ root.render(
         <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
-  </>
+  </AuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
