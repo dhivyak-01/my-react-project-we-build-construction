@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import moment from "moment";
 import {
@@ -531,12 +531,12 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
   // Fetch users on mount
   useEffect(() => {
     fetchUsers();
-  }, []); // Runs once when the component mounts
+  }); // Runs once when the component mounts
 
-  // Add user function
-  const handleUserAdded = () => {
-    fetchUsers(); // Refresh users when a new user is added
-  };
+  // // Add user function
+  // const handleUserAdded = () => {
+  //   fetchUsers(); // Refresh users when a new user is added
+  // };
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
@@ -1179,9 +1179,9 @@ const CallBackRequest = () => {
 
 
 // const Comments = () => {
-//   const [comments, setComments] = useState([]);
-//   const [viewedComment, setViewedComment] = useState(null);
-//   const [selectedIds, setSelectedIds] = useState([]);
+  // const [comments, setComments] = useState([]);
+  // const [viewedComment, setViewedComment] = useState(null);
+  // const [selectedIds, setSelectedIds] = useState([]);
 
 //   useEffect(() => {
 //     const fetchComments = async () => {
@@ -1201,47 +1201,47 @@ const CallBackRequest = () => {
 //     fetchComments();
 //   }, []);
 
-//   const handleDelete = async (id) => {
-//     const response = await fetch(`http://localhost:5000/api/comments/${id}`, {
-//       method: "DELETE",
-//     });
+  // const handleDelete = async (id) => {
+  //   const response = await fetch(`http://localhost:5000/api/comments/${id}`, {
+  //     method: "DELETE",
+  //   });
 
-//     if (response.ok) {
-//       setComments((prev) => prev.filter((comment) => comment._id !== id));
-//       if (viewedComment && viewedComment._id === id) {
-//         setViewedComment(null);
-//       }
-//     }
-//   };
+  //   if (response.ok) {
+  //     setComments((prev) => prev.filter((comment) => comment._id !== id));
+  //     if (viewedComment && viewedComment._id === id) {
+  //       setViewedComment(null);
+  //     }
+  //   }
+  // };
 
-//   const handleDeleteSelected = async () => {
-//     for (const id of selectedIds) {
-//       await handleDelete(id);
-//     }
-//     setSelectedIds([]);
-//   };
+  // const handleDeleteSelected = async () => {
+  //   for (const id of selectedIds) {
+  //     await handleDelete(id);
+  //   }
+  //   setSelectedIds([]);
+  // };
 
-//   const handleView = (comment) => {
-//     setViewedComment(comment);
-//   };
+  // const handleView = (comment) => {
+  //   setViewedComment(comment);
+  // };
 
 //   const handleClose = () => {
 //     setViewedComment(null);
 //   };
 
-//   const handleSelectAll = (event) => {
-//     if (event.target.checked) {
-//       setSelectedIds(comments.map((comment) => comment._id));
-//     } else {
-//       setSelectedIds([]);
-//     }
-//   };
+  // const handleSelectAll = (event) => {
+  //   if (event.target.checked) {
+  //     setSelectedIds(comments.map((comment) => comment._id));
+  //   } else {
+  //     setSelectedIds([]);
+  //   }
+  // };
 
-//   const handleSelect = (id) => {
-//     setSelectedIds((prev) =>
-//       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-//     );
-//   };
+  // const handleSelect = (id) => {
+  //   setSelectedIds((prev) =>
+  //     prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+  //   );
+  // };
 
 //   return (
 //     <Col xs lg="12" className="custom-padding !bg-back2">
@@ -1348,6 +1348,8 @@ const CallBackRequest = () => {
 
 const Comments = () => {
   const [comments, setComments] = useState([]);
+  const [viewedComment, setViewedComment] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -1374,6 +1376,45 @@ const Comments = () => {
 
     fetchComments();
   }, []);
+
+  
+  const handleDelete = async (id) => {
+    const response = await fetch(`http://localhost:5000/api/comments/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      setComments((prev) => prev.filter((comment) => comment._id !== id));
+      if (viewedComment && viewedComment._id === id) {
+        setViewedComment(null);
+      }
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    for (const id of selectedIds) {
+      await handleDelete(id);
+    }
+    setSelectedIds([]);
+  };
+
+  const handleSelectAll = (event) => {
+    if (event.target.checked) {
+      setSelectedIds(comments.map((comment) => comment._id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleSelect = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleView = (comment) => {
+    setViewedComment(comment);
+  };
 
   return (
     // <Col xs lg="12" className="custom-padding !bg-back2">
@@ -1429,8 +1470,8 @@ const Comments = () => {
               <input
                 type="checkbox"
                 checked={
-                  selectedIds.length === callbacks.length &&
-                  callbacks.length > 0
+                  selectedIds.length === comments.length &&
+                  comments.length > 0
                 }
                 onChange={handleSelectAll}
               />
@@ -1475,17 +1516,6 @@ const Comments = () => {
     </Col>
   );
 };
-
-
-
-
-
-
-
-
-
-
-
 
 
 

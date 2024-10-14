@@ -710,7 +710,7 @@ const BlogSection = () => {
                       </span>
                     </div>
                     <div className="d-flex align-items-center">
-                      <a
+                      <div
                         className="btn !text-customorange d-flex align-items-center"
                         href="#"
                       >
@@ -720,7 +720,7 @@ const BlogSection = () => {
                         <span className="ms-2 !text-customwhite font-open-sans">
                           {post.date}
                         </span>
-                      </a>
+                      </div>
                     </div>
                   </div>
                   <h4 className="text-uppercase mb-3 font-roboto !font-semibold">
@@ -897,9 +897,9 @@ const FooterBottom = () => {
         <Col md={7} className="py-4 px-5 text-center text-md-start">
           <p className="mb-0">
             ©{" "}
-            <a className="text-customorange" href="#">
+            <div className="text-customorange" href="#">
               {footerBottomData.siteName}
-            </a>
+            </div>
             . All Rights Reserved.
           </p>
         </Col>
