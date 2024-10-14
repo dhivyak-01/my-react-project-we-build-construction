@@ -1001,22 +1001,21 @@ const CallBackRequest = () => {
   }, []);
 
   const handleToggleRead = async (id, isRead) => {
-    const response = await fetch(
-      `http://localhost:5000/api/callbacks/${id}/read`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ isRead: !isRead }),
-      }
-    );
-
+    const response = await fetch(`http://localhost:5000/api/callbacks/${id}/read`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ isRead: !isRead }), // Toggle the read status
+    });
+  
     if (response.ok) {
       const updatedCallback = await response.json();
       setCallbacks((prev) =>
         prev.map((cb) => (cb._id === id ? updatedCallback : cb))
       );
+    } else {
+      console.error('Failed to toggle read status:', response.statusText);
     }
   };
 
@@ -1165,6 +1164,331 @@ const CallBackRequest = () => {
     </Col>
   );
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const Comments = () => {
+//   const [comments, setComments] = useState([]);
+//   const [viewedComment, setViewedComment] = useState(null);
+//   const [selectedIds, setSelectedIds] = useState([]);
+
+//   useEffect(() => {
+//     const fetchComments = async () => {
+//       try {
+//         const response = await fetch("http://localhost:5000/api/comments");
+//         if (!response.ok) {
+//           throw new Error("Network response was not ok");
+//         }
+//         const data = await response.json();
+//         console.log("Fetched comments:", data); // Log the entire data response
+//         setComments(data.comments); // Ensure this matches the structure
+//       } catch (error) {
+//         console.error("Failed to fetch comments:", error);
+//       }
+//     };
+
+//     fetchComments();
+//   }, []);
+
+//   const handleDelete = async (id) => {
+//     const response = await fetch(`http://localhost:5000/api/comments/${id}`, {
+//       method: "DELETE",
+//     });
+
+//     if (response.ok) {
+//       setComments((prev) => prev.filter((comment) => comment._id !== id));
+//       if (viewedComment && viewedComment._id === id) {
+//         setViewedComment(null);
+//       }
+//     }
+//   };
+
+//   const handleDeleteSelected = async () => {
+//     for (const id of selectedIds) {
+//       await handleDelete(id);
+//     }
+//     setSelectedIds([]);
+//   };
+
+//   const handleView = (comment) => {
+//     setViewedComment(comment);
+//   };
+
+//   const handleClose = () => {
+//     setViewedComment(null);
+//   };
+
+//   const handleSelectAll = (event) => {
+//     if (event.target.checked) {
+//       setSelectedIds(comments.map((comment) => comment._id));
+//     } else {
+//       setSelectedIds([]);
+//     }
+//   };
+
+//   const handleSelect = (id) => {
+//     setSelectedIds((prev) =>
+//       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+//     );
+//   };
+
+//   return (
+//     <Col xs lg="12" className="custom-padding !bg-back2">
+//       <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
+//         <div className="d-flex justify-content-between align-items-start">
+//           <h1 className="pt-1 text-25px mb-0">Manage Comments</h1>
+//           <Button
+//             variant="danger"
+//             onClick={handleDeleteSelected}
+//             disabled={selectedIds.length === 0}
+//             style={{ marginLeft: "10px" }}
+//           >
+//             <FaTrash />
+//           </Button>
+//         </div>
+//       </Card>
+//       <Table striped bordered hover style={{ marginTop: "47px" }}>
+//         <thead className="table-header">
+//           <tr>
+//             <th>
+//               <input
+//                 type="checkbox"
+//                 checked={
+//                   selectedIds.length === comments.length &&
+//                   comments.length > 0
+//                 }
+//                 onChange={handleSelectAll}
+//               />
+//             </th>
+//             <th>Name</th>
+//             <th>Email</th>
+//             <th>Website</th>
+//             <th>Comment</th>
+//             <th>Date</th>
+//             <th>Actions</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {comments.map((comment) => (
+//             <tr key={comment._id}>
+//               <td>
+//                 <input
+//                   type="checkbox"
+//                   checked={selectedIds.includes(comment._id)}
+//                   onChange={() => handleSelect(comment._id)}
+//                 />
+//               </td>
+//               <td>{comment.name}</td>
+//               <td>{comment.email}</td>
+//               <td><a href={comment.website} target="_blank" rel="noopener noreferrer">{comment.website}</a></td>
+//               <td>{comment.comment}</td>
+//               <td>{new Date(comment.date).toLocaleString()}</td>
+//               <td>
+//                 <Button variant="primary" onClick={() => handleView(comment)}>
+//                   View
+//                 </Button>
+//                 <Button
+//                   variant="danger"
+//                   onClick={() => handleDelete(comment._id)}
+//                   style={{ marginLeft: "5px" }}
+//                 >
+//                   Delete
+//                 </Button>
+//               </td>
+//             </tr>
+//           ))}
+//         </tbody>
+//       </Table>
+//       {/* Modal for viewing comment details */}
+//       <Modal show={viewedComment !== null} onHide={handleClose}>
+//         <Modal.Header closeButton>
+//           <Modal.Title>Comment Details</Modal.Title>
+//         </Modal.Header>
+//         <Modal.Body>
+//           {viewedComment && (
+//             <div>
+//               <p>
+//                 <strong>Name:</strong> {viewedComment.name}
+//               </p>
+//               <p>
+//                 <strong>Email:</strong> {viewedComment.email}
+//               </p>
+//               <p>
+//                 <strong>Website:</strong> <a href={viewedComment.website} target="_blank" rel="noopener noreferrer">{viewedComment.website}</a>
+//               </p>
+//               <p>
+//                 <strong>Comment:</strong> {viewedComment.comment}
+//               </p>
+//               <p>
+//                 <strong>Date:</strong> {new Date(viewedComment.date).toLocaleString()}
+//               </p>
+//             </div>
+//           )}
+//         </Modal.Body>
+//         <Modal.Footer>
+//           <Button variant="secondary" onClick={handleClose}>
+//             Close
+//           </Button>
+//         </Modal.Footer>
+//       </Modal>
+//     </Col>
+//   );
+// };
+
+const Comments = () => {
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/comments");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("Fetched comments:", data);
+        
+        // Make sure the data is what you expect
+        if (Array.isArray(data)) {
+          setComments(data); // Adjust this if data structure is different
+        } else {
+          console.error("Expected an array of comments but got:", data);
+          setComments([]); // Reset to an empty array if not valid
+        }
+      } catch (error) {
+        console.error("Failed to fetch comments:", error);
+        setComments([]); // Handle error by resetting state
+      }
+    };
+
+    fetchComments();
+  }, []);
+
+  return (
+    // <Col xs lg="12" className="custom-padding !bg-back2">
+    //   <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
+    //     <div className="d-flex justify-content-between align-items-start">
+    //       <h1 className="pt-1 text-25px mb-0">Manage Comments</h1>
+    //       </div>
+    //       </Card>
+    //   <table striped bordered hover style={{ marginTop: "47px" }}>
+    //     <thead className="table-header">
+    //       <tr>
+    //         <th>Name</th>
+    //         <th>Email</th>
+    //         <th>Comment</th>
+    //         <th>Date</th>
+    //       </tr>
+    //     </thead>
+    //     <tbody>
+    //       {Array.isArray(comments) && comments.length > 0 ? (
+    //         comments.map((comment) => (
+    //           <tr key={comment._id}>
+    //             <td>{comment.name}</td>
+    //             <td>{comment.email}</td>
+    //             <td>{comment.comment}</td>
+    //             <td>{new Date(comment.date).toLocaleString()}</td>
+    //           </tr>
+    //         ))
+    //       ) : (
+    //         <tr>
+    //           <td colSpan="4" className="text-center">No comments available</td>
+    //         </tr>
+    //       )}
+    //     </tbody>
+    //   </table>
+      <Col xs lg="12" className="custom-padding !bg-back2">
+      <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
+        <div className="d-flex justify-content-between align-items-start">
+          <h1 className="pt-1 text-25px mb-0">Manage Users Request</h1>
+          <Button
+            variant="danger"
+            onClick={handleDeleteSelected}
+            disabled={selectedIds.length === 0}
+            style={{ marginLeft: "10px" }}
+          >
+            <FaTrash />
+          </Button>
+        </div>
+      </Card>
+      <Table striped bordered hover style={{ marginTop: "47px" }}>
+        <thead className="table-header">
+          <tr>
+            <th>
+              <input
+                type="checkbox"
+                checked={
+                  selectedIds.length === callbacks.length &&
+                  callbacks.length > 0
+                }
+                onChange={handleSelectAll}
+              />
+            </th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Commets</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {comments.map((comment) => (
+            <tr key={comment._id}>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={selectedIds.includes(comment._id)}
+                  onChange={() => handleSelect(comment._id)}
+                />
+              </td>
+              <td>{comment.yourname}</td>
+              <td>{comment.youremail}</td>
+              <td>{comment.callbackdate}</td>
+              <td>{comment.callbacktime}</td>
+              <td>{comment.message}</td>
+              <td>
+                <Button variant="primary" onClick={() => handleView(comment)}>
+                  View
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => handleDelete(comment._id)}
+                  style={{ marginLeft: "5px" }}
+                >
+                  Delete
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </Col>
+  );
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const Admin = () => {
   const [activeButton, setActiveButton] = useState("Dashboard");
@@ -1335,6 +1659,8 @@ const Admin = () => {
         );
       case "Manage Request":
         return <CallBackRequest />;
+        case "Manage Comments":
+        return <Comments />;
       default:
         console.log(`No content found for: ${activeButton}`);
         return null;

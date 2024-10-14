@@ -82,7 +82,7 @@ const Adminlogin = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', formData);
+      const response = await axios.post('http://localhost:5000/api/auth/admin/login', formData);
       // Assuming the backend sends back a success message on successful login
       setSuccess(response.data.message || 'Login successful');
       setError(null);

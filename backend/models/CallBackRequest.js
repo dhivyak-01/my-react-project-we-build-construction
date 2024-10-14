@@ -6,6 +6,7 @@ const callbackRequestSchema = new mongoose.Schema({
   message: { type: String, required: true },
   callbackdate: { type: Date, required: true },
   callbacktime: { type: String, required: true },
+  isRead: { type: Boolean, default: false }, // Add this line
   createdAt: { type: Date, default: Date.now },
 });
 

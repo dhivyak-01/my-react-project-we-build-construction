@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from 'react';
+import axios from 'axios';
 import Button from "react-bootstrap/Button";
 import { Link, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
@@ -207,9 +208,46 @@ const Aboute = () => {
   );
 };
 
+
+
+
+
+
+
+
+
+
 const Blog = () => {
   const { blogDetail, comments, recentPosts, categories, tags } =
     blogDatadatail;
+
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [website, setWebsite] = useState('');
+    const [comment, setComment] = useState('');
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault(); // Prevent page refresh
+  
+      const commentData = {
+        name,
+        email,
+        website,
+        comment,
+      };
+  
+      try {
+        const response = await axios.post('http://localhost:5000/api/comments', commentData);
+        console.log('Comment saved:', response.data);
+        // Optionally, clear the form fields
+        setName('');
+        setEmail('');
+        setWebsite('');
+        setComment('');
+      } catch (error) {
+        console.error('Error saving comment:', error);
+      }
+    };
 
   return (
     <div className="container-fluid py-6 px-5">
@@ -256,11 +294,13 @@ const Blog = () => {
           {/* Comment Form */}
           <div className="bg-light p-5">
             <h3 className="text-uppercase mb-4">Leave a comment</h3>
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <Row className="g-3">
                 <Col xs={12} sm={6}>
                   <FormControl
                     type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="Your Name"
                     className="bg-white border-0"
                     style={{ height: "55px" }}
@@ -269,6 +309,8 @@ const Blog = () => {
                 <Col xs={12} sm={6}>
                   <FormControl
                     type="email"
+                    value={email}
+              onChange={(e) => setEmail(e.target.value)}
                     placeholder="Your Email"
                     className="bg-white border-0"
                     style={{ height: "55px" }}
@@ -277,6 +319,8 @@ const Blog = () => {
                 <Col xs={12}>
                   <FormControl
                     type="text"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
                     placeholder="Website"
                     className="bg-white border-0"
                     style={{ height: "55px" }}
@@ -285,6 +329,8 @@ const Blog = () => {
                 <Col xs={12}>
                   <FormControl
                     as="textarea"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
                     rows={5}
                     placeholder="Comment"
                     className="bg-white border-0"
