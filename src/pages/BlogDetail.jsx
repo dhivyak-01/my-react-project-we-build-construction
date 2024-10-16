@@ -187,7 +187,7 @@ const Aboute = () => {
     <div className="container-fluid bg-gray-800 py-5 page-header d-flex flex-column justify-content-center align-items-center text-center">
       <Container>
         <h1 className="display-3 text-uppercase text-white mb-3 font-roboto !font-bold">
-          about
+          BLOG DETAIL
         </h1>
         <div className="d-inline-flex text-white justify-content-center align-items-center">
           <h6 className="text-uppercase m-0">
@@ -200,7 +200,7 @@ const Aboute = () => {
           </h6>
           <h6 className="text-white m-0 px-3">/</h6>
           <h6 className="text-uppercase font-roboto text-white m-0 pt-1">
-            about
+          BLOG DETAIL
           </h6>
         </div>
       </Container>

@@ -35,7 +35,7 @@ a.nav-link.active {
     display: block; 
     margin-right: 0; 
   }
-} */
+} 
 
 
 #navbarScrollingDropdown:hover , #navbarScrollingDropdown:active{
@@ -211,7 +211,7 @@ thead.table-header
 }
 
 .form-image-width{
-  margin-bottom: '10px';
+  margin-bottom: 10px;
   width: 299px !important;
 }
 

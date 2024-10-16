@@ -1166,186 +1166,6 @@ const CallBackRequest = () => {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-// const Comments = () => {
-  // const [comments, setComments] = useState([]);
-  // const [viewedComment, setViewedComment] = useState(null);
-  // const [selectedIds, setSelectedIds] = useState([]);
-
-//   useEffect(() => {
-//     const fetchComments = async () => {
-//       try {
-//         const response = await fetch("http://localhost:5000/api/comments");
-//         if (!response.ok) {
-//           throw new Error("Network response was not ok");
-//         }
-//         const data = await response.json();
-//         console.log("Fetched comments:", data); // Log the entire data response
-//         setComments(data.comments); // Ensure this matches the structure
-//       } catch (error) {
-//         console.error("Failed to fetch comments:", error);
-//       }
-//     };
-
-//     fetchComments();
-//   }, []);
-
-  // const handleDelete = async (id) => {
-  //   const response = await fetch(`http://localhost:5000/api/comments/${id}`, {
-  //     method: "DELETE",
-  //   });
-
-  //   if (response.ok) {
-  //     setComments((prev) => prev.filter((comment) => comment._id !== id));
-  //     if (viewedComment && viewedComment._id === id) {
-  //       setViewedComment(null);
-  //     }
-  //   }
-  // };
-
-  // const handleDeleteSelected = async () => {
-  //   for (const id of selectedIds) {
-  //     await handleDelete(id);
-  //   }
-  //   setSelectedIds([]);
-  // };
-
-  // const handleView = (comment) => {
-  //   setViewedComment(comment);
-  // };
-
-//   const handleClose = () => {
-//     setViewedComment(null);
-//   };
-
-  // const handleSelectAll = (event) => {
-  //   if (event.target.checked) {
-  //     setSelectedIds(comments.map((comment) => comment._id));
-  //   } else {
-  //     setSelectedIds([]);
-  //   }
-  // };
-
-  // const handleSelect = (id) => {
-  //   setSelectedIds((prev) =>
-  //     prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-  //   );
-  // };
-
-//   return (
-//     <Col xs lg="12" className="custom-padding !bg-back2">
-//       <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
-//         <div className="d-flex justify-content-between align-items-start">
-//           <h1 className="pt-1 text-25px mb-0">Manage Comments</h1>
-//           <Button
-//             variant="danger"
-//             onClick={handleDeleteSelected}
-//             disabled={selectedIds.length === 0}
-//             style={{ marginLeft: "10px" }}
-//           >
-//             <FaTrash />
-//           </Button>
-//         </div>
-//       </Card>
-//       <Table striped bordered hover style={{ marginTop: "47px" }}>
-//         <thead className="table-header">
-//           <tr>
-//             <th>
-//               <input
-//                 type="checkbox"
-//                 checked={
-//                   selectedIds.length === comments.length &&
-//                   comments.length > 0
-//                 }
-//                 onChange={handleSelectAll}
-//               />
-//             </th>
-//             <th>Name</th>
-//             <th>Email</th>
-//             <th>Website</th>
-//             <th>Comment</th>
-//             <th>Date</th>
-//             <th>Actions</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {comments.map((comment) => (
-//             <tr key={comment._id}>
-//               <td>
-//                 <input
-//                   type="checkbox"
-//                   checked={selectedIds.includes(comment._id)}
-//                   onChange={() => handleSelect(comment._id)}
-//                 />
-//               </td>
-//               <td>{comment.name}</td>
-//               <td>{comment.email}</td>
-//               <td><a href={comment.website} target="_blank" rel="noopener noreferrer">{comment.website}</a></td>
-//               <td>{comment.comment}</td>
-//               <td>{new Date(comment.date).toLocaleString()}</td>
-//               <td>
-//                 <Button variant="primary" onClick={() => handleView(comment)}>
-//                   View
-//                 </Button>
-//                 <Button
-//                   variant="danger"
-//                   onClick={() => handleDelete(comment._id)}
-//                   style={{ marginLeft: "5px" }}
-//                 >
-//                   Delete
-//                 </Button>
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </Table>
-//       {/* Modal for viewing comment details */}
-//       <Modal show={viewedComment !== null} onHide={handleClose}>
-//         <Modal.Header closeButton>
-//           <Modal.Title>Comment Details</Modal.Title>
-//         </Modal.Header>
-//         <Modal.Body>
-//           {viewedComment && (
-//             <div>
-//               <p>
-//                 <strong>Name:</strong> {viewedComment.name}
-//               </p>
-//               <p>
-//                 <strong>Email:</strong> {viewedComment.email}
-//               </p>
-//               <p>
-//                 <strong>Website:</strong> <a href={viewedComment.website} target="_blank" rel="noopener noreferrer">{viewedComment.website}</a>
-//               </p>
-//               <p>
-//                 <strong>Comment:</strong> {viewedComment.comment}
-//               </p>
-//               <p>
-//                 <strong>Date:</strong> {new Date(viewedComment.date).toLocaleString()}
-//               </p>
-//             </div>
-//           )}
-//         </Modal.Body>
-//         <Modal.Footer>
-//           <Button variant="secondary" onClick={handleClose}>
-//             Close
-//           </Button>
-//         </Modal.Footer>
-//       </Modal>
-//     </Col>
-//   );
-// };
-
 const Comments = () => {
   const [comments, setComments] = useState([]);
   const [viewedComment, setViewedComment] = useState(null);
@@ -1416,43 +1236,16 @@ const Comments = () => {
     setViewedComment(comment);
   };
 
+  const handleClose = () => {
+    setViewedComment(null);
+  };
+
+
   return (
-    // <Col xs lg="12" className="custom-padding !bg-back2">
-    //   <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
-    //     <div className="d-flex justify-content-between align-items-start">
-    //       <h1 className="pt-1 text-25px mb-0">Manage Comments</h1>
-    //       </div>
-    //       </Card>
-    //   <table striped bordered hover style={{ marginTop: "47px" }}>
-    //     <thead className="table-header">
-    //       <tr>
-    //         <th>Name</th>
-    //         <th>Email</th>
-    //         <th>Comment</th>
-    //         <th>Date</th>
-    //       </tr>
-    //     </thead>
-    //     <tbody>
-    //       {Array.isArray(comments) && comments.length > 0 ? (
-    //         comments.map((comment) => (
-    //           <tr key={comment._id}>
-    //             <td>{comment.name}</td>
-    //             <td>{comment.email}</td>
-    //             <td>{comment.comment}</td>
-    //             <td>{new Date(comment.date).toLocaleString()}</td>
-    //           </tr>
-    //         ))
-    //       ) : (
-    //         <tr>
-    //           <td colSpan="4" className="text-center">No comments available</td>
-    //         </tr>
-    //       )}
-    //     </tbody>
-    //   </table>
       <Col xs lg="12" className="custom-padding !bg-back2">
       <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
         <div className="d-flex justify-content-between align-items-start">
-          <h1 className="pt-1 text-25px mb-0">Manage Users Request</h1>
+          <h1 className="pt-1 text-25px mb-0">Manage Users Comments</h1>
           <Button
             variant="danger"
             onClick={handleDeleteSelected}
@@ -1478,8 +1271,10 @@ const Comments = () => {
             </th>
             <th>Name</th>
             <th>Email</th>
+            <th>Website</th>
             <th>Commets</th>
             <th>Date</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -1492,11 +1287,11 @@ const Comments = () => {
                   onChange={() => handleSelect(comment._id)}
                 />
               </td>
-              <td>{comment.yourname}</td>
-              <td>{comment.youremail}</td>
-              <td>{comment.callbackdate}</td>
-              <td>{comment.callbacktime}</td>
-              <td>{comment.message}</td>
+              <td>{comment.name}</td>
+              <td>{comment.email}</td>
+              <td>{comment.website}</td>
+              <td>{comment.comment}</td>
+              <td>{comment.date}</td>
               <td>
                 <Button variant="primary" onClick={() => handleView(comment)}>
                   View
@@ -1513,11 +1308,226 @@ const Comments = () => {
           ))}
         </tbody>
       </Table>
+       {/* Modal for viewing comment details */}
+       <Modal show={viewedComment !== null} onHide={handleClose}>
+         <Modal.Header closeButton>
+         <Modal.Title>Comment Details</Modal.Title>
+        </Modal.Header>
+       <Modal.Body>
+           {viewedComment && (
+            <div>
+              <p>
+                <strong>Name:</strong> {viewedComment.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {viewedComment.email}
+              </p>
+              <p>
+                <strong>Website:</strong> <a href={viewedComment.website} target="_blank" rel="noopener noreferrer">{viewedComment.website}</a>
+              </p>
+              <p>
+                <strong>Comment:</strong> {viewedComment.comment}
+              </p>
+              <p>
+                <strong>Date:</strong> {new Date(viewedComment.date).toLocaleString()}
+              </p>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Col>
   );
 };
 
 
+
+
+
+
+
+
+const Message = () => {
+  const [message, setMessage] = useState([]);
+  const [viewedMessage, setViewedMessage] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
+
+  useEffect(() => {
+    const fetchMessage = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/message");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("Fetched message:", data);
+        
+        // Make sure the data is what you expect
+        if (Array.isArray(data)) {
+          setMessage(data); // Adjust this if data structure is different
+        } else {
+          console.error("Expected an array of message but got:", data);
+          setMessage([]); // Reset to an empty array if not valid
+        }
+      } catch (error) {
+        console.error("Failed to fetch message:", error);
+        setMessage([]); // Handle error by resetting state
+      }
+    };
+
+    fetchMessage();
+  }, []);
+
+  
+  const handleDelete = async (id) => {
+    const response = await fetch(`http://localhost:5000/api/message/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      setMessage((prev) => prev.filter((message) => message._id !== id));
+      if (viewedMessage && viewedMessage._id === id) {
+        setViewedMessage(null);
+      }
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    for (const id of selectedIds) {
+      await handleDelete(id);
+    }
+    setSelectedIds([]);
+  };
+
+  const handleSelectAll = (event) => {
+    if (event.target.checked) {
+      setSelectedIds(message.map((message) => message._id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleSelect = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleView = (message) => {
+    setViewedMessage(message);
+  };
+
+  const handleClose = () => {
+    setViewedMessage(null);
+  };
+
+
+  return (
+      <Col xs lg="12" className="custom-padding !bg-back2">
+      <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
+        <div className="d-flex justify-content-between align-items-start">
+          <h1 className="pt-1 text-25px mb-0">Manage Users Messages</h1>
+          <Button
+            variant="danger"
+            onClick={handleDeleteSelected}
+            disabled={selectedIds.length === 0}
+            style={{ marginLeft: "10px" }}
+          >
+            <FaTrash />
+          </Button>
+        </div>
+      </Card>
+      <Table striped bordered hover style={{ marginTop: "47px" }}>
+        <thead className="table-header">
+          <tr>
+            <th>
+              <input
+                type="checkbox"
+                checked={
+                  selectedIds.length === message.length &&
+                  message.length > 0
+                }
+                onChange={handleSelectAll}
+              />
+            </th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Subject</th>
+            <th>Message</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {message.map((message) => (
+            <tr key={message._id}>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={selectedIds.includes(message._id)}
+                  onChange={() => handleSelect(message._id)}
+                />
+              </td>
+              <td>{message.name}</td>
+              <td>{message.email}</td>
+              <td>{message.subject}</td>
+              <td>{message.comment}</td>
+              <td>{message.date}</td>
+              <td>
+                <Button variant="primary" onClick={() => handleView(message)}>
+                  View
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => handleDelete(message._id)}
+                  style={{ marginLeft: "5px" }}
+                >
+                  Delete
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+       {/* Modal for viewing message details */}
+       <Modal show={viewedMessage !== null} onHide={handleClose}>
+         <Modal.Header closeButton>
+         <Modal.Title>Message Details</Modal.Title>
+        </Modal.Header>
+       <Modal.Body>
+           {viewedMessage && (
+            <div>
+              <p>
+                <strong>Name:</strong> {viewedMessage.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {viewedMessage.email}
+              </p>
+              <p>
+                <strong>Website:</strong> <a href={viewedMessage.website} target="_blank" rel="noopener noreferrer">{viewedMessage.website}</a>
+              </p>
+              <p>
+                <strong>Comment:</strong> {viewedMessage.comment}
+              </p>
+              <p>
+                <strong>Date:</strong> {new Date(viewedMessage.date).toLocaleString()}
+              </p>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Col>
+  );
+};
 
 
 const Admin = () => {
@@ -1691,6 +1701,8 @@ const Admin = () => {
         return <CallBackRequest />;
         case "Manage Comments":
         return <Comments />;
+        case "Manage Message":
+        return <Message />;
       default:
         console.log(`No content found for: ${activeButton}`);
         return null;

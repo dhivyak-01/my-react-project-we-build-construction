@@ -842,10 +842,9 @@ export const AdminpanelData = {
     {
       id: "4",
       icon: "menu",
-      button: "Company",
+      button: "Message",
       dropdown: [
-        { id: "1", label: "Add User" },
-        { id: "2", label: "Manage User" },
+        { id: "2", label: "Manage Message" },
       ],
     },
     {
