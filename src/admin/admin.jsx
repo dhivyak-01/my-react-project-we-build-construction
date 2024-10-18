@@ -755,16 +755,19 @@ const ManageUser = ({ users, setUsers, onEditUser, onDeleteUser }) => {
               placeholder="Search..."
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
+              className="me-2"
             />
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
+              className="me-2"
             />
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
+              className="me-2"
             />
             <Button onClick={handleSearch} style={{ marginLeft: "10px" }}>
               <FontAwesomeIcon icon={faSearch} style={{ marginRight: "5px" }} />
@@ -981,6 +984,8 @@ const CallBackRequest = () => {
   const [callbacks, setCallbacks] = useState([]);
   const [viewedCallback, setViewedCallback] = useState(null);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   useEffect(() => {
     const fetchCallbacks = async () => {
@@ -991,7 +996,7 @@ const CallBackRequest = () => {
         }
         const data = await response.json();
         console.log("Fetched callbacks:", data.callbacks); // Check the structure of the data
-        setCallbacks(data.callbacks);
+        setCallbacks(data.callbacks.reverse());
       } catch (error) {
         console.error("Failed to fetch callbacks:", error);
       }
@@ -1062,6 +1067,12 @@ const CallBackRequest = () => {
     );
   };
 
+
+  // Pagination Logic
+  const totalPages = Math.ceil(callbacks.length / itemsPerPage);
+  const paginatedCallbacks = callbacks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+
   return (
     <Col xs lg="12" className="custom-padding !bg-back2">
       <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
@@ -1110,7 +1121,7 @@ const CallBackRequest = () => {
               </td>
               <td>{callback.yourname}</td>
               <td>{callback.youremail}</td>
-              <td>{callback.callbackdate}</td>
+              <td>{new Date(callback.callbackdate).toLocaleDateString('en-GB')}</td> 
               <td>{callback.callbacktime}</td>
               <td>{callback.message}</td>
               <td>
@@ -1129,6 +1140,29 @@ const CallBackRequest = () => {
           ))}
         </tbody>
       </Table>
+ {/* Pagination */}
+ <div className="d-flex justify-content-center mt-3">
+        <Pagination>
+          <Pagination.Prev
+            onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+          />
+          {[...Array(totalPages)].map((_, index) => (
+            <Pagination.Item
+              key={index + 1}
+              active={index + 1 === currentPage}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            onClick={() =>
+              currentPage < totalPages && setCurrentPage(currentPage + 1)
+            }
+          />
+        </Pagination>
+        </div>
+
       {/* Modal for viewing request details */}
       <Modal show={viewedCallback !== null} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -1144,7 +1178,7 @@ const CallBackRequest = () => {
                 <strong>Email:</strong> {viewedCallback.youremail}
               </p>
               <p>
-                <strong>Callback Date:</strong> {viewedCallback.callbackdate}
+              <p><strong>Callback Date:</strong> {viewedCallback && new Date(viewedCallback.callbackdate).toLocaleDateString('en-GB')}</p>
               </p>
               <p>
                 <strong>Callback Time:</strong> {viewedCallback.callbacktime}
@@ -1170,6 +1204,8 @@ const Comments = () => {
   const [comments, setComments] = useState([]);
   const [viewedComment, setViewedComment] = useState(null);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -1183,7 +1219,7 @@ const Comments = () => {
         
         // Make sure the data is what you expect
         if (Array.isArray(data)) {
-          setComments(data); // Adjust this if data structure is different
+          setComments(data.reverse()); // Adjust this if data structure is different
         } else {
           console.error("Expected an array of comments but got:", data);
           setComments([]); // Reset to an empty array if not valid
@@ -1240,6 +1276,10 @@ const Comments = () => {
     setViewedComment(null);
   };
 
+  // Pagination Logic
+  const totalPages = Math.ceil(comments.length / itemsPerPage);
+  const paginatedoCmments = comments.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
 
   return (
       <Col xs lg="12" className="custom-padding !bg-back2">
@@ -1291,7 +1331,7 @@ const Comments = () => {
               <td>{comment.email}</td>
               <td>{comment.website}</td>
               <td>{comment.comment}</td>
-              <td>{comment.date}</td>
+              <td>{new Date(comment.date).toLocaleDateString('en-GB')}</td>
               <td>
                 <Button variant="primary" onClick={() => handleView(comment)}>
                   View
@@ -1308,6 +1348,30 @@ const Comments = () => {
           ))}
         </tbody>
       </Table>
+
+      {/* Pagination */}
+ <div className="d-flex justify-content-center mt-3">
+        <Pagination>
+          <Pagination.Prev
+            onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+          />
+          {[...Array(totalPages)].map((_, index) => (
+            <Pagination.Item
+              key={index + 1}
+              active={index + 1 === currentPage}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            onClick={() =>
+              currentPage < totalPages && setCurrentPage(currentPage + 1)
+            }
+          />
+        </Pagination>
+        </div>
+
        {/* Modal for viewing comment details */}
        <Modal show={viewedComment !== null} onHide={handleClose}>
          <Modal.Header closeButton>
@@ -1349,6 +1413,8 @@ const Message = () => {
   const [message, setMessage] = useState([]);
   const [viewedMessage, setViewedMessage] = useState(null);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   useEffect(() => {
     const fetchMessage = async () => {
@@ -1362,7 +1428,7 @@ const Message = () => {
         
         // Make sure the data is what you expect
         if (Array.isArray(data)) {
-          setMessage(data); // Adjust this if data structure is different
+          setMessage(data.reverse()); // Adjust this if data structure is different
         } else {
           console.error("Expected an array of message but got:", data);
           setMessage([]); // Reset to an empty array if not valid
@@ -1419,6 +1485,10 @@ const Message = () => {
     setViewedMessage(null);
   };
 
+  // Pagination Logic
+  const totalPages = Math.ceil(message.length / itemsPerPage);
+  const paginatedMessage = message.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
 
   return (
       <Col xs lg="12" className="custom-padding !bg-back2">
@@ -1470,7 +1540,7 @@ const Message = () => {
               <td>{message.email}</td>
               <td>{message.subject}</td>
               <td>{message.message}</td>
-              <td>{message.date}</td>
+              <td>{new Date(message.date).toLocaleDateString('en-GB')}</td>
               <td>
                 <Button variant="primary" onClick={() => handleView(message)}>
                   View
@@ -1487,6 +1557,30 @@ const Message = () => {
           ))}
         </tbody>
       </Table>
+
+      {/* Pagination */}
+ <div className="d-flex justify-content-center mt-3">
+        <Pagination>
+          <Pagination.Prev
+            onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+          />
+          {[...Array(totalPages)].map((_, index) => (
+            <Pagination.Item
+              key={index + 1}
+              active={index + 1 === currentPage}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            onClick={() =>
+              currentPage < totalPages && setCurrentPage(currentPage + 1)
+            }
+          />
+        </Pagination>
+        </div>
+
        {/* Modal for viewing message details */}
        <Modal show={viewedMessage !== null} onHide={handleClose}>
          <Modal.Header closeButton>
