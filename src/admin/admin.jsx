@@ -1475,7 +1475,7 @@ const Message = () => {
               <td>{message.name}</td>
               <td>{message.email}</td>
               <td>{message.subject}</td>
-              <td>{message.comment}</td>
+              <td>{message.message}</td>
               <td>{message.date}</td>
               <td>
                 <Button variant="primary" onClick={() => handleView(message)}>
@@ -1508,10 +1508,10 @@ const Message = () => {
                 <strong>Email:</strong> {viewedMessage.email}
               </p>
               <p>
-                <strong>Website:</strong> <a href={viewedMessage.website} target="_blank" rel="noopener noreferrer">{viewedMessage.website}</a>
+                <strong>Subject:</strong> {viewedMessage.subject}
               </p>
               <p>
-                <strong>Comment:</strong> {viewedMessage.comment}
+                <strong>Message:</strong> {viewedMessage.message}
               </p>
               <p>
                 <strong>Date:</strong> {new Date(viewedMessage.date).toLocaleString()}
