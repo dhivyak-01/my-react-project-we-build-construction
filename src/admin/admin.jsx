@@ -1345,12 +1345,6 @@ const Comments = () => {
 };
 
 
-
-
-
-
-
-
 const Message = () => {
   const [message, setMessage] = useState([]);
   const [viewedMessage, setViewedMessage] = useState(null);
