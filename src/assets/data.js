@@ -1,6 +1,6 @@
 // image
-import carousel_1 from "./img/carousel-1.jpg";
-import carousel_2 from "./img/carousel-2.jpg";
+// import carousel_1 from "./img/carousel-1.jpg";
+// import carousel_2 from "./img/carousel-2.jpg";
 import signature from "./img/signature.jpg";
 import about from "./img/about.jpg";
 import service_1 from "./img/service-1.jpg";
@@ -195,21 +195,66 @@ export const signinForm = {
   ],
 };
 
-//carousel
-export const carousel = {
-  1: {
-    icon: "home",
-    image: carousel_1,
-    heading: "Build Your Dream House With Us",
-    caption: "get a quote",
-  },
-  2: {
-    icon: "tool",
-    image: carousel_2,
-    heading: "We Are Trusted For Your Project",
-    caption: "Contact us",
-  },
+
+
+export const carousels = {
+  name: "carousel list",
+  carousels: [
+    {
+      id: "carousel1", // Unique ID for the first carousel
+      items: [
+        {
+          icon: "home",
+          image: "carousel_1", // Replace with the actual image path or variable
+          heading: "Build Your Dream House With Us",
+          caption: "Get a quote",
+        },
+        {
+          icon: "tool",
+          image: "carousel_2", // Replace with the actual image path or variable
+          heading: "We Are Trusted For Your Project",
+          caption: "Contact us",
+        },
+      ],
+    },
+    {
+      id: "carousel2", // Unique ID for the second carousel
+      items: [
+        {
+          icon: "home",
+          image: "carousel_1", // Replace with the actual image path or variable
+          heading: "Build Your Dream House With Us",
+          caption: "Get a quote",
+        },
+        {
+          icon: "tool",
+          image: "carousel_2", // Replace with the actual image path or variable
+          heading: "We Are Trusted For Your Project",
+          caption: "Contact us",
+        },
+      ],
+    },
+  ],
 };
+
+
+
+
+//carousel
+// export const carousel = {
+//   1: {
+//     icon: "home",
+//     image: carousel_1,
+//     heading: "Build Your Dream House With Us",
+//     caption: "get a quote",
+//   },
+  // 2: {
+  //   icon: "tool",
+  //   image: carousel_2,
+  //   heading: "We Are Trusted For Your Project",
+  //   caption: "Contact us",
+  // },
+// };
 
 export const theleader = [
   {
@@ -855,6 +900,16 @@ export const AdminpanelData = {
         { id: "1", label: "Manage Comments" },
       ],
     },
+    {
+      id: "6",
+      icon: "menu",
+      button: "Banner",
+      dropdown: [
+        { id: "1", label: "Carousel List" },
+        { id: "2", label: "Add Carousel Item" },
+        { id: "3", label: "Manage Banner" },
+      ],
+    },
   ],
 };
 
@@ -869,86 +924,5 @@ export const UserTable = {
     { id: "6", heading: "Phone no" },
     { id: "7", heading: "City" },
   ],
-  Data: [
-    {
-      id: "1",
-      Image: "user",
-      UserName: "William",
-      Date: "12/3/2002",
-      Email: "William12324@gmail.com",
-      Gender: "Male",
-      PhoneNo: "9973625173",
-      City: "selam",
-    },
-    {
-      id: "2",
-      Image: "user",
-      UserName: "Liam",
-      Date: "12/3/2002",
-      Email: "Liam5624@gmail.com",
-      Gender: "Male",
-      PhoneNo: "8632415173",
-      City: "erode",
-    },
-    {
-      id: "3",
-      Image: "user",
-      UserName: " Henry",
-      Date: "12/3/2002",
-      Email: " Henry98724@gmail.com",
-      Gender: "Male",
-      PhoneNo: "9965430973",
-      City: "selam",
-    },
-    {
-      id: "4",
-      Image: "user",
-      UserName: "Alice",
-      Date: "12/3/2002",
-      Email: "AliceWilliam@gmail.com",
-      Gender: "Female",
-      PhoneNo: "9933334561",
-      City: "selam",
-    },
-    {
-      id: "5",
-      Image: "user",
-      UserName: "Clara",
-      Date: "12/3/2002",
-      Email: "Clara64537@gmail.com",
-      Gender: "Female",
-      PhoneNo: "9128964573",
-      City: "selam",
-    },
-    {
-      id: "6",
-      Image: "user",
-      UserName: "Noah",
-      Date: "12/3/2002",
-      Email: "Noah12555@gmail.com",
-      Gender: "Male",
-      PhoneNo: "9973625173",
-      City: "selam",
-    },
-    {
-      id: "7",
-      Image: "user",
-      UserName: "Erin",
-      Date: "12/3/2002",
-      Email: "WilliamErin24@gmail.com",
-      Gender: "Female",
-      PhoneNo: "9973625173",
-      City: "selam",
-    },
-    {
-      id: "8",
-      Image: "user",
-      UserName: "Daniel",
-      Date: "12/3/2002",
-      Email: "Danielinfo@gmail.com",
-      Gender: "Male",
-      PhoneNo: "9973625173",
-      City: "selam",
-    },
-  ],
+
 };

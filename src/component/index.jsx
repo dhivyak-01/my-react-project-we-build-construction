@@ -1,4 +1,4 @@
-import React ,{ useState } from "react";
+import React ,{ useState , useEffect } from "react";
 import {
   Container,
   Row,
@@ -17,7 +17,7 @@ import buildingsIcon from "@iconify/icons-bi/buildings";
 import iconMap from "../assets/data"; // Import the iconMap from your icons.js
 import { quickcontact } from "../assets/data";
 import { navbar } from "../assets/data";
-import { carousel } from "../assets/data";
+// import { carousel } from "../assets/data";
 import { theleader } from "../assets/data";
 import {
   thebest,
@@ -188,53 +188,61 @@ const NavbarComponent = () => {
   );
 };
 
+
+const BASE_URL = 'http://localhost:5000/';
+
 const iconSizes = {
   home: { width: "72px", height: "72px" },
   tool: { width: "64px", height: "64px" },
 };
 
 function CarouselFadeExample() {
+  const [carouselItems, setCarouselItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCarouselData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/carousels/1'); // Fetching carousel with ID "1"
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const data = await response.json();
+        setCarouselItems(data.items || []); // Use items from the fetched carousel
+      } catch (error) {
+        console.error("Error fetching carousel data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCarouselData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
       <Carousel fade interval={5000} controls={true} indicators={false}>
-        {Object.keys(carousel).map((key) => {
-          const item = carousel[key];
-          const IconComponent = iconMap[item.icon]; // Get the icon component from the map
-
-          // Get the icon size based on the type
-          const iconSize = iconSizes[item.icon] || {
-            width: "64px",
-            height: "64px",
-          }; // Default size
+        {carouselItems.map((item) => {
+          const IconComponent = iconMap[item.icon]; // Ensure iconMap is defined
+          const iconSize = iconSizes[item.icon] || { width: "64px", height: "64px" };
+          const imageUrl = `${BASE_URL}${item.imagePath}`; // Assuming imagePath is correct
 
           return (
-            <Carousel.Item key={key}>
-              <img src={item.image} alt={`Slide ${key}`} />
-              <div
-                className="position-absolute top-0 start-0 d-flex w-100 h-100 align-items-center"
-                style={{ background: "rgba(24, 29, 56, .7)" }}
-              >
-                <Carousel.Caption
-                  className="mb-12p"
-                  style={{ maxWidth: "900px" }}
-                >
+            <Carousel.Item key={item._id}>
+              <img src={imageUrl} alt={`Slide ${item.heading}`} />
+              <div className="position-absolute top-0 start-0 d-flex w-100 h-100 align-items-center" style={{ background: "rgba(24, 29, 56, .7)" }}>
+                <Carousel.Caption className="mb-12p" style={{ maxWidth: "900px" }}>
                   <div className="align-items-center d-flex justify-content-center">
                     {IconComponent && (
-                      <IconComponent
-                        className="me-3 text-customorange mb-4 d-none d-sm-block"
-                        style={{
-                          width: iconSize.width,
-                          height: iconSize.height,
-                        }}
-                      />
+                      <IconComponent className="me-3 text-customorange mb-4 d-none d-sm-block" style={{ width: iconSize.width, height: iconSize.height }} />
                     )}
                   </div>
-                  <div className="d-flex align-items-center justify-content-center ">
-                    <div>
-                      <h1 className="text-white display-2 mb-md-4 font-roboto !font-semi-bold uppercase">
-                        {item.heading}
-                      </h1>
-                    </div>
+                  <div className="d-flex align-items-center justify-content-center">
+                    <h1 className="text-white display-2 mb-md-4 font-roboto !font-semi-bold uppercase">
+                      {item.heading}
+                    </h1>
                   </div>
                   <button className="btn py-md-3 px-md-5 mt-2 !bg-customorange text-white uppercase !font-semibold rounded-0 font-open-sans">
                     {item.caption}

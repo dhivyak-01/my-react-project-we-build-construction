@@ -227,3 +227,7 @@ thead.table-header
 .date-control{
    width: 320px;
 }
+
+.textsize{
+  font-size: xxx-large;
+}

@@ -7,6 +7,8 @@ const callbackRoutes = require('./routes/callBackRoutes'); // Import callback ro
 const authRoutes = require('./routes/auth');
 const commentRoutes = require('./routes/commentsRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const carouselRoutes = require('./routes/carousel');
+const carouselList = require('./routes/carouselList');
 
 
 const app = express();
@@ -37,6 +39,14 @@ app.use('/api/comments', commentRoutes);
 
 // Use the message routes
 app.use('/api/message', messageRoutes); 
+
+// Use routes
+app.use('/api/carousel', carouselRoutes);
+
+
+
+// Routes
+app.use('/api/carousels', carouselList);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

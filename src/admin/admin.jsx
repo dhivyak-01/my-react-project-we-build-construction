@@ -13,6 +13,7 @@ import {
   Modal,
 } from "react-bootstrap";
 import { AdminpanelData } from "../assets/data";
+import iconMap from "../assets/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faBars } from "@fortawesome/free-solid-svg-icons";
 import { AiFillDashboard } from "react-icons/ai";
@@ -20,6 +21,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faFilePdf, faFileCsv } from "@fortawesome/free-solid-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FaTrash } from "react-icons/fa";
+import { FaPlus, FaEdit } from "react-icons/fa"; // Importing the "+" and bin icon
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import "../App.css";
@@ -29,37 +31,25 @@ const DashboardContent = (
     <Row className="g-5">
       <Col lg={4}>
         <Card className="!bg-back" style={{ width: "100%", height: "250px" }}>
-          <Card.Img variant="top" src="holder.js/100px180" />
           <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </Card.Text>
+            <Card.Title>Total Project</Card.Title>
+            <Card.Text className="textsize text-center">5</Card.Text>
           </Card.Body>
         </Card>
       </Col>
       <Col lg={4}>
         <Card className="!bg-back" style={{ width: "100%", height: "250px" }}>
-          <Card.Img variant="top" src="holder.js/100px180" />
           <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </Card.Text>
+            <Card.Title>Program Budget</Card.Title>
+            <Card.Text className="textsize text-center">14</Card.Text>
           </Card.Body>
         </Card>
       </Col>
       <Col lg={4}>
         <Card className="!bg-back" style={{ width: "100%", height: "250px" }}>
-          <Card.Img variant="top" src="holder.js/100px180" />
           <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </Card.Text>
+            <Card.Title>Estimate at Completion</Card.Title>
+            <Card.Text className="textsize text-center">7.11m</Card.Text>
           </Card.Body>
         </Card>
       </Col>
@@ -1006,21 +996,24 @@ const CallBackRequest = () => {
   }, []);
 
   const handleToggleRead = async (id, isRead) => {
-    const response = await fetch(`http://localhost:5000/api/callbacks/${id}/read`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ isRead: !isRead }), // Toggle the read status
-    });
-  
+    const response = await fetch(
+      `http://localhost:5000/api/callbacks/${id}/read`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isRead: !isRead }), // Toggle the read status
+      }
+    );
+
     if (response.ok) {
       const updatedCallback = await response.json();
       setCallbacks((prev) =>
         prev.map((cb) => (cb._id === id ? updatedCallback : cb))
       );
     } else {
-      console.error('Failed to toggle read status:', response.statusText);
+      console.error("Failed to toggle read status:", response.statusText);
     }
   };
 
@@ -1067,11 +1060,12 @@ const CallBackRequest = () => {
     );
   };
 
-
   // Pagination Logic
   const totalPages = Math.ceil(callbacks.length / itemsPerPage);
-  const paginatedCallbacks = callbacks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
+  const paginatedCallbacks = callbacks.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <Col xs lg="12" className="custom-padding !bg-back2">
@@ -1121,7 +1115,9 @@ const CallBackRequest = () => {
               </td>
               <td>{callback.yourname}</td>
               <td>{callback.youremail}</td>
-              <td>{new Date(callback.callbackdate).toLocaleDateString('en-GB')}</td> 
+              <td>
+                {new Date(callback.callbackdate).toLocaleDateString("en-GB")}
+              </td>
               <td>{callback.callbacktime}</td>
               <td>{callback.message}</td>
               <td>
@@ -1140,8 +1136,8 @@ const CallBackRequest = () => {
           ))}
         </tbody>
       </Table>
- {/* Pagination */}
- <div className="d-flex justify-content-center mt-3">
+      {/* Pagination */}
+      <div className="d-flex justify-content-center mt-3">
         <Pagination>
           <Pagination.Prev
             onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
@@ -1161,7 +1157,7 @@ const CallBackRequest = () => {
             }
           />
         </Pagination>
-        </div>
+      </div>
 
       {/* Modal for viewing request details */}
       <Modal show={viewedCallback !== null} onHide={handleClose}>
@@ -1178,7 +1174,13 @@ const CallBackRequest = () => {
                 <strong>Email:</strong> {viewedCallback.youremail}
               </p>
               <p>
-              <p><strong>Callback Date:</strong> {viewedCallback && new Date(viewedCallback.callbackdate).toLocaleDateString('en-GB')}</p>
+                <p>
+                  <strong>Callback Date:</strong>{" "}
+                  {viewedCallback &&
+                    new Date(viewedCallback.callbackdate).toLocaleDateString(
+                      "en-GB"
+                    )}
+                </p>
               </p>
               <p>
                 <strong>Callback Time:</strong> {viewedCallback.callbacktime}
@@ -1199,7 +1201,6 @@ const CallBackRequest = () => {
   );
 };
 
-
 const Comments = () => {
   const [comments, setComments] = useState([]);
   const [viewedComment, setViewedComment] = useState(null);
@@ -1216,7 +1217,7 @@ const Comments = () => {
         }
         const data = await response.json();
         console.log("Fetched comments:", data);
-        
+
         // Make sure the data is what you expect
         if (Array.isArray(data)) {
           setComments(data.reverse()); // Adjust this if data structure is different
@@ -1233,7 +1234,6 @@ const Comments = () => {
     fetchComments();
   }, []);
 
-  
   const handleDelete = async (id) => {
     const response = await fetch(`http://localhost:5000/api/comments/${id}`, {
       method: "DELETE",
@@ -1278,11 +1278,13 @@ const Comments = () => {
 
   // Pagination Logic
   const totalPages = Math.ceil(comments.length / itemsPerPage);
-  const paginatedoCmments = comments.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
+  const paginatedoCmments = comments.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
-      <Col xs lg="12" className="custom-padding !bg-back2">
+    <Col xs lg="12" className="custom-padding !bg-back2">
       <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
         <div className="d-flex justify-content-between align-items-start">
           <h1 className="pt-1 text-25px mb-0">Manage Users Comments</h1>
@@ -1303,8 +1305,7 @@ const Comments = () => {
               <input
                 type="checkbox"
                 checked={
-                  selectedIds.length === comments.length &&
-                  comments.length > 0
+                  selectedIds.length === comments.length && comments.length > 0
                 }
                 onChange={handleSelectAll}
               />
@@ -1331,7 +1332,7 @@ const Comments = () => {
               <td>{comment.email}</td>
               <td>{comment.website}</td>
               <td>{comment.comment}</td>
-              <td>{new Date(comment.date).toLocaleDateString('en-GB')}</td>
+              <td>{new Date(comment.date).toLocaleDateString("en-GB")}</td>
               <td>
                 <Button variant="primary" onClick={() => handleView(comment)}>
                   View
@@ -1350,7 +1351,7 @@ const Comments = () => {
       </Table>
 
       {/* Pagination */}
- <div className="d-flex justify-content-center mt-3">
+      <div className="d-flex justify-content-center mt-3">
         <Pagination>
           <Pagination.Prev
             onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
@@ -1370,15 +1371,15 @@ const Comments = () => {
             }
           />
         </Pagination>
-        </div>
+      </div>
 
-       {/* Modal for viewing comment details */}
-       <Modal show={viewedComment !== null} onHide={handleClose}>
-         <Modal.Header closeButton>
-         <Modal.Title>Comment Details</Modal.Title>
+      {/* Modal for viewing comment details */}
+      <Modal show={viewedComment !== null} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Comment Details</Modal.Title>
         </Modal.Header>
-       <Modal.Body>
-           {viewedComment && (
+        <Modal.Body>
+          {viewedComment && (
             <div>
               <p>
                 <strong>Name:</strong> {viewedComment.name}
@@ -1387,13 +1388,21 @@ const Comments = () => {
                 <strong>Email:</strong> {viewedComment.email}
               </p>
               <p>
-                <strong>Website:</strong> <a href={viewedComment.website} target="_blank" rel="noopener noreferrer">{viewedComment.website}</a>
+                <strong>Website:</strong>{" "}
+                <a
+                  href={viewedComment.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {viewedComment.website}
+                </a>
               </p>
               <p>
                 <strong>Comment:</strong> {viewedComment.comment}
               </p>
               <p>
-                <strong>Date:</strong> {new Date(viewedComment.date).toLocaleString()}
+                <strong>Date:</strong>{" "}
+                {new Date(viewedComment.date).toLocaleString()}
               </p>
             </div>
           )}
@@ -1407,7 +1416,6 @@ const Comments = () => {
     </Col>
   );
 };
-
 
 const Message = () => {
   const [message, setMessage] = useState([]);
@@ -1425,7 +1433,7 @@ const Message = () => {
         }
         const data = await response.json();
         console.log("Fetched message:", data);
-        
+
         // Make sure the data is what you expect
         if (Array.isArray(data)) {
           setMessage(data.reverse()); // Adjust this if data structure is different
@@ -1442,7 +1450,6 @@ const Message = () => {
     fetchMessage();
   }, []);
 
-  
   const handleDelete = async (id) => {
     const response = await fetch(`http://localhost:5000/api/message/${id}`, {
       method: "DELETE",
@@ -1487,11 +1494,13 @@ const Message = () => {
 
   // Pagination Logic
   const totalPages = Math.ceil(message.length / itemsPerPage);
-  const paginatedMessage = message.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
+  const paginatedMessage = message.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
-      <Col xs lg="12" className="custom-padding !bg-back2">
+    <Col xs lg="12" className="custom-padding !bg-back2">
       <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
         <div className="d-flex justify-content-between align-items-start">
           <h1 className="pt-1 text-25px mb-0">Manage Users Messages</h1>
@@ -1512,8 +1521,7 @@ const Message = () => {
               <input
                 type="checkbox"
                 checked={
-                  selectedIds.length === message.length &&
-                  message.length > 0
+                  selectedIds.length === message.length && message.length > 0
                 }
                 onChange={handleSelectAll}
               />
@@ -1540,7 +1548,7 @@ const Message = () => {
               <td>{message.email}</td>
               <td>{message.subject}</td>
               <td>{message.message}</td>
-              <td>{new Date(message.date).toLocaleDateString('en-GB')}</td>
+              <td>{new Date(message.date).toLocaleDateString("en-GB")}</td>
               <td>
                 <Button variant="primary" onClick={() => handleView(message)}>
                   View
@@ -1559,7 +1567,7 @@ const Message = () => {
       </Table>
 
       {/* Pagination */}
- <div className="d-flex justify-content-center mt-3">
+      <div className="d-flex justify-content-center mt-3">
         <Pagination>
           <Pagination.Prev
             onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
@@ -1579,15 +1587,15 @@ const Message = () => {
             }
           />
         </Pagination>
-        </div>
+      </div>
 
-       {/* Modal for viewing message details */}
-       <Modal show={viewedMessage !== null} onHide={handleClose}>
-         <Modal.Header closeButton>
-         <Modal.Title>Message Details</Modal.Title>
+      {/* Modal for viewing message details */}
+      <Modal show={viewedMessage !== null} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Message Details</Modal.Title>
         </Modal.Header>
-       <Modal.Body>
-           {viewedMessage && (
+        <Modal.Body>
+          {viewedMessage && (
             <div>
               <p>
                 <strong>Name:</strong> {viewedMessage.name}
@@ -1602,7 +1610,8 @@ const Message = () => {
                 <strong>Message:</strong> {viewedMessage.message}
               </p>
               <p>
-                <strong>Date:</strong> {new Date(viewedMessage.date).toLocaleString()}
+                <strong>Date:</strong>{" "}
+                {new Date(viewedMessage.date).toLocaleString()}
               </p>
             </div>
           )}
@@ -1616,6 +1625,609 @@ const Message = () => {
     </Col>
   );
 };
+
+
+function ManageBanner() {
+  const [newItem, setNewItem] = useState({
+    image: null,
+    icon: "",
+    heading: "",
+    caption: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewItem((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setNewItem((prev) => ({ ...prev, image: file }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("image", newItem.image);
+    formData.append("icon", newItem.icon);
+    formData.append("heading", newItem.heading);
+    formData.append("caption", newItem.caption);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/carousel", {
+        method: "POST",
+        body: formData,
+      });
+      if (response.ok) {
+        console.log("Item added successfully");
+        setNewItem({ image: null, icon: "", heading: "", caption: "" });
+      } else {
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
+      }
+    } catch (error) {
+      console.error("Error adding carousel item:", error);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <table>
+        <thead>
+          <tr>
+            <th>Carousel Image</th>
+            <th>Icon</th>
+            <th>Heading</th>
+            <th>Button Caption</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                required
+              />
+            </td>
+            <td>
+              <select
+                name="icon"
+                value={newItem.icon}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Icon</option>
+                {Object.keys(iconMap).map((iconName) => (
+                  <option key={iconName} value={iconName}>
+                    {iconName}
+                  </option>
+                ))}
+              </select>
+            </td>
+            <td>
+              <input
+                name="heading"
+                value={newItem.heading}
+                onChange={handleChange}
+                placeholder="Heading"
+                required
+              />
+            </td>
+            <td>
+              <input
+                name="caption"
+                value={newItem.caption}
+                onChange={handleChange}
+                placeholder="Caption"
+                required
+              />
+            </td>
+            <td>
+              <button type="submit">Add Carousel Item</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  );
+}
+
+
+const CarouselList = () => {
+  const [carousels, setCarousels] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
+
+  useEffect(() => {
+    const fetchCarousels = async () => {
+      const response = await fetch("http://localhost:5000/api/carousels");
+      const data = await response.json();
+      setCarousels(data);
+    };
+
+    fetchCarousels();
+  }, []);
+
+  const handleSelect = (id) => {
+    setSelectedIds((prev) => 
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedIds(carousels.map((carousel) => carousel._id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleEdit = (carousel) => {
+    // Logic to handle edit, like opening a modal or redirecting
+    alert(`Edit carousel: ${carousel.name}`);
+    // Implement your edit logic here
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this carousel?")) {
+      await fetch(`http://localhost:5000/api/carousels/${id}`, {
+        method: 'DELETE',
+      });
+      setCarousels((prev) => prev.filter((carousel) => carousel._id !== id));
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    if (window.confirm("Are you sure you want to delete the selected carousels?")) {
+      await Promise.all(selectedIds.map((id) =>
+        fetch(`http://localhost:5000/api/carousels/${id}`, {
+          method: 'DELETE',
+        })
+      ));
+      setCarousels((prev) => prev.filter((carousel) => !selectedIds.includes(carousel._id)));
+      setSelectedIds([]);
+    }
+  };
+
+  return (
+    <div>
+      <Col xs lg="12" className="custom-padding !bg-back2">
+        <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
+          <div className="d-flex justify-content-between align-items-start">
+            <h1 className="pt-1 text-25px mb-0">Carousel List</h1>
+            <Button
+              variant="danger"
+              onClick={handleDeleteSelected}
+              disabled={selectedIds.length === 0}
+              style={{ marginLeft: "10px" }}
+            >
+              <FaTrash />
+            </Button>
+          </div>
+        </Card>
+        <Table striped bordered hover style={{ marginTop: "47px" }}>
+          <thead className="table-header">
+            <tr>
+              <th>
+                <input
+                  type="checkbox"
+                  checked={selectedIds.length === carousels.length && carousels.length > 0}
+                  onChange={handleSelectAll}
+                />
+              </th>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {carousels.map((carousel) => (
+              <tr key={carousel._id}>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.includes(carousel._id)}
+                    onChange={() => handleSelect(carousel._id)}
+                  />
+                </td>
+                <td>{carousel.id}</td>
+                <td>{carousel.name}</td>
+                <td>{carousel.isEnabled ? "Enabled" : "Disabled"}</td>
+                <td>
+                  <Button variant="primary" onClick={() => handleEdit(carousel)}>
+                    <FaEdit /> Edit
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => handleDelete(carousel._id)}
+                    style={{ marginLeft: "5px" }}
+                  >
+                    <FaTrash /> Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Col>
+    </div>
+  );
+};
+const CarouselManager = () => {
+  const [carouselData, setCarouselData] = useState({
+    id: "",
+    name: "",
+    isEnabled: "enabled", // Changed to string for dropdown
+  });
+
+  const [newItem, setNewItem] = useState({
+    image: null,
+    icon: "",
+    heading: "",
+    caption: "",
+  });
+
+  const [carousels, setCarousels] = useState([]);
+  const [editingCarouselId, setEditingCarouselId] = useState(null);
+
+  useEffect(() => {
+    const fetchCarousels = async () => {
+      const response = await fetch("http://localhost:5000/api/carousels");
+      const data = await response.json();
+      setCarousels(data);
+    };
+
+    fetchCarousels();
+  }, []);
+
+  const handleCarouselChange = (e) => {
+    const { name, value } = e.target;
+    setCarouselData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleItemChange = (e) => {
+    const { name, value } = e.target;
+    setNewItem((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setNewItem((prev) => ({ ...prev, image: file }));
+  };
+
+  const handleCarouselSubmit = async (e) => {
+    e.preventDefault();
+    if (editingCarouselId) {
+      // Update existing carousel
+      await fetch(`http://localhost:5000/api/carousels/${editingCarouselId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...carouselData,
+          isEnabled: carouselData.isEnabled === "enabled",
+        }),
+      });
+      setEditingCarouselId(null); // Reset editing state
+    } else {
+      // Create new carousel
+      await fetch("http://localhost:5000/api/carousels", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...carouselData,
+          isEnabled: carouselData.isEnabled === "enabled",
+        }),
+      });
+    }
+    setCarouselData({ id: "", name: "", isEnabled: "enabled" }); // Reset form
+  };
+
+  const handleItemSubmit = async (carouselId, e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("image", newItem.image);
+    formData.append("icon", newItem.icon);
+    formData.append("heading", newItem.heading);
+    formData.append("caption", newItem.caption);
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/carousels/${carouselId}/items`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      if (response.ok) {
+        console.log("Item added successfully");
+        setNewItem({ image: null, icon: "", heading: "", caption: "" });
+      } else {
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
+      }
+    } catch (error) {
+      console.error("Error adding carousel item:", error);
+    }
+  };
+
+  const handleEditCarousel = (carousel) => {
+    setCarouselData({
+      id: carousel.id,
+      name: carousel.name,
+      isEnabled: carousel.isEnabled ? "enabled" : "disabled", // Set dropdown value
+    });
+    setEditingCarouselId(carousel.id);
+  };
+
+  return (
+    <div>
+      <h2>{editingCarouselId ? "Edit Carousel" : "Add New Carousel"}</h2>
+      <form onSubmit={handleCarouselSubmit}>
+        <input
+          type="text"
+          name="id"
+          value={carouselData.id}
+          onChange={handleCarouselChange}
+          placeholder="Carousel ID"
+          required
+        />
+        <input
+          type="text"
+          name="name"
+          value={carouselData.name}
+          onChange={handleCarouselChange}
+          placeholder="Carousel Name"
+          required
+        />
+        <label>
+          Status:
+          <select
+            name="isEnabled"
+            value={carouselData.isEnabled}
+            onChange={handleCarouselChange}
+          >
+            <option value="enabled">Enabled</option>
+            <option value="disabled">Disabled</option>
+          </select>
+        </label>
+        <button type="submit">
+          {editingCarouselId ? "Update Carousel" : "Add Carousel"}
+        </button>
+      </form>
+
+      <h2>Carousels List</h2>
+      <ul>
+        {carousels.map((carousel) => (
+          <li key={carousel.id}>
+            {carousel.name}
+            <button onClick={() => handleEditCarousel(carousel)}>Edit</button>
+          </li>
+        ))}
+      </ul>
+
+      <div>
+        <h2>Add Items to Carousel: {carouselData.name || "New Carousel"}</h2>
+        <form onSubmit={(e) => handleItemSubmit(carouselData.id, e)}>
+          <table>
+            <thead>
+              <tr>
+                <th>Carousel Image</th>
+                <th>Icon</th>
+                <th>Heading</th>
+                <th>Button Caption</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    required
+                  />
+                </td>
+                <td>
+                  <select
+                    name="icon"
+                    value={newItem.icon}
+                    onChange={handleItemChange}
+                    required
+                  >
+                    <option value="">Select Icon</option>
+                    {Object.keys(iconMap).map((iconName) => (
+                      <option key={iconName} value={iconName}>
+                        {iconName}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <input
+                    name="heading"
+                    value={newItem.heading}
+                    onChange={handleItemChange}
+                    placeholder="Heading"
+                    required
+                  />
+                </td>
+                <td>
+                  <input
+                    name="caption"
+                    value={newItem.caption}
+                    onChange={handleItemChange}
+                    placeholder="Caption"
+                    required
+                  />
+                </td>
+                <td>
+                  <button type="submit">Add Carousel Item</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const CarouselList = () => {
+//   const [carousels, setCarousels] = useState([]);
+//   const [selectedIds, setSelectedIds] = useState([]);
+//   const [editingCarousel, setEditingCarousel] = useState(null);
+
+//   // Define fetchCarousels function here
+//   const fetchCarousels = async () => {
+//     const response = await fetch("http://localhost:5000/api/carousels");
+//     const data = await response.json();
+//     setCarousels(data);
+//   };
+
+//   useEffect(() => {
+//     fetchCarousels();
+//   }, []);
+
+//   const handleEdit = (carousel) => {
+//     setEditingCarousel(carousel);
+//   };
+
+//   const handleDelete = async (id) => {
+//     if (window.confirm("Are you sure you want to delete this carousel?")) {
+//       await fetch(`http://localhost:5000/api/carousels/${id}`, {
+//         method: 'DELETE',
+//       });
+//       fetchCarousels(); // Refresh the list after deletion
+//     }
+//   };
+
+//   const handleSubmit = async (data) => {
+//     if (editingCarousel) {
+//       // Update existing carousel
+//       await fetch(`http://localhost:5000/api/carousels/${editingCarousel._id}`, {
+//         method: 'PUT',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify(data),
+//       });
+//       setEditingCarousel(null);
+//     } else {
+//       // Create new carousel
+//       await fetch("http://localhost:5000/api/carousels", {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify(data),
+//       });
+//     }
+//     fetchCarousels(); // Refresh the list after adding/updating
+//   };
+
+//   const handleCancelEdit = () => {
+//     setEditingCarousel(null);
+//   };
+
+//   return (
+//     <div>
+//       {editingCarousel ? (
+//         <CarouselManager
+//           carouselData={editingCarousel}
+//           onSubmit={handleSubmit}
+//           onCancel={handleCancelEdit}
+//         />
+//       ) : (
+//         <Col xs lg="12" className="custom-padding !bg-back2">
+//           <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
+//             <div className="d-flex justify-content-between align-items-start">
+//               <h1 className="pt-1 text-25px mb-0">Carousel List</h1>
+//               <Button
+//                 variant="danger"
+//                 onClick={() => { /* handle delete selected logic */ }}
+//                 disabled={selectedIds.length === 0}
+//                 style={{ marginLeft: "10px" }}
+//               >
+//                 <FaTrash />
+//               </Button>
+//             </div>
+//           </Card>
+//           <Table striped bordered hover style={{ marginTop: "47px" }}>
+//             <thead className="table-header">
+//               <tr>
+//                 <th>
+//                   <input
+//                     type="checkbox"
+//                     checked={selectedIds.length === carousels.length && carousels.length > 0}
+//                     onChange={(e) => { /* handle select all logic */ }}
+//                   />
+//                 </th>
+//                 <th>ID</th>
+//                 <th>Name</th>
+//                 <th>Status</th>
+//                 <th>Action</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {carousels.map((carousel) => (
+//                 <tr key={carousel._id}>
+//                   <td>
+//                     <input
+//                       type="checkbox"
+//                       checked={selectedIds.includes(carousel._id)}
+//                       onChange={() => { /* handle select logic */ }}
+//                     />
+//                   </td>
+//                   <td>{carousel.id}</td>
+//                   <td>{carousel.name}</td>
+//                   <td>{carousel.isEnabled ? "Enabled" : "Disabled"}</td>
+//                   <td>
+//                     <Button variant="primary" onClick={() => handleEdit(carousel)}>
+//                       <FaEdit /> Edit
+//                     </Button>
+//                     <Button
+//                       variant="danger"
+//                       onClick={() => handleDelete(carousel._id)}
+//                       style={{ marginLeft: "5px" }}
+//                     >
+//                       <FaTrash /> Delete
+//                     </Button>
+//                   </td>
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </Table>
+//         </Col>
+//       )}
+//     </div>
+//   );
+// };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const Admin = () => {
@@ -1787,10 +2399,16 @@ const Admin = () => {
         );
       case "Manage Request":
         return <CallBackRequest />;
-        case "Manage Comments":
+      case "Manage Comments":
         return <Comments />;
-        case "Manage Message":
+      case "Manage Message":
         return <Message />;
+      case "Manage Banner":
+        return <ManageBanner />;
+      case "Carousel List":
+        return <CarouselList />;
+      case "Add Carousel Item":
+        return <CarouselManager />;
       default:
         console.log(`No content found for: ${activeButton}`);
         return null;
@@ -1898,5 +2516,4 @@ const Admin = () => {
     </Container>
   );
 };
-
 export default Admin;
