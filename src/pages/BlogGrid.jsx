@@ -1,15 +1,27 @@
-import React from 'react';
+import React from "react";
 import Button from "react-bootstrap/Button";
 import { Link, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Carousel from "react-bootstrap/Carousel";
 import buildingsIcon from "@iconify/icons-bi/buildings";
 import iconMap from "../assets/data";
-import {quickcontact, navbar, blogPostsgrid,  footerData, footerBottomData, } from "../assets/data";
 import {
-  Container, Row, Col, Navbar, Nav, NavDropdown, Form, Card,
+  quickcontact,
+  navbar,
+  blogPostsgrid,
+  footerData,
+  footerBottomData,
+} from "../assets/data";
+import {
+  Container,
+  Row,
+  Col,
+  Navbar,
+  Nav,
+  NavDropdown,
+  Form,
+  Card,
 } from "react-bootstrap";
-
 
 const ContactSection = () => {
   return (
@@ -57,7 +69,6 @@ const ContactSection = () => {
     </Container>
   );
 };
-
 
 const NavbarComponent = () => {
   const location = useLocation();
@@ -171,13 +182,22 @@ const Aboute = () => {
   return (
     <div className="container-fluid bg-gray-800 py-5 page-header d-flex flex-column justify-content-center align-items-center text-center">
       <Container>
-        <h1 className="display-3 text-uppercase text-white mb-3 font-roboto !font-bold">Blog Grid</h1>
+        <h1 className="display-3 text-uppercase text-white mb-3 font-roboto !font-bold">
+          Blog Grid
+        </h1>
         <div className="d-inline-flex text-white justify-content-center align-items-center">
           <h6 className="text-uppercase m-0">
-            <a href="/" className="text-customorange font-roboto hover:text-gray-400 no-underline">Home</a>
+            <a
+              href="/"
+              className="text-customorange font-roboto hover:text-gray-400 no-underline"
+            >
+              Home
+            </a>
           </h6>
           <h6 className="text-white m-0 px-3">/</h6>
-          <h6 className="text-uppercase font-roboto text-white m-0 pt-1">Blog Grid</h6>
+          <h6 className="text-uppercase font-roboto text-white m-0 pt-1">
+            Blog Grid
+          </h6>
         </div>
       </Container>
     </div>
@@ -185,7 +205,7 @@ const Aboute = () => {
 };
 
 const iconSizes = {
-  right_arrow: "text-24px", 
+  right_arrow: "text-24px",
   calendar: "text-20px",
 };
 
@@ -269,7 +289,6 @@ const BlogSection = () => {
     </Container>
   );
 };
-
 
 const Footer = () => {
   const {
@@ -434,13 +453,13 @@ const FooterBottom = () => {
 const Bloggrid = () => {
   return (
     <>
-    <ContactSection />
-    <NavbarComponent />
-    <Aboute />
-    <BlogSection />
-    <Footer />
-    <FooterBottom />
+      <ContactSection />
+      <NavbarComponent />
+      <Aboute />
+      <BlogSection />
+      <Footer />
+      <FooterBottom />
     </>
-  )
+  );
 };
-export default Bloggrid ;
+export default Bloggrid;

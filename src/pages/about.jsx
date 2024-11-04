@@ -1,15 +1,28 @@
-import React from 'react';
+import React from "react";
 import Button from "react-bootstrap/Button";
 import { Link, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import buildingsIcon from "@iconify/icons-bi/buildings";
 import iconMap from "../assets/data";
 // import {  } from "../assets/data";
-import {quickcontact, navbar, theleader, requestCallBackData, professional, footerData, footerBottomData, } from "../assets/data";
 import {
-  Container, Row, Col, Navbar, Nav, NavDropdown, Form,
+  quickcontact,
+  navbar,
+  theleader,
+  requestCallBackData,
+  professional,
+  footerData,
+  footerBottomData,
+} from "../assets/data";
+import {
+  Container,
+  Row,
+  Col,
+  Navbar,
+  Nav,
+  NavDropdown,
+  Form,
 } from "react-bootstrap";
-
 
 const ContactSection = () => {
   return (
@@ -170,19 +183,27 @@ const Aboute = () => {
   return (
     <div className="container-fluid bg-gray-800 py-5 page-header d-flex flex-column justify-content-center align-items-center text-center">
       <Container>
-        <h1 className="display-3 text-uppercase text-white mb-3 font-roboto !font-bold">about</h1>
+        <h1 className="display-3 text-uppercase text-white mb-3 font-roboto !font-bold">
+          about
+        </h1>
         <div className="d-inline-flex text-white justify-content-center align-items-center">
           <h6 className="text-uppercase m-0">
-            <a href="/" className="text-customorange font-roboto hover:text-gray-400 no-underline">Home</a>
+            <a
+              href="/"
+              className="text-customorange font-roboto hover:text-gray-400 no-underline"
+            >
+              Home
+            </a>
           </h6>
           <h6 className="text-white m-0 px-3">/</h6>
-          <h6 className="text-uppercase font-roboto text-white m-0 pt-1">about</h6>
+          <h6 className="text-uppercase font-roboto text-white m-0 pt-1">
+            about
+          </h6>
         </div>
       </Container>
     </div>
   );
 };
-
 
 const TheLeader = () => {
   const leader = theleader[0]; // Access the first object in the array
@@ -267,7 +288,6 @@ const TheLeader = () => {
   );
 };
 
-
 const RequestCallBack = () => {
   return (
     <Container fluid className="py-6 px-5">
@@ -282,7 +302,9 @@ const RequestCallBack = () => {
               </span>
             </h1>
           </div>
-          <p className="mb-5 font-open-sans text-customwhite">{requestCallBackData.description}</p>
+          <p className="mb-5 font-open-sans text-customwhite">
+            {requestCallBackData.description}
+          </p>
           <Button variant="" className="py-3 px-5 !bg-customorange text-white">
             {requestCallBackData.buttonText}
           </Button>
@@ -330,7 +352,6 @@ const RequestCallBack = () => {
     </Container>
   );
 };
-
 
 const Professional = () => {
   return (
@@ -380,7 +401,6 @@ const Professional = () => {
     </Container>
   );
 };
-
 
 const Footer = () => {
   const {
@@ -545,15 +565,15 @@ const FooterBottom = () => {
 const About = () => {
   return (
     <>
-    <ContactSection />
-    <NavbarComponent />
-    <Aboute />
-    <TheLeader />
-    <RequestCallBack />
-    <Professional />
-    <Footer />
-    <FooterBottom />
+      <ContactSection />
+      <NavbarComponent />
+      <Aboute />
+      <TheLeader />
+      <RequestCallBack />
+      <Professional />
+      <Footer />
+      <FooterBottom />
     </>
-  )
+  );
 };
-export default About ;
+export default About;

@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import { Link, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import buildingsIcon from "@iconify/icons-bi/buildings";
 import iconMap from "../assets/data";
-import {quickcontact, navbar, contactrouter, footerData, footerBottomData, } from "../assets/data";
 import {
-  Container, Row, Col, Navbar, Nav, NavDropdown, Form
+  quickcontact,
+  navbar,
+  contactrouter,
+  footerData,
+  footerBottomData,
+} from "../assets/data";
+import {
+  Container,
+  Row,
+  Col,
+  Navbar,
+  Nav,
+  NavDropdown,
+  Form,
 } from "react-bootstrap";
-
 
 const ContactSection = () => {
   return (
@@ -170,161 +181,35 @@ const Aboute = () => {
   return (
     <div className="container-fluid bg-gray-800 py-5 page-header d-flex flex-column justify-content-center align-items-center text-center">
       <Container>
-        <h1 className="display-3 text-uppercase text-white mb-3 font-roboto !font-bold">CONTACT</h1>
+        <h1 className="display-3 text-uppercase text-white mb-3 font-roboto !font-bold">
+          CONTACT
+        </h1>
         <div className="d-inline-flex text-white">
           <h6 className="text-uppercase m-0">
-            <a href="/" className="text-customorange font-roboto hover:text-gray-400 no-underline">Home</a>
+            <a
+              href="/"
+              className="text-customorange font-roboto hover:text-gray-400 no-underline"
+            >
+              Home
+            </a>
           </h6>
           <h6 className="text-white m-0 px-3">/</h6>
-          <h6 className="text-uppercase font-roboto text-white m-0 pt-1">CONTACT</h6>
+          <h6 className="text-uppercase font-roboto text-white m-0 pt-1">
+            CONTACT
+          </h6>
         </div>
       </Container>
     </div>
   );
 };
 
-
-
-
-
-
-// const ContactUs = () => {
-//   const { title, mapEmbedURL, buttonText } = contactrouter.contactSection;
-//   const [formData, setFormData] = useState({
-//     name: '',        // Matches "Your Name"
-//     email: '',      // Matches "Your Email"
-//     subject: '',   // Matches "Call Back Date"
-//     message: '',        // Matches "Message"  
-//   });
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prevState) => ({
-//       ...prevState,
-//       [name]: value,
-//     }));
-//     console.log(`Changing ${name} to ${value}`);
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     console.log('Submitting form with data:', formData);
-
-//     try {
-//       const response = await fetch('http://localhost:5000/api/callbacks/submit', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(formData),
-//       });
-
-//       if (!response.ok) {
-//         const errorDetails = await response.text();
-//         throw new Error(`Network response was not ok: ${errorDetails}`);
-//       }
-
-//       const result = await response.json();
-//       console.log('Request submitted successfully:', result);
-//       alert('Your request has been submitted successfully!');
-//     } catch (error) {
-//       console.error('Error submitting request:', error);
-//       alert(`Error submitting your request: ${error.message}`);
-//     }
-//   };
-
-//   return (
-//     <Container fluid className="py-6 px-5">
-//       <div className="text-center mx-auto mb-5" style={{ maxWidth: '600px' }}>
-//         <h1 className="display-5 text-uppercase mb-4 font-roboto !font-semibold">
-//           {title.split('Feel Free').map((part, index) => (
-//             <React.Fragment key={index}>
-//               {index > 0 && <span className="text-customorange">Feel Free</span>}
-//               {part}
-//             </React.Fragment>
-//           ))}
-//         </h1>
-//       </div>
-//       <Row className="gx-0 align-items-center">
-//         <Col lg={6} className="mb-5 mb-lg-0" style={{ height: '600px' }}>
-//           <iframe
-//             className="w-full h-full"
-//             src={mapEmbedURL}
-//             frameBorder="0"
-//             style={{ border: '0' }}
-//             allowFullScreen
-//             aria-hidden="false"
-//             tabIndex="0"
-//           ></iframe>
-//         </Col>
-//         <Col lg={6}>
-//           <div className="contact-form bg-light p-5">
-//             <Form onSubmit={handleSubmit}>
-//               <Row className="g-3">
-//                 <Col xs={12} sm={6}>
-//                   <Form.Control
-//                     type="text"
-//                     value={name}
-//                     placeholder="Name"
-//                     style={{ height: '55px' }}
-//                     className="border-0"
-//                   />
-//                 </Col>
-//                 <Col xs={12} sm={6}>
-//                   <Form.Control
-//                     type="email"
-//                     value={email}
-//                     placeholder="Email"
-//                     style={{ height: '55px' }}
-//                     className="border-0"
-//                   />
-//                 </Col>
-//                 <Col xs={12}>
-//                   <Form.Control
-//                     type="text"
-//                     value={subject}
-//                     placeholder="Subject"
-//                     style={{ height: '55px' }}
-//                     className="border-0"
-//                   />
-//                 </Col>
-//                 <Col xs={12}>
-//                   <Form.Control
-//                     as="textarea"
-//                     value={message}
-//                     rows={4}
-//                     placeholder="Your message"
-//                     className="border-0"
-//                   />
-//                 </Col>
-//                 <Col xs={12}>
-//                   <Button className="w-full py-3 !bg-customorange border-0 text-uppercase" variant="primary" type="submit">
-//                     {buttonText}
-//                   </Button>
-//                 </Col>
-//               </Row>
-//             </Form>
-//           </div>
-//         </Col>
-//       </Row>
-//     </Container>
-//   );
-// };
-
-
-
-
-
-
-
-
 const ContactUs = () => {
   const { title, mapEmbedURL, buttonText } = contactrouter.contactSection;
   const [formData, setFormData] = useState({
-    name: '',        // Name
-    email: '',      // Email
-    subject: '',    // Subject
-    message: '',    // Message  
+    name: "", // Name
+    email: "", // Email
+    subject: "", // Subject
+    message: "", // Message
   });
 
   const handleChange = (e) => {
@@ -338,13 +223,13 @@ const ContactUs = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitting form with data:', formData);
+    console.log("Submitting form with data:", formData);
 
     try {
-      const response = await fetch('http://localhost:5000/api/message/submit', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/api/message/submit", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -355,33 +240,35 @@ const ContactUs = () => {
       }
 
       const result = await response.json();
-      console.log('Request submitted successfully:', result);
-      alert('Your request has been submitted successfully!');
+      console.log("Request submitted successfully:", result);
+      alert("Your request has been submitted successfully!");
     } catch (error) {
-      console.error('Error submitting request:', error);
+      console.error("Error submitting request:", error);
       alert(`Error submitting your request: ${error.message}`);
     }
   };
 
   return (
     <Container fluid className="py-6 px-5">
-      <div className="text-center mx-auto mb-5" style={{ maxWidth: '600px' }}>
+      <div className="text-center mx-auto mb-5" style={{ maxWidth: "600px" }}>
         <h1 className="display-5 text-uppercase mb-4 font-roboto !font-semibold">
-          {title.split('Feel Free').map((part, index) => (
+          {title.split("Feel Free").map((part, index) => (
             <React.Fragment key={index}>
-              {index > 0 && <span className="text-customorange">Feel Free</span>}
+              {index > 0 && (
+                <span className="text-customorange">Feel Free</span>
+              )}
               {part}
             </React.Fragment>
           ))}
         </h1>
       </div>
       <Row className="gx-0 align-items-center">
-        <Col lg={6} className="mb-5 mb-lg-0" style={{ height: '600px' }}>
+        <Col lg={6} className="mb-5 mb-lg-0" style={{ height: "600px" }}>
           <iframe
             className="w-full h-full"
             src={mapEmbedURL}
             frameBorder="0"
-            style={{ border: '0' }}
+            style={{ border: "0" }}
             allowFullScreen
             aria-hidden="false"
             tabIndex="0"
@@ -398,7 +285,7 @@ const ContactUs = () => {
                     value={formData.name}
                     placeholder="Name"
                     onChange={handleChange}
-                    style={{ height: '55px' }}
+                    style={{ height: "55px" }}
                     className="border-0"
                   />
                 </Col>
@@ -409,7 +296,7 @@ const ContactUs = () => {
                     value={formData.email}
                     placeholder="Email"
                     onChange={handleChange}
-                    style={{ height: '55px' }}
+                    style={{ height: "55px" }}
                     className="border-0"
                   />
                 </Col>
@@ -420,7 +307,7 @@ const ContactUs = () => {
                     value={formData.subject}
                     placeholder="Subject"
                     onChange={handleChange}
-                    style={{ height: '55px' }}
+                    style={{ height: "55px" }}
                     className="border-0"
                   />
                 </Col>
@@ -436,7 +323,11 @@ const ContactUs = () => {
                   />
                 </Col>
                 <Col xs={12}>
-                  <Button className="w-full py-3 !bg-customorange border-0 text-uppercase" variant="primary" type="submit">
+                  <Button
+                    className="w-full py-3 !bg-customorange border-0 text-uppercase"
+                    variant="primary"
+                    type="submit"
+                  >
                     {buttonText}
                   </Button>
                 </Col>
@@ -448,14 +339,6 @@ const ContactUs = () => {
     </Container>
   );
 };
-
-
-
-
-
-
-
-
 
 const Footer = () => {
   const {
@@ -617,19 +500,16 @@ const FooterBottom = () => {
   );
 };
 
-
-
-
 const Contact = () => {
   return (
     <>
-    <ContactSection />
-    <NavbarComponent />
-    <Aboute />
-    <ContactUs />
-    <Footer />
-    <FooterBottom />
+      <ContactSection />
+      <NavbarComponent />
+      <Aboute />
+      <ContactUs />
+      <Footer />
+      <FooterBottom />
     </>
-  )
+  );
 };
-export default Contact ;
+export default Contact;

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 import Button from "react-bootstrap/Button";
 import { Link, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
@@ -200,7 +200,7 @@ const Aboute = () => {
           </h6>
           <h6 className="text-white m-0 px-3">/</h6>
           <h6 className="text-uppercase font-roboto text-white m-0 pt-1">
-          BLOG DETAIL
+            BLOG DETAIL
           </h6>
         </div>
       </Container>
@@ -208,46 +208,40 @@ const Aboute = () => {
   );
 };
 
-
-
-
-
-
-
-
-
-
 const Blog = () => {
   const { blogDetail, comments, recentPosts, categories, tags } =
     blogDatadatail;
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [website, setWebsite] = useState('');
-    const [comment, setComment] = useState('');
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault(); // Prevent page refresh
-  
-      const commentData = {
-        name,
-        email,
-        website,
-        comment,
-      };
-  
-      try {
-        const response = await axios.post('http://localhost:5000/api/comments', commentData);
-        console.log('Comment saved:', response.data);
-        // Optionally, clear the form fields
-        setName('');
-        setEmail('');
-        setWebsite('');
-        setComment('');
-      } catch (error) {
-        console.error('Error saving comment:', error);
-      }
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState("");
+  const [comment, setComment] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent page refresh
+
+    const commentData = {
+      name,
+      email,
+      website,
+      comment,
     };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/comments",
+        commentData
+      );
+      console.log("Comment saved:", response.data);
+      // Optionally, clear the form fields
+      setName("");
+      setEmail("");
+      setWebsite("");
+      setComment("");
+    } catch (error) {
+      console.error("Error saving comment:", error);
+    }
+  };
 
   return (
     <div className="container-fluid py-6 px-5">
@@ -310,7 +304,7 @@ const Blog = () => {
                   <FormControl
                     type="email"
                     value={email}
-              onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Your Email"
                     className="bg-white border-0"
                     style={{ height: "55px" }}

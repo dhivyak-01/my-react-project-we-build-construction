@@ -1,15 +1,29 @@
-import React from 'react';
+import React from "react";
 import Button from "react-bootstrap/Button";
 import { Link, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Carousel from "react-bootstrap/Carousel";
 import buildingsIcon from "@iconify/icons-bi/buildings";
 import iconMap from "../assets/data";
-import {quickcontact, navbar, thebest, requestCallBackData, tmonials, footerData, footerBottomData, } from "../assets/data";
 import {
-  Container, Row, Col, Navbar, Nav, NavDropdown, Form, Card,
+  quickcontact,
+  navbar,
+  thebest,
+  requestCallBackData,
+  tmonials,
+  footerData,
+  footerBottomData,
+} from "../assets/data";
+import {
+  Container,
+  Row,
+  Col,
+  Navbar,
+  Nav,
+  NavDropdown,
+  Form,
+  Card,
 } from "react-bootstrap";
-
 
 const ContactSection = () => {
   return (
@@ -57,7 +71,6 @@ const ContactSection = () => {
     </Container>
   );
 };
-
 
 const NavbarComponent = () => {
   const location = useLocation();
@@ -171,23 +184,31 @@ const Aboute = () => {
   return (
     <div className="container-fluid bg-gray-800 py-5 page-header d-flex flex-column justify-content-center align-items-center text-center">
       <Container>
-        <h1 className="display-3 text-uppercase text-white mb-3 font-roboto !font-bold">service</h1>
+        <h1 className="display-3 text-uppercase text-white mb-3 font-roboto !font-bold">
+          service
+        </h1>
         <div className="d-inline-flex text-white justify-content-center align-items-center">
           <h6 className="text-uppercase m-0">
-            <a href="/" className="text-customorange font-roboto hover:text-gray-400 no-underline">Home</a>
+            <a
+              href="/"
+              className="text-customorange font-roboto hover:text-gray-400 no-underline"
+            >
+              Home
+            </a>
           </h6>
           <h6 className="text-white m-0 px-3">/</h6>
-          <h6 className="text-uppercase font-roboto text-white m-0 pt-1">service</h6>
+          <h6 className="text-uppercase font-roboto text-white m-0 pt-1">
+            service
+          </h6>
         </div>
       </Container>
     </div>
   );
 };
 
-
 const iconSizes = {
-  building_1: 'w-[48px] h-[48px]',
-  right_arrow: 'w-[24px] h-[24px]',
+  building_1: "w-[48px] h-[48px]",
+  right_arrow: "w-[24px] h-[24px]",
 };
 
 const Thebest = () => {
@@ -258,7 +279,6 @@ const Thebest = () => {
   );
 };
 
-
 const RequestCallBack = () => {
   return (
     <Container fluid className="py-6 px-5">
@@ -273,7 +293,9 @@ const RequestCallBack = () => {
               </span>
             </h1>
           </div>
-          <p className="mb-5 font-open-sans text-customwhite">{requestCallBackData.description}</p>
+          <p className="mb-5 font-open-sans text-customwhite">
+            {requestCallBackData.description}
+          </p>
           <Button variant="" className="py-3 px-5 !bg-customorange text-white">
             {requestCallBackData.buttonText}
           </Button>
@@ -321,7 +343,6 @@ const RequestCallBack = () => {
     </Container>
   );
 };
-
 
 const Testimonials = () => {
   return (
@@ -395,8 +416,6 @@ const Testimonials = () => {
     </div>
   );
 };
-
-
 
 const Footer = () => {
   const {
@@ -561,15 +580,15 @@ const FooterBottom = () => {
 const Service = () => {
   return (
     <>
-    <ContactSection />
-    <NavbarComponent />
-    <Aboute />
-    <Thebest />
-    <RequestCallBack />
-    <Testimonials />
-    <Footer />
-    <FooterBottom />
+      <ContactSection />
+      <NavbarComponent />
+      <Aboute />
+      <Thebest />
+      <RequestCallBack />
+      <Testimonials />
+      <Footer />
+      <FooterBottom />
     </>
-  )
+  );
 };
-export default Service ;
+export default Service;

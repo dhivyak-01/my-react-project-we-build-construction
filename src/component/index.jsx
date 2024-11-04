@@ -1,4 +1,4 @@
-import React ,{ useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -86,7 +86,7 @@ const NavbarComponent = () => {
     location.pathname === path ||
     (path === "/index" && location.pathname === "/");
 
-    // console.log("Navbar config:", config);
+  // console.log("Navbar config:", config);
 
   return (
     <Navbar
@@ -131,7 +131,9 @@ const NavbarComponent = () => {
 
           <NavDropdown
             title={
-              <span className={`text-white hover:!text-customorange navdropdown`}>
+              <span
+                className={`text-white hover:!text-customorange navdropdown`}
+              >
                 {config.dropdown.title}
               </span>
             }
@@ -188,13 +190,12 @@ const NavbarComponent = () => {
   );
 };
 
-
-const BASE_URL = 'http://localhost:5000/';
-
 const iconSizes = {
   home: { width: "72px", height: "72px" },
   tool: { width: "64px", height: "64px" },
 };
+
+const BASE_URL = "http://localhost:5000/";
 
 function CarouselFadeExample() {
   const [carouselItems, setCarouselItems] = useState([]);
@@ -203,10 +204,12 @@ function CarouselFadeExample() {
   useEffect(() => {
     const fetchCarouselData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/carousels/1'); // Fetching carousel with ID "1"
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const response = await fetch(`${BASE_URL}api/carousels/1`);
+        if (!response.ok)
+          throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
-        setCarouselItems(data.items || []); // Use items from the fetched carousel
+        console.log("Fetched Data:", data);
+        setCarouselItems(data.items || []);
       } catch (error) {
         console.error("Error fetching carousel data:", error);
       } finally {
@@ -224,34 +227,51 @@ function CarouselFadeExample() {
   return (
     <div>
       <Carousel fade interval={5000} controls={true} indicators={false}>
-        {carouselItems.map((item) => {
-          const IconComponent = iconMap[item.icon]; // Ensure iconMap is defined
-          const iconSize = iconSizes[item.icon] || { width: "64px", height: "64px" };
-          const imageUrl = `${BASE_URL}${item.imagePath}`; // Assuming imagePath is correct
+        {carouselItems
+          .filter((item) => item.isEnabled) // Filter out disabled items
+          .map((item, index) => {
+            const IconComponent = iconMap[item.icon]; // Get the icon component from the map
+            const iconSize = iconSizes[item.icon] || {
+              width: "64px",
+              height: "64px",
+            }; // Default size
+            const imageUrl = `${BASE_URL}${item.imagePath}`; // Assuming imagePath is correct
 
-          return (
-            <Carousel.Item key={item._id}>
-              <img src={imageUrl} alt={`Slide ${item.heading}`} />
-              <div className="position-absolute top-0 start-0 d-flex w-100 h-100 align-items-center" style={{ background: "rgba(24, 29, 56, .7)" }}>
-                <Carousel.Caption className="mb-12p" style={{ maxWidth: "900px" }}>
-                  <div className="align-items-center d-flex justify-content-center">
-                    {IconComponent && (
-                      <IconComponent className="me-3 text-customorange mb-4 d-none d-sm-block" style={{ width: iconSize.width, height: iconSize.height }} />
-                    )}
-                  </div>
-                  <div className="d-flex align-items-center justify-content-center">
-                    <h1 className="text-white display-2 mb-md-4 font-roboto !font-semi-bold uppercase">
-                      {item.heading}
-                    </h1>
-                  </div>
-                  <button className="btn py-md-3 px-md-5 mt-2 !bg-customorange text-white uppercase !font-semibold rounded-0 font-open-sans">
-                    {item.caption}
-                  </button>
-                </Carousel.Caption>
-              </div>
-            </Carousel.Item>
-          );
-        })}
+            return (
+              <Carousel.Item key={item._id}>
+                <img src={imageUrl} alt={`Slide ${item.heading}`} />
+                <div
+                  className="position-absolute top-0 start-0 d-flex w-100 h-100 align-items-center"
+                  style={{ background: "rgba(24, 29, 56, .7)" }}
+                >
+                  <Carousel.Caption
+                    className="mb-12p"
+                    style={{ maxWidth: "900px" }}
+                  >
+                    <div className="align-items-center d-flex justify-content-center">
+                      {IconComponent && (
+                        <IconComponent
+                          className="me-3 text-customorange mb-4 d-none d-sm-block"
+                          style={{
+                            width: iconSize.width,
+                            height: iconSize.height,
+                          }}
+                        />
+                      )}
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center">
+                      <h1 className="text-white display-2 mb-md-4 font-roboto !font-semi-bold uppercase">
+                        {item.heading}
+                      </h1>
+                    </div>
+                    <button className="btn py-md-3 px-md-5 mt-2 !bg-customorange text-white uppercase !font-semibold rounded-0 font-open-sans">
+                      {item.caption}
+                    </button>
+                  </Carousel.Caption>
+                </div>
+              </Carousel.Item>
+            );
+          })}
       </Carousel>
     </div>
   );
@@ -408,14 +428,13 @@ const Thebest = () => {
   );
 };
 
-
 const RequestCallBack = () => {
   const [formData, setFormData] = useState({
-    yourname: '',        // Matches "Your Name"
-    youremail: '',      // Matches "Your Email"
-    callbackdate: '',   // Matches "Call Back Date"
-    callbacktime: '',   // Matches "Call Back Time"
-    message: '',        // Matches "Message"  
+    yourname: "", // Matches "Your Name"
+    youremail: "", // Matches "Your Email"
+    callbackdate: "", // Matches "Call Back Date"
+    callbacktime: "", // Matches "Call Back Time"
+    message: "", // Matches "Message"
   });
 
   const handleChange = (e) => {
@@ -429,16 +448,19 @@ const RequestCallBack = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitting form with data:', formData);
+    console.log("Submitting form with data:", formData);
 
     try {
-      const response = await fetch('http://localhost:5000/api/callbacks/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "http://localhost:5000/api/callbacks/submit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (!response.ok) {
         const errorDetails = await response.text();
@@ -446,10 +468,10 @@ const RequestCallBack = () => {
       }
 
       const result = await response.json();
-      console.log('Request submitted successfully:', result);
-      alert('Your request has been submitted successfully!');
+      console.log("Request submitted successfully:", result);
+      alert("Your request has been submitted successfully!");
     } catch (error) {
-      console.error('Error submitting request:', error);
+      console.error("Error submitting request:", error);
       alert(`Error submitting your request: ${error.message}`);
     }
   };
@@ -461,7 +483,8 @@ const RequestCallBack = () => {
           <h1 className="text-4xl font-bold uppercase mb-4">
             {requestCallBackData.header.title}
             <span className="text-customorange">
-              {" "}{requestCallBackData.header.highlight}
+              {" "}
+              {requestCallBackData.header.highlight}
             </span>
           </h1>
           <p className="mb-5 font-open-sans text-customwhite">
@@ -476,7 +499,9 @@ const RequestCallBack = () => {
             <Form onSubmit={handleSubmit}>
               <Row className="g-3">
                 {requestCallBackData.formFields.map((field, index) => {
-                  const fieldName = field.placeholder.toLowerCase().replace(/\s/g, '');
+                  const fieldName = field.placeholder
+                    .toLowerCase()
+                    .replace(/\s/g, "");
                   console.log(`Field name: ${fieldName}`);
 
                   return (
@@ -525,7 +550,6 @@ const RequestCallBack = () => {
     </Container>
   );
 };
-
 
 const Popular = () => {
   return (

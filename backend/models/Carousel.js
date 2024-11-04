@@ -5,10 +5,11 @@ const carouselItemSchema = new mongoose.Schema({
   heading: String,
   caption: String,
   imagePath: String,
+  isEnabled: { type: Boolean, default: true },
 });
 
 const carouselSchema = new mongoose.Schema({
-  id: { type: String, required: true, unique: true },
+  id: { type: String, unique: true },
   name: { type: String, required: true },
   isEnabled: { type: Boolean, default: true },
   items: [carouselItemSchema],
