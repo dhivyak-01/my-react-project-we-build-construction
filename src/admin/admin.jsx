@@ -20,7 +20,7 @@ import { AiFillDashboard } from "react-icons/ai";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faFilePdf, faFileCsv } from "@fortawesome/free-solid-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaSave } from "react-icons/fa";
 import { FaPlus, FaEdit } from "react-icons/fa"; // Importing the "+" and bin icon
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -1626,125 +1626,293 @@ const Message = () => {
   );
 };
 
-function ManageBanner() {
-  const [newItem, setNewItem] = useState({
+
+const ManageBanner = ({ carousel }) => {
+  const [carouselData, setCarouselData] = useState(null);
+  const [selectedId, setSelectedId] = useState(carousel); // Renamed state variable
+  const [formState, setFormState] = useState({
+    id: '',
+    name: '',
+    isEnabled: 'disabled',
+  });
+  const [itemFormState, setItemFormState] = useState({
+    carouselId: null,
+    icon: '',
+    heading: '',
+    caption: '',
+    status: 'disabled',
     image: null,
-    icon: "",
-    heading: "",
-    caption: "",
   });
 
-  const handleChange = (e) => {
+  useEffect(() => {
+    if (selectedId) {
+      const fetchCarouselData = async () => {
+        const response = await fetch(`http://localhost:5000/api/carousels/${selectedId}`);
+        const data = await response.json();
+        if (data) {
+          setCarouselData(data);
+          setFormState({
+            id: data.id,
+            name: data.name,
+            isEnabled: data.isEnabled ? 'enabled' : 'disabled',
+          });
+
+          // Set the first item's data to itemFormState
+          if (data.items && data.items.length > 0) {
+            const firstItem = data.items[0]; // Just show first item for now (can modify to show all items)
+            setItemFormState({
+              carouselId: data.id,
+              icon: firstItem.icon,
+              heading: firstItem.heading,
+              caption: firstItem.caption,
+              status: firstItem.isEnabled ? 'enabled' : 'disabled',
+              image: firstItem.imagePath || null,
+            });
+          }
+        }
+      };
+
+      fetchCarouselData();
+    }
+  }, [selectedId]);
+
+  const handleEditCarousel = (carouselId) => {
+    console.log("Editing Carousel with ID:", carouselId); // Log the ID
+    setSelectedId(carouselId); // Save the selected carousel ID to state
+  };
+
+  console.log("Selected Carousel ID:", selectedId);
+
+  // Handle carousel form changes
+  const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setNewItem((prev) => ({ ...prev, [name]: value }));
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setNewItem((prev) => ({ ...prev, image: file }));
+  // Handle item form changes
+  const handleItemFormChange = (e) => {
+    const { name, value } = e.target;
+    setItemFormState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async (e) => {
+  // Handle carousel update
+  const handleCarouselUpdate = async (e) => {
     e.preventDefault();
+    const response = await fetch(`http://localhost:5000/api/carousels/${selectedId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formState),
+    });
 
-    const formData = new FormData();
-    formData.append("image", newItem.image);
-    formData.append("icon", newItem.icon);
-    formData.append("heading", newItem.heading);
-    formData.append("caption", newItem.caption);
-
-    try {
-      const response = await fetch("http://localhost:5000/api/carousel", {
-        method: "POST",
-        body: formData,
-      });
-      if (response.ok) {
-        console.log("Item added successfully");
-        setNewItem({ image: null, icon: "", heading: "", caption: "" });
-      } else {
-        const errorData = await response.json();
-        console.error("Error response:", errorData);
-      }
-    } catch (error) {
-      console.error("Error adding carousel item:", error);
+    if (response.ok) {
+      alert('Carousel updated successfully');
+    } else {
+      alert('Error updating carousel');
     }
   };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Carousel Image</th>
-            <th>Icon</th>
-            <th>Heading</th>
-            <th>Button Caption</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                required
-              />
-            </td>
-            <td>
-              <select
-                name="icon"
-                value={newItem.icon}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Icon</option>
-                {Object.keys(iconMap).map((iconName) => (
-                  <option key={iconName} value={iconName}>
-                    {iconName}
-                  </option>
-                ))}
-              </select>
-            </td>
-            <td>
-              <input
-                name="heading"
-                value={newItem.heading}
-                onChange={handleChange}
-                placeholder="Heading"
-                required
-              />
-            </td>
-            <td>
-              <input
-                name="caption"
-                value={newItem.caption}
-                onChange={handleChange}
-                placeholder="Caption"
-                required
-              />
-            </td>
-            <td>
-              <button type="submit">Add Carousel Item</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </form>
-  );
-}
+  // Handle item update
+  const handleItemUpdate = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('carouselId', itemFormState.carouselId);
+    formData.append('icon', itemFormState.icon);
+    formData.append('heading', itemFormState.heading);
+    formData.append('caption', itemFormState.caption);
+    formData.append('status', itemFormState.status);
+    if (itemFormState.image) {
+      formData.append('image', itemFormState.image);
+    }
 
-const CarouselList = () => {
+    const response = await fetch('http://localhost:5000/api/carousels/items', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.ok) {
+      alert('Item updated successfully');
+    } else {
+      alert('Error updating item');
+    }
+  };
+
+  // Ensure carouselData is available
+  if (!carouselData) return <div>Loading...</div>;
+
+  return (
+    <div>
+      <Col xs lg="12" className="custom-padding !bg-back2">
+        <Card className="!bg-back ps-3" style={{ padding: '10px' }}>
+          <h1 className="pt-1 text-25px mb-0">Edit Carousel</h1>
+        </Card>
+
+        {/* Carousel Form */}
+        <form onSubmit={handleCarouselUpdate}>
+          <Table striped bordered hover style={{ marginTop: '20px' }}>
+            <thead>
+              <tr>
+                <th>Carousel Id</th>
+                <th>Carousel Name</th>
+                <th>Status</th>
+                <th style={{ width: '183px' }}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input
+                    name="id"
+                    required
+                    className="form-control"
+                    value={formState.id}
+                    onChange={handleFormChange}
+                  />
+                </td>
+                <td>
+                  <input
+                    name="name"
+                    required
+                    className="form-control"
+                    value={formState.name}
+                    onChange={handleFormChange}
+                  />
+                </td>
+                <td>
+                  <select
+                    name="isEnabled"
+                    className="form-control"
+                    value={formState.isEnabled}
+                    onChange={handleFormChange}
+                  >
+                    <option value="enabled">Enabled</option>
+                    <option value="disabled">Disabled</option>
+                  </select>
+                </td>
+                <td>
+                  <Button type="submit" variant="primary" style={{ marginRight: '15px' }}>
+                    Update
+                  </Button>
+                  <Button type="button" variant="secondary">
+                    Cancel
+                  </Button>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </form>
+
+        {/* Item Form */}
+        <div>
+          <h3 style={{ marginTop: '20px' }}>Edit Items</h3>
+          <form onSubmit={handleItemUpdate}>
+            <Table striped bordered hover style={{ marginTop: '20px' }}>
+              <thead>
+                <tr>
+                  <th>Select Carousel</th>
+                  <th>Carousel Image</th>
+                  <th>Icon</th>
+                  <th>Heading</th>
+                  <th>Button Caption</th>
+                  <th>Status</th>
+                  <th style={{ width: '183px' }}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {carouselData.items.map((item) => (
+                  <tr key={item._id}>
+                    <td>
+                      <select
+                        name="carouselId"
+                        required
+                        className="form-control"
+                        value={itemFormState.carouselId}
+                        onChange={handleItemFormChange}
+                      >
+                        <option value="">Select Carousel</option>
+                        <option value={carouselData.id}>{carouselData.name}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="form-control"
+                        onChange={(e) => setItemFormState({ ...itemFormState, image: e.target.files[0] })}
+                      />
+                    </td>
+                    <td>
+                      <select
+                        name="icon"
+                        required
+                        className="form-control"
+                        value={itemFormState.icon}
+                        onChange={handleItemFormChange}
+                      >
+                        <option value="">Select Icon</option>
+                        <option value={item.icon}>{item.icon}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input
+                        name="heading"
+                        required
+                        className="form-control"
+                        value={itemFormState.heading}
+                        onChange={handleItemFormChange}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        name="caption"
+                        required
+                        className="form-control"
+                        value={itemFormState.caption}
+                        onChange={handleItemFormChange}
+                      />
+                    </td>
+                    <td>
+                      <select
+                        name="status"
+                        className="form-control"
+                        value={itemFormState.status}
+                        onChange={handleItemFormChange}
+                      >
+                        <option value="enabled">Enabled</option>
+                        <option value="disabled">Disabled</option>
+                      </select>
+                    </td>
+                    <td>
+                      <Button type="submit" variant="primary" style={{ marginRight: '15px' }}>
+                        Update
+                      </Button>
+                      <Button type="button" variant="secondary">
+                        Cancel
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </form>
+        </div>
+      </Col>
+    </div>
+  );
+};
+
+
+const CarouselList = ({ onEditCarousel }) => {
   const [carousels, setCarousels] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
-  const [editCarousel, setEditCarousel] = useState(null);
-  const [newItem, setNewItem] = useState({
-    icon: "",
-    heading: "",
-    caption: "",
-    image: null,
-  });
+  const [editData, setEditData] = useState({}); // Track edit data for individual carousel
 
   useEffect(() => {
     const fetchCarousels = async () => {
@@ -1752,7 +1920,6 @@ const CarouselList = () => {
       const data = await response.json();
       setCarousels(data);
     };
-
     fetchCarousels();
   }, []);
 
@@ -1764,20 +1931,15 @@ const CarouselList = () => {
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      setSelectedIds(carousels.map((carousel) => carousel._id));
+      setSelectedIds(carousels.map((carousel) => carousel.id));
     } else {
       setSelectedIds([]);
     }
   };
 
   const handleEdit = (carousel) => {
-    setEditCarousel(carousel);
-    setNewItem({
-      icon: carousel.icon || "",
-      heading: carousel.heading || "",
-      caption: carousel.caption || "",
-      image: null,
-    });
+    console.log("Editing Carousel with ID:", carousel.id);
+    onEditCarousel(carousel.id); // This triggers the edit action in CarouselManager
   };
 
   const handleDelete = async (id) => {
@@ -1807,190 +1969,185 @@ const CarouselList = () => {
     }
   };
 
-  const handleFileChange = (e) => {
-    setNewItem({ ...newItem, image: e.target.files[0] });
-  };
-
-  const handleChange = (e) => {
+  const onChangeInput = (e, id) => {
     const { name, value } = e.target;
-    setNewItem((prev) => ({ ...prev, [name]: value }));
+    setEditData((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        [name]: value,
+      },
+    }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Logic to handle the form submission for editing a carousel
-    const formData = new FormData();
-    formData.append("icon", newItem.icon);
-    formData.append("heading", newItem.heading);
-    formData.append("caption", newItem.caption);
-    if (newItem.image) {
-      formData.append("image", newItem.image);
+  const handleSave = async (id) => {
+    const carouselData = editData[id] || {}; // Get the data for the specific carousel being edited
+
+    if (!carouselData.name) {
+      alert("Name is required");
+      return;
     }
 
-    await fetch(`http://localhost:5000/api/carousels/${editCarousel._id}`, {
-      method: "PUT",
-      body: formData,
-    });
+    try {
+      // Send a PUT request to the backend to update the carousel
+      const response = await fetch(
+        `http://localhost:5000/api/carousels/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: carouselData.name,
+            isEnabled: carouselData.isEnabled === "enabled", // Convert to boolean if it's a string
+          }),
+        }
+      );
 
-    // Update the local state
-    setCarousels((prev) =>
-      prev.map((carousel) =>
-        carousel._id === editCarousel._id
-          ? { ...carousel, ...newItem }
-          : carousel
-      )
-    );
-    setEditCarousel(null);
+      // Check if the response was successful
+      if (!response.ok) {
+        throw new Error("Failed to update carousel");
+      }
+
+      // Parse the response to get the updated carousel
+      const data = await response.json();
+
+      // Update the carousels state with the updated data
+      setCarousels((prev) =>
+        prev.map((carousel) =>
+          carousel._id === id ? { ...carousel, ...data } : carousel
+        )
+      );
+
+      // Clear the edit data for this carousel
+      setEditData((prev) => {
+        const newData = { ...prev };
+        delete newData[id];
+        return newData;
+      });
+
+      alert("Carousel updated successfully!");
+    } catch (error) {
+      console.error("Error saving carousel data:", error);
+      alert("Failed to update carousel.");
+    }
   };
 
   return (
-    <div>
-      <Col xs lg="12" className="custom-padding !bg-back2">
-        <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
-          <div className="d-flex justify-content-between align-items-start">
-            <h1 className="pt-1 text-25px mb-0">Carousel List</h1>
-            <Button
-              variant="danger"
-              onClick={handleDeleteSelected}
-              disabled={selectedIds.length === 0}
-              style={{ marginLeft: "10px" }}
-            >
-              <FaTrash />
-            </Button>
-          </div>
-        </Card>
-        <Table striped bordered hover style={{ marginTop: "47px" }}>
-          <thead className="table-header">
-            <tr>
-              <th>
+    <Col xs lg="12" className="custom-padding !bg-back2">
+      <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
+        <div className="d-flex justify-content-between align-items-start">
+          <h1 className="pt-1 text-25px mb-0">Carousel List</h1>
+          <Button
+            variant="danger"
+            onClick={handleDeleteSelected}
+            disabled={selectedIds.length === 0}
+            style={{ marginLeft: "10px" }}
+          >
+            <FaTrash /> {/* Trash icon only */}
+          </Button>
+        </div>
+      </Card>
+
+      <Table striped bordered hover style={{ marginTop: "47px" }}>
+        <thead className="table-header">
+          <tr>
+            <th>
+              <input
+                type="checkbox"
+                checked={
+                  selectedIds.length === carousels.length &&
+                  carousels.length > 0
+                }
+                onChange={handleSelectAll}
+              />
+            </th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {carousels.map((carousel) => (
+            <tr key={carousel._id}>
+              <td>
                 <input
                   type="checkbox"
-                  checked={
-                    selectedIds.length === carousels.length &&
-                    carousels.length > 0
-                  }
-                  onChange={handleSelectAll}
+                  checked={selectedIds.includes(carousel._id)}
+                  onChange={() => handleSelect(carousel._id)}
                 />
-              </th>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Status</th>
-              <th>Action</th>
+              </td>
+              <td>
+                <input
+                  className="tableinput"
+                  name="id"
+                  value={carousel.id}
+                  type="text"
+                  onChange={(e) => onChangeInput(e, carousel._id)}
+                  placeholder="ID"
+                />
+              </td>
+              <td>
+                <input
+                  className="tableinput"
+                  name="name"
+                  value={editData[carousel._id]?.name || carousel.name}
+                  type="text"
+                  onChange={(e) => onChangeInput(e, carousel._id)}
+                  placeholder="Type Name"
+                />
+              </td>
+              <select
+                name="isEnabled"
+                value={
+                  editData[carousel._id]?.isEnabled ??
+                  (carousel.isEnabled ? "enabled" : "disabled")
+                }
+                onChange={(e) => onChangeInput(e, carousel._id)}
+              >
+                <option value="enabled">Enabled</option>
+                <option value="disabled">Disabled</option>
+              </select>
+              <td>
+                <Button variant="primary" onClick={() => handleEdit(carousel)}>
+                  <FaEdit />
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => handleDelete(carousel._id)}
+                  style={{ marginLeft: "5px" }}
+                >
+                  <FaTrash />
+                </Button>
+                <Button
+                  variant="success"
+                  onClick={() => handleSave(carousel._id)}
+                  style={{ marginLeft: "5px" }}
+                >
+                  <FaSave />
+                </Button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {carousels.map((carousel) => (
-              <tr key={carousel._id}>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.includes(carousel._id)}
-                    onChange={() => handleSelect(carousel._id)}
-                  />
-                </td>
-                <td>{carousel.id}</td>
-                <td>{carousel.name}</td>
-                <td>{carousel.isEnabled ? "Enabled" : "Disabled"}</td>
-                <td>
-                  <Button
-                    variant="primary"
-                    onClick={() => handleEdit(carousel)}
-                  >
-                    <FaEdit /> Edit
-                  </Button>
-                  <Button
-                    variant="danger"
-                    onClick={() => handleDelete(carousel._id)}
-                    style={{ marginLeft: "5px" }}
-                  >
-                    <FaTrash /> Delete
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        {editCarousel && (
-          <form onSubmit={handleSubmit}>
-            <table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Carousel Image</th>
-                  <th>Icon</th>
-                  <th>Heading</th>
-                  <th>Button Caption</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                    />
-                  </td>
-                  <td>
-                    <select
-                      name="icon"
-                      value={newItem.icon}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select Icon</option>
-                      {/* Assuming iconMap is defined somewhere in your code */}
-                      {Object.keys(iconMap).map((iconName) => (
-                        <option key={iconName} value={iconName}>
-                          {iconName}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <input
-                      name="heading"
-                      value={newItem.heading}
-                      onChange={handleChange}
-                      placeholder="Heading"
-                      required
-                    />
-                  </td>
-                  <td>
-                    <input
-                      name="caption"
-                      value={newItem.caption}
-                      onChange={handleChange}
-                      placeholder="Caption"
-                      required
-                    />
-                  </td>
-                  <td>
-                    <button type="submit">Update Carousel</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </form>
-        )}
-      </Col>
-    </div>
+          ))}
+        </tbody>
+      </Table>
+    </Col>
   );
 };
+
 const CarouselManager = () => {
   const [carouselData, setCarouselData] = useState({
-    id: '',
-    name: '',
-    isEnabled: 'enabled',
+    id: "",
+    name: "",
+    isEnabled: "enabled",
   });
 
   const [newItem, setNewItem] = useState({
     image: null,
-    icon: '',
-    heading: '',
-    caption: '',
-    status: 'enabled',
-    carouselId: '',
+    icon: "",
+    heading: "",
+    caption: "",
+    status: "enabled",
+    carouselId: "",
   });
 
   const [carousels, setCarousels] = useState([]);
@@ -1998,12 +2155,12 @@ const CarouselManager = () => {
   useEffect(() => {
     const fetchCarousels = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/carousels');
+        const response = await fetch("http://localhost:5000/api/carousels");
         const data = await response.json();
-        console.log('Fetched carousels:', data); // Log the fetched data
+        console.log("Fetched carousels:", data); // Log the fetched data
         setCarousels(data);
       } catch (error) {
-        console.error('Error fetching carousels:', error);
+        console.error("Error fetching carousels:", error);
       }
     };
     fetchCarousels();
@@ -2018,7 +2175,7 @@ const CarouselManager = () => {
     const { name, value } = e.target;
     setNewItem((prev) => ({
       ...prev,
-      [name]: name === 'status' ? value : value,
+      [name]: name === "status" ? value : value,
     }));
   };
 
@@ -2030,42 +2187,40 @@ const CarouselManager = () => {
   const handleCarouselSubmit = async (e) => {
     e.preventDefault();
     try {
-      await fetch('http://localhost:5000/api/carousels', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("http://localhost:5000/api/carousels", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...carouselData,
-          isEnabled: carouselData.isEnabled === 'enabled',
+          isEnabled: carouselData.isEnabled === "enabled",
         }),
       });
       resetCarouselForm();
-      alert('Carousel added successfully!');
+      alert("Carousel added successfully!");
     } catch (error) {
-      console.error('Error submitting carousel:', error);
-      alert('Failed to submit carousel. Check console for details.');
+      console.error("Error submitting carousel:", error);
+      alert("Failed to submit carousel. Check console for details.");
     }
   };
 
   const resetCarouselForm = () => {
-    setCarouselData({ id: '', name: '', isEnabled: 'enabled' });
+    setCarouselData({ id: "", name: "", isEnabled: "enabled" });
   };
 
   const resetNewItem = () => {
     setNewItem({
       image: null,
-      icon: '',
-      heading: '',
-      caption: '',
-      status: 'enabled',
-      carouselId: '',
+      icon: "",
+      heading: "",
+      caption: "",
+      status: "enabled",
+      carouselId: "",
     });
   };
 
-  
-
   const handleItemSubmit = async (e) => {
     e.preventDefault();
-  
+
     console.log("Submitting Item:", {
       image: newItem.image,
       icon: newItem.icon,
@@ -2074,43 +2229,46 @@ const CarouselManager = () => {
       status: newItem.status, // Log the status here
       carouselId: newItem.carouselId,
     });
-  
+
     const formData = new FormData();
-    formData.append('image', newItem.image);
-    formData.append('icon', newItem.icon);
-    formData.append('heading', newItem.heading);
-    formData.append('caption', newItem.caption);
-    formData.append('status', newItem.status); // This should be a string
-    formData.append('carouselId', newItem.carouselId);
-  
+    formData.append("image", newItem.image);
+    formData.append("icon", newItem.icon);
+    formData.append("heading", newItem.heading);
+    formData.append("caption", newItem.caption);
+    formData.append("status", newItem.status); // This should be a string
+    formData.append("carouselId", newItem.carouselId);
+
     try {
-      const response = await fetch('http://localhost:5000/api/carousels/items', {
-        method: 'POST',
-        body: formData,
-      });
-  
+      const response = await fetch(
+        "http://localhost:5000/api/carousels/items",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
-      alert('Item added successfully!');
+
+      alert("Item added successfully!");
       resetNewItem();
     } catch (error) {
-      console.error('Error submitting item:', error);
-      alert('Failed to submit item. Check console for details.');
+      console.error("Error submitting item:", error);
+      alert("Failed to submit item. Check console for details.");
     }
   };
 
   return (
     <div>
       <Col xs lg="12" className="custom-padding !bg-back2">
-        <Card className="!bg-back ps-3" style={{ padding: '10px' }}>
+        <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
           <h1 className="pt-1 text-25px mb-0"> Add Carousel </h1>
         </Card>
 
         {/* Carousel Form */}
         <form onSubmit={handleCarouselSubmit}>
-          <Table striped bordered hover style={{ marginTop: '20px' }}>
+          <Table striped bordered hover style={{ marginTop: "20px" }}>
             <thead>
               <tr>
                 <th>Carousel Id</th>
@@ -2151,7 +2309,9 @@ const CarouselManager = () => {
                   </select>
                 </td>
                 <td>
-                  <Button type="submit" variant="primary">Add Carousel</Button>
+                  <Button type="submit" variant="primary">
+                    Add Carousel
+                  </Button>
                 </td>
               </tr>
             </tbody>
@@ -2160,9 +2320,9 @@ const CarouselManager = () => {
 
         {/* Item Form */}
         <div>
-          <h3 style={{ marginTop: '20px' }}>Add Items to Carousel</h3>
+          <h3 style={{ marginTop: "20px" }}>Add Items to Carousel</h3>
           <form onSubmit={handleItemSubmit}>
-            <Table striped bordered hover style={{ marginTop: '20px' }}>
+            <Table striped bordered hover style={{ marginTop: "20px" }}>
               <thead>
                 <tr>
                   <th>Select Carousel</th>
@@ -2179,7 +2339,7 @@ const CarouselManager = () => {
                   <td>
                     <select
                       name="carouselId"
-                      value={newItem.carouselId || ''}
+                      value={newItem.carouselId || ""}
                       onChange={handleItemChange}
                       required
                       className="form-control"
@@ -2248,7 +2408,9 @@ const CarouselManager = () => {
                     </select>
                   </td>
                   <td>
-                    <Button type="submit" variant="primary">Add Item</Button>
+                    <Button type="submit" variant="primary">
+                      Add Item
+                    </Button>
                   </td>
                 </tr>
               </tbody>
@@ -2260,12 +2422,13 @@ const CarouselManager = () => {
   );
 };
 
-
 const Admin = () => {
   const [activeButton, setActiveButton] = useState("Dashboard");
   const [users, setUsers] = useState([]);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [editIndex, setEditIndex] = useState(null);
+
+  const [currentCarousel, setCurrentCarousel] = useState(null);
 
   useEffect(() => {
     console.log(`activeButton updated to: ${activeButton}`);
@@ -2409,6 +2572,12 @@ const Admin = () => {
     }
   };
 
+  // Handle the edit carousel action
+  const handleEditCarousel = (carousel) => {
+    setCurrentCarousel(carousel); // Set the selected carousel for editing
+    setActiveButton("Manage Banner"); // Change to "Manage Banner" to open the form
+  };
+
   const renderContent = () => {
     const selectedUser = users.find((user) => user._id === editIndex) || null;
 
@@ -2435,9 +2604,9 @@ const Admin = () => {
       case "Manage Message":
         return <Message />;
       case "Manage Banner":
-        return <ManageBanner />;
+        return <ManageBanner carousel={currentCarousel} />;
       case "Carousel List":
-        return <CarouselList />;
+        return <CarouselList onEditCarousel={handleEditCarousel} />;
       case "Add Carousel Item":
         return <CarouselManager />;
       default:

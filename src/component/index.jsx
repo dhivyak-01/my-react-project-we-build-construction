@@ -12,6 +12,7 @@ import {
 import Button from "react-bootstrap/Button";
 import { Link, useLocation } from "react-router-dom";
 import Carousel from "react-bootstrap/Carousel";
+import { Spinner } from "react-bootstrap";
 import { Icon } from "@iconify/react";
 import buildingsIcon from "@iconify/icons-bi/buildings";
 import iconMap from "../assets/data"; // Import the iconMap from your icons.js
@@ -198,20 +199,20 @@ const iconSizes = {
 const BASE_URL = "http://localhost:5000/";
 
 function CarouselFadeExample() {
-  const [carouselItems, setCarouselItems] = useState([]);
+  const [carouselData, setCarouselData] = useState(null); // Store full carousel data, including `isEnabled` at top level
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); // Track error state
 
   useEffect(() => {
     const fetchCarouselData = async () => {
       try {
         const response = await fetch(`${BASE_URL}api/carousels/1`);
-        if (!response.ok)
-          throw new Error(`HTTP error! Status: ${response.status}`);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
-        console.log("Fetched Data:", data);
-        setCarouselItems(data.items || []);
+        setCarouselData(data); // Store the entire data, including `isEnabled` at top level
       } catch (error) {
         console.error("Error fetching carousel data:", error);
+        setError("Error fetching carousel data, please try again later.");
       } finally {
         setLoading(false);
       }
@@ -220,22 +221,34 @@ function CarouselFadeExample() {
     fetchCarouselData();
   }, []);
 
+  // If loading, show a spinner
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+        <Spinner animation="border" variant="primary" />
+      </div>
+    );
+  }
+
+  // If there's an error, show error message
+  if (error) {
+    return <div className="text-center text-danger">{error}</div>;
+  }
+
+  // If the carousel is disabled (top-level `isEnabled` is false), don't render anything
+  if (carouselData?.isEnabled === false) {
+    return null; // Return nothing (hide the carousel)
   }
 
   return (
     <div>
       <Carousel fade interval={5000} controls={true} indicators={false}>
-        {carouselItems
-          .filter((item) => item.isEnabled) // Filter out disabled items
-          .map((item, index) => {
-            const IconComponent = iconMap[item.icon]; // Get the icon component from the map
-            const iconSize = iconSizes[item.icon] || {
-              width: "64px",
-              height: "64px",
-            }; // Default size
-            const imageUrl = `${BASE_URL}${item.imagePath}`; // Assuming imagePath is correct
+        {carouselData?.items
+          .filter((item) => item.isEnabled) // Filter out disabled carousel items
+          .map((item) => {
+            const IconComponent = iconMap[item.icon];
+            const iconSize = iconSizes[item.icon] || { width: "64px", height: "64px" };
+            const imageUrl = `${BASE_URL}${item.imagePath}`;
 
             return (
               <Carousel.Item key={item._id}>
@@ -244,10 +257,7 @@ function CarouselFadeExample() {
                   className="position-absolute top-0 start-0 d-flex w-100 h-100 align-items-center"
                   style={{ background: "rgba(24, 29, 56, .7)" }}
                 >
-                  <Carousel.Caption
-                    className="mb-12p"
-                    style={{ maxWidth: "900px" }}
-                  >
+                  <Carousel.Caption className="mb-12p" style={{ maxWidth: "900px" }}>
                     <div className="align-items-center d-flex justify-content-center">
                       {IconComponent && (
                         <IconComponent
@@ -359,6 +369,95 @@ const TheLeader = () => {
     </Container>
   );
 };
+
+function CarouselFadeExampleTwo() {
+  const [carouselData, setCarouselData] = useState(null); // Store full carousel data, including `isEnabled` at top level
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); // Track error state
+
+  useEffect(() => {
+    const fetchCarouselData = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}api/carousels/56`);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const data = await response.json();
+        setCarouselData(data); // Store the entire data, including `isEnabled` at top level
+      } catch (error) {
+        console.error("Error fetching carousel data:", error);
+        setError("Error fetching carousel data, please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCarouselData();
+  }, []);
+
+  // If loading, show a spinner
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+        <Spinner animation="border" variant="primary" />
+      </div>
+    );
+  }
+
+  // If there's an error, show error message
+  if (error) {
+    return <div className="text-center text-danger">{error}</div>;
+  }
+
+  // If the carousel is disabled (top-level `isEnabled` is false), don't render anything
+  if (carouselData?.isEnabled === false) {
+    return null; // Return nothing (hide the carousel)
+  }
+
+  return (
+    <div>
+      <Carousel fade interval={5000} controls={true} indicators={false}>
+        {carouselData?.items
+          .filter((item) => item.isEnabled) // Filter out disabled carousel items
+          .map((item) => {
+            const IconComponent = iconMap[item.icon];
+            const iconSize = iconSizes[item.icon] || { width: "64px", height: "64px" };
+            const imageUrl = `${BASE_URL}${item.imagePath}`;
+
+            return (
+              <Carousel.Item key={item._id}>
+                <img src={imageUrl} alt={`Slide ${item.heading}`} />
+                <div
+                  className="position-absolute top-0 start-0 d-flex w-100 h-100 align-items-center"
+                  style={{ background: "rgba(24, 29, 56, .7)" }}
+                >
+                  <Carousel.Caption className="mb-12p" style={{ maxWidth: "900px" }}>
+                    <div className="align-items-center d-flex justify-content-center">
+                      {IconComponent && (
+                        <IconComponent
+                          className="me-3 text-customorange mb-4 d-none d-sm-block"
+                          style={{
+                            width: iconSize.width,
+                            height: iconSize.height,
+                          }}
+                        />
+                      )}
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center">
+                      <h1 className="text-white display-2 mb-md-4 font-roboto !font-semi-bold uppercase">
+                        {item.heading}
+                      </h1>
+                    </div>
+                    <button className="btn py-md-3 px-md-5 mt-2 !bg-customorange text-white uppercase !font-semibold rounded-0 font-open-sans">
+                      {item.caption}
+                    </button>
+                  </Carousel.Caption>
+                </div>
+              </Carousel.Item>
+            );
+          })}
+      </Carousel>
+    </div>
+  );
+}
 
 const Thebest = () => {
   return (
@@ -959,6 +1058,7 @@ const MainComponent = () => {
       <CarouselFadeExample />
       <TheLeader />
       <Thebest />
+      <CarouselFadeExampleTwo />
       <RequestCallBack />
       <Popular />
       <Professional />
