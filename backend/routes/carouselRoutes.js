@@ -1,5 +1,7 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const multer = require('multer');
+const fs = require('fs');  // Native Node module to interact with the file system
 const path = require('path');
 const Carousel = require('../models/Carousel');
 
@@ -52,10 +54,7 @@ router.post('/items', upload.single('image'), async (req, res) => {
     }
 
     // Determine if the item should be enabled
-    const isEnabled = status === 'enabled'; // This remains the same
-
-    console.log('Status received:', status);
-    console.log('isEnabled:', isEnabled);
+    const isEnabled = status === 'enabled'; 
 
     // Push the new item with isEnabled instead of status
     carousel.items.push({ icon, heading, caption, imagePath, isEnabled });
@@ -66,7 +65,6 @@ router.post('/items', upload.single('image'), async (req, res) => {
     res.status(500).json({ message: 'Error adding item' });
   }
 });
-
 
 // 4. Get a specific carousel by ID
 router.get('/:id', async (req, res) => {
@@ -82,26 +80,22 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-
-
-
+// 5. Update carousel data
 router.put('/:id', async (req, res) => {
   try {
-    const { id } = req.params;  // Get the ID from the URL
-    const { name, isEnabled } = req.body;  // Get the data from the request body
+    const { id } = req.params;
+    const { name, isEnabled } = req.body;
 
-    // Find the carousel by ID and update it
     const updatedCarousel = await Carousel.findByIdAndUpdate(
-      id, 
+      id,
       { name, isEnabled },
-      { new: true }  // The `new: true` option returns the updated document
+      { new: true }
     );
 
     if (!updatedCarousel) {
       return res.status(404).json({ message: 'Carousel not found' });
     }
 
-    // Return the updated carousel
     res.status(200).json(updatedCarousel);
   } catch (error) {
     console.error('Error updating carousel:', error);
@@ -109,49 +103,63 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE /api/carousels/:id - Delete a carousel
-router.delete("/carousels/:id", async (req, res) => {
-  const { id } = req.params;
 
+// Helper function to delete an image file
+const deleteImage = (imagePath) => {
+  const fullPath = path.resolve(imagePath);  // Make sure the path is absolute
+  if (fs.existsSync(fullPath)) {
+    fs.unlinkSync(fullPath);  // Delete the file
+  } else {
+    console.log(`Image not found: ${imagePath}`);
+  }
+};
+
+router.delete('/:id', async (req, res) => {
   try {
-    // Find the carousel by its ID and delete it
+    const { id } = req.params;
+    console.log(`DELETE request received for ID: ${id}`); // Log the ID to the console
+
+    // Try to find and delete the carousel from the DB using Mongoose
     const deletedCarousel = await Carousel.findByIdAndDelete(id);
 
     if (!deletedCarousel) {
-      return res.status(404).json({ message: "Carousel not found" });
+      return res.status(404).json({ message: 'Carousel not found' });
     }
 
-    res.status(200).json({ message: "Carousel deleted successfully" });
+    // Send success response
+    res.status(200).json({ message: 'Carousel deleted successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to delete carousel" });
+    console.error('Error deleting carousel:', error);
+    res.status(500).json({ message: 'Server error', error });
   }
 });
 
-// DELETE /api/carousels - Delete multiple carousels
-router.delete("/carousels", async (req, res) => {
-  const { ids } = req.body; // Expecting an array of carousel IDs
 
+
+router.delete('/items/:itemId', async (req, res) => {
   try {
-    // Delete all carousels that match the provided IDs
-    const deletedCarousels = await Carousel.deleteMany({ _id: { $in: ids } });
+    const { carouselId } = req.body;  // carouselId from the request body
+    const { itemId } = req.params;    // itemId from the request URL params
 
-    if (deletedCarousels.deletedCount === 0) {
-      return res.status(404).json({ message: "No carousels found to delete" });
+    console.log("Received carouselId:", carouselId);  // Log for debugging
+    console.log("Received itemId:", itemId);          // Log for debugging
+
+    // Check if both IDs are valid MongoDB ObjectIds
+    if (!mongoose.Types.ObjectId.isValid(carouselId)) {
+      return res.status(400).json({ message: 'Invalid carouselId format' });
     }
 
-    res.status(200).json({ message: "Carousels deleted successfully" });
+    if (!mongoose.Types.ObjectId.isValid(itemId)) {
+      return res.status(400).json({ message: 'Invalid itemId format' });
+    }
+
+    // Proceed with deletion logic...
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to delete carousels" });
+    console.error('Error deleting item:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
-
-
-
-
-
-
 
 
 module.exports = router;
+
