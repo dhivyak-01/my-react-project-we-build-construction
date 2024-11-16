@@ -1656,13 +1656,15 @@ const ManageBanner = ({ carousel }) => {
 
           if (data.items && data.items.length > 0) {
             const updatedItemFormState = data.items.map((item) => ({
-              carouselId: data.id,
+              _id: item._id, // Add the _id here
+              carouselId: data._id,
               icon: item.icon,
               heading: item.heading,
               caption: item.caption,
               status: item.isEnabled ? "enabled" : "disabled",
-              image: item.imagePath || null,
+              image: item.imagePath || null, // or just store null if no image
             }));
+
             setItemFormState(updatedItemFormState);
           }
         }
@@ -1671,7 +1673,7 @@ const ManageBanner = ({ carousel }) => {
       fetchCarouselData();
     }
   }, [selectedId]);
-  console.log("received Carousel with ID:", selectedId);
+  // console.log("received Carousel with ID:", selectedId);
 
   // Handle changes in carousel form fields
   const handleFormChange = (e) => {
@@ -1706,73 +1708,103 @@ const ManageBanner = ({ carousel }) => {
   // Handle carousel update request
   const handleCarouselUpdate = async (e) => {
     e.preventDefault();
-    const response = await fetch(
-      `http://localhost:5000/api/carousels/${selectedId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formState),
-      }
-    );
 
-    if (response.ok) {
-      alert("Carousel updated successfully");
-    } else {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/carousels/${selectedId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formState.name, // Ensure you're sending the correct data for the carousel
+            isEnabled: formState.isEnabled === "enabled" ? true : false, // Convert to boolean explicitly
+          }),
+        }
+      );
+
+      if (response.ok) {
+        alert("Carousel updated successfully");
+      } else {
+        const errorData = await response.json();
+        console.error("Error response from backend:", errorData);
+        alert(
+          `Error updating carousel: ${errorData.message || "Unknown error"}`
+        );
+      }
+    } catch (error) {
+      console.error("Error in handleCarouselUpdate:", error);
       alert("Error updating carousel");
     }
   };
 
   // Handle item update request
-  const handleItemUpdate = async (e) => {
+  const handleItemUpdate = async (e, itemId) => {
     e.preventDefault();
-    const updatePromises = itemFormState.map((itemState) => {
-      const formData = new FormData();
-      formData.append("carouselId", itemState.carouselId);
-      formData.append("icon", itemState.icon);
-      formData.append("heading", itemState.heading);
-      formData.append("caption", itemState.caption);
-      formData.append("status", itemState.status);
-      if (itemState.image) {
-        formData.append("image", itemState.image);
-      }
-      return fetch("http://localhost:5000/api/carousels/items", {
-        method: "PUT",
-        body: formData,
-      });
-    });
-
+  
+    const formData = new FormData();
+    const carouselId = formState.id;  // This should be the _id of the carousel document
+  
+    formData.append("carouselId", carouselId); // Passing carouselId
+    formData.append("itemId", itemId); // Passing itemId dynamically
+    formData.append("icon", itemFormState.icon);
+    formData.append("heading", itemFormState.heading);
+    formData.append("caption", itemFormState.caption);
+    formData.append("status", itemFormState.status);
+  
+    if (itemFormState.image) {
+      formData.append("image", itemFormState.image);
+    }
+  
     try {
-      await Promise.all(updatePromises);
-      alert("Items updated successfully");
-    } catch (error) {
-      alert("Error updating items");
+      const response = await fetch(
+        `http://localhost:5000/api/carousels/${carouselId}/items/${itemId}`,
+        {
+          method: 'PUT',
+          body: formData,
+        }
+      );
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error:', errorText);
+        alert(`Failed to update item: ${errorText}`);
+      } else {
+        alert('Item updated successfully!');
+      }
+    } catch (err) {
+      console.error('Error in handleItemUpdate:', err);
+      alert('Error updating item');
     }
   };
 
-  const handleItemDelete = async (itemId) => {
-  try {
-    const carouselId = selectedId; // Ensure this is the correct ID
-    const response = await fetch(`http://localhost:5000/api/carousels/items/${itemId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json', 
-      },
-      body: JSON.stringify({ carouselId }), // Send the carouselId in the body
-    });
+  const handleItemDelete = async (carouselId, itemId) => {
+    try {
+      // Make the DELETE request to remove the item
+      const response = await fetch(
+        `http://localhost:5000/api/carousels/${carouselId}/items/${itemId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    if (response.ok) {
-      alert('Item deleted successfully');
-    } else {
-      const errorData = await response.json();
-      alert(`Error: ${errorData.message || 'Error deleting item'}`);
+      if (response.ok) {
+        alert("Item deleted successfully");
+        // Optionally, refresh the carousel data after deletion
+        // setCarouselData(updatedCarouselData);
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.message || "Error deleting item"}`);
+      }
+    } catch (error) {
+      alert("Error deleting item");
+      console.error("Error:", error);
     }
-  } catch (error) {
-    alert('Error deleting item');
-    console.error('Error:', error);
-  }
-};
+  };
 
   // Handle Select All checkbox change
   const handleSelectAllChange = (e) => {
@@ -1819,7 +1851,9 @@ const ManageBanner = ({ carousel }) => {
     }
   };
 
-  if (!carouselData) return <div>Loading...</div>;
+  if (!carouselData || !Array.isArray(carouselData.items)) {
+    return <div>Loading...</div>; // Show loading state or message if data is not available
+  }
 
   return (
     <div>
@@ -1894,129 +1928,127 @@ const ManageBanner = ({ carousel }) => {
         {/* Item Form */}
         <div>
           <h3 style={{ marginTop: "20px" }}>Edit Items</h3>
-          <form onSubmit={handleItemUpdate}>
-            <Table striped bordered hover style={{ marginTop: "20px" }}>
-              <thead>
-                <tr>
-                  <th>
+          <Table striped bordered hover style={{ marginTop: "20px" }}>
+            <thead>
+              <tr>
+                <th>
+                  <input
+                    type="checkbox"
+                    onChange={handleSelectAllChange}
+                    checked={selectedItems.length === carouselData.items.length}
+                  />
+                </th>
+                <th>Id</th>
+                <th>Carousel Image</th>
+                <th>Icon</th>
+                <th>Heading</th>
+                <th>Button Caption</th>
+                <th>Status</th>
+                <th style={{ width: "183px" }}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {carouselData.items.map((item, index) => (
+                <tr key={item._id}>
+                  <td>
                     <input
                       type="checkbox"
-                      onChange={handleSelectAllChange}
-                      checked={
-                        selectedItems.length === carouselData.items.length
-                      }
+                      checked={selectedItems.includes(index)}
+                      onChange={(e) => handleItemSelect(e, index)}
                     />
-                  </th>
-                  <th>Id</th>
-                  <th>Carousel Image</th>
-                  <th>Icon</th>
-                  <th>Heading</th>
-                  <th>Button Caption</th>
-                  <th>Status</th>
-                  <th style={{ width: "183px" }}>Action</th>
+                  </td>
+                  <td>{index + 1}</td>
+                  <td>
+                    {item.imagePath ? (
+                      <img
+                        src={`http://localhost:5000/${item.imagePath}`}
+                        alt="Item Image"
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <div>No Image</div>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="form-control"
+                      onChange={(e) => handleItemFileChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                    <select
+                      name="icon"
+                      required
+                      className="form-control"
+                      value={itemFormState[index]?.icon || ""}
+                      onChange={(e) => handleItemFormChange(e, index)}
+                    >
+                      <option value="">Select Icon</option>
+                      <option value={item.icon}>{item.icon}</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input
+                      name="heading"
+                      required
+                      className="form-control"
+                      value={itemFormState[index]?.heading || ""}
+                      onChange={(e) => handleItemFormChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      name="caption"
+                      required
+                      className="form-control"
+                      value={itemFormState[index]?.caption || ""}
+                      onChange={(e) => handleItemFormChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                    <select
+                      name="status"
+                      className="form-control"
+                      value={itemFormState[index]?.status || ""}
+                      onChange={(e) => handleItemFormChange(e, index)}
+                    >
+                      <option value="enabled">Enabled</option>
+                      <option value="disabled">Disabled</option>
+                    </select>
+                  </td>
+                  <td>
+                    <Button
+                      type="button"
+                      variant="primary"
+                      onClick={(e) => handleItemUpdate(e, item._id)} // Pass the itemId to update
+                    >
+                      <FaSave />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      style={{ marginRight: "15px" }}
+                    >
+                      <FaTimes />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="danger"
+                      onClick={() =>
+                        handleItemDelete(carouselData._id, item._id)
+                      }
+                    >
+                      <FaTrashAlt />
+                    </Button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {carouselData.items.map((item, index) => (
-                  <tr key={item._id}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectedItems.includes(index)}
-                        onChange={(e) => handleItemSelect(e, index)}
-                      />
-                    </td>
-                    <td>{index + 1}</td>
-                    <td>
-                      {item.imagePath ? (
-                        <img
-                          src={`http://localhost:5000/${item.imagePath}`}
-                          alt="Item Image"
-                          style={{
-                            width: "100px",
-                            height: "100px",
-                            objectFit: "cover",
-                          }}
-                        />
-                      ) : (
-                        <div>No Image</div>
-                      )}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="form-control"
-                        onChange={(e) => handleItemFileChange(e, index)}
-                      />
-                    </td>
-                    <td>
-                      <select
-                        name="icon"
-                        required
-                        className="form-control"
-                        value={itemFormState[index]?.icon || ""}
-                        onChange={(e) => handleItemFormChange(e, index)}
-                      >
-                        <option value="">Select Icon</option>
-                        <option value={item.icon}>{item.icon}</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input
-                        name="heading"
-                        required
-                        className="form-control"
-                        value={itemFormState[index]?.heading || ""}
-                        onChange={(e) => handleItemFormChange(e, index)}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        name="caption"
-                        required
-                        className="form-control"
-                        value={itemFormState[index]?.caption || ""}
-                        onChange={(e) => handleItemFormChange(e, index)}
-                      />
-                    </td>
-                    <td>
-                      <select
-                        name="status"
-                        className="form-control"
-                        value={itemFormState[index]?.status || ""}
-                        onChange={(e) => handleItemFormChange(e, index)}
-                      >
-                        <option value="enabled">Enabled</option>
-                        <option value="disabled">Disabled</option>
-                      </select>
-                    </td>
-                    <td>
-                      <Button
-                        type="submit"
-                        variant="primary"
-                        style={{ marginRight: "15px" }}
-                      >
-                        <FaSave />
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        style={{ marginRight: "15px" }}
-                      >
-                        <FaTimes />
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="danger"
-                        onClick={() => handleItemDelete(item._id)}
-                      >
-                        <FaTrashAlt />
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          </form>
+              ))}
+            </tbody>
+          </Table>
         </div>
       </Col>
     </div>

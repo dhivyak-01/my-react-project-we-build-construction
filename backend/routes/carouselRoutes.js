@@ -69,7 +69,7 @@ router.post('/items', upload.single('image'), async (req, res) => {
 // 4. Get a specific carousel by ID
 router.get('/:id', async (req, res) => {
   try {
-    const carousel = await Carousel.findOne({ id: req.params.id });
+    const carousel = await Carousel.findOne({ _id: req.params.id });
     if (!carousel) {
       return res.status(404).json({ message: 'Carousel not found' });
     }
@@ -104,7 +104,7 @@ router.put('/:id', async (req, res) => {
 });
 
 
-// Helper function to delete an image file
+// 6. Helper function to delete an image file
 const deleteImage = (imagePath) => {
   const fullPath = path.resolve(imagePath);  // Make sure the path is absolute
   if (fs.existsSync(fullPath)) {
@@ -134,31 +134,146 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// 7. Delete a specific item from a carousel
+router.delete('/:carouselId/items/:itemId', async (req, res) => {
+  const { carouselId, itemId } = req.params;
 
-
-router.delete('/items/:itemId', async (req, res) => {
   try {
-    const { carouselId } = req.body;  // carouselId from the request body
-    const { itemId } = req.params;    // itemId from the request URL params
+    // Find the carousel by its ID
+    const carousel = await Carousel.findById(carouselId);
 
-    console.log("Received carouselId:", carouselId);  // Log for debugging
-    console.log("Received itemId:", itemId);          // Log for debugging
-
-    // Check if both IDs are valid MongoDB ObjectIds
-    if (!mongoose.Types.ObjectId.isValid(carouselId)) {
-      return res.status(400).json({ message: 'Invalid carouselId format' });
+    if (!carousel) {
+      return res.status(404).json({ message: 'Carousel not found' });
     }
 
-    if (!mongoose.Types.ObjectId.isValid(itemId)) {
-      return res.status(400).json({ message: 'Invalid itemId format' });
+    // Find the item index within the carousel's items array
+    const itemIndex = carousel.items.findIndex(item => item._id.toString() === itemId);
+
+    if (itemIndex === -1) {
+      return res.status(404).json({ message: 'Item not found in this carousel' });
     }
 
-    // Proceed with deletion logic...
+    // Remove the item from the array
+    carousel.items.splice(itemIndex, 1);
+
+    // Save the updated carousel
+    await carousel.save();
+
+    res.json({ message: 'Item deleted successfully' });
+
   } catch (error) {
     console.error('Error deleting item:', error);
-    res.status(500).json({ message: 'Internal server error', error: error.message });
+    res.status(500).json({ message: 'Error deleting item' });
   }
 });
+
+// 8. PUT route for updating a carousel from edit
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, isEnabled } = req.body;
+
+    console.log('Received data:', { id, name, isEnabled });
+    console.log('isEnabled type:', typeof isEnabled); // This should log boolean, not string
+
+    // Ensure isEnabled is a boolean
+    let isEnabledBoolean;
+    if (typeof isEnabled === 'string') {
+      if (isEnabled === 'enabled') {
+        isEnabledBoolean = true;
+      } else if (isEnabled === 'disabled') {
+        isEnabledBoolean = false;
+      } else {
+        return res.status(400).json({ message: 'Invalid value for isEnabled. It must be "enabled" or "disabled".' });
+      }
+    } else {
+      isEnabledBoolean = isEnabled; // It should already be a boolean if sent correctly
+    }
+
+    console.log('Converted isEnabled:', isEnabledBoolean); // Check that it is boolean
+
+    // Update the carousel with the correct boolean value for isEnabled
+    const updatedCarousel = await Carousel.findByIdAndUpdate(
+      id,
+      { name, isEnabled: isEnabledBoolean },
+      { new: true }
+    );
+
+    if (!updatedCarousel) {
+      return res.status(404).json({ message: 'Carousel not found' });
+    }
+
+    res.status(200).json(updatedCarousel);
+  } catch (error) {
+    console.error('Error updating carousel:', error);
+    res.status(500).json({ message: 'Error updating carousel' });
+  }
+});
+
+
+
+// 9. Update an existing carousel item
+router.put('/:carouselId/items/:itemId', upload.single('image'), (req, res) => {
+  const { carouselId, itemId } = req.params; // Get carouselId and itemId from URL
+
+  // Validate if carouselId is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(carouselId)) {
+    return res.status(400).json({ message: 'Invalid carousel ID format' });
+  }
+
+  // Validate if itemId is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(itemId)) {
+    return res.status(400).json({ message: 'Invalid item ID format' });
+  }
+
+  const { icon, heading, caption, status } = req.body;  // Get form data
+  const image = req.file ? req.file.filename : null;  // Handle image upload if exists
+
+  // Find the carousel by carouselId
+  Carousel.findById(carouselId)
+    .then(carousel => {
+      if (!carousel) {
+        return res.status(404).json({ message: 'Carousel not found' });
+      }
+
+      // Find the item by itemId inside the carousel
+      const item = carousel.items.id(itemId);  // Use the `id` method to find the item inside the array
+      if (!item) {
+        return res.status(404).json({ message: 'Item not found' });
+      }
+
+      // Update the item fields
+      item.icon = icon;
+      item.heading = heading;
+      item.caption = caption;
+      item.status = status;
+      if (image) {
+        item.imagePath = image;  // If an image is provided, update its path
+      }
+
+      // Save the updated carousel document
+      return carousel.save();
+    })
+    .then(updatedCarousel => {
+      res.json(updatedCarousel);  // Respond with the updated carousel
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: 'Server error' });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 module.exports = router;
