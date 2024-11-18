@@ -67,17 +67,33 @@ router.post('/items', upload.single('image'), async (req, res) => {
 
 // 4. Get a specific carousel by ID
 router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  // Check if the id is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid ID format' });
+  }
+
   try {
-    const carousel = await Carousel.findOne({ _id: req.params.id });
+    // Perform the query using the valid ObjectId
+    const carousel = await Carousel.findById(id);
+
     if (!carousel) {
       return res.status(404).json({ message: 'Carousel not found' });
     }
+
     res.json(carousel);
   } catch (error) {
     console.error('Error fetching carousel:', error);
     res.status(500).json({ message: 'Error fetching carousel' });
   }
 });
+
+
+
+
+
+
 
 // 5. Update carousel data
 router.put('/:id', async (req, res) => {

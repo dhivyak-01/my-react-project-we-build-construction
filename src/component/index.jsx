@@ -206,7 +206,7 @@ function CarouselFadeExample() {
   useEffect(() => {
     const fetchCarouselData = async () => {
       try {
-        const response = await fetch(`${BASE_URL}api/carousels/1`);
+        const response = await fetch(`${BASE_URL}api/carousels/67288d215f51dfdea5cc267f`);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
         setCarouselData(data); // Store the entire data, including `isEnabled` at top level
@@ -378,7 +378,7 @@ function CarouselFadeExampleTwo() {
   useEffect(() => {
     const fetchCarouselData = async () => {
       try {
-        const response = await fetch(`${BASE_URL}api/carousels/56`);
+        const response = await fetch(`${BASE_URL}api/carousels/672700cb26c86312089675ee`);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
         setCarouselData(data); // Store the entire data, including `isEnabled` at top level
