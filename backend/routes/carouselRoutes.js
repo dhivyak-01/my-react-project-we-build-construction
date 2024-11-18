@@ -6,7 +6,6 @@ const path = require('path');
 const Carousel = require('../models/Carousel');
 
 const router = express.Router();
-
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -214,44 +213,39 @@ router.put('/:id', async (req, res) => {
 
 // 9. Update an existing carousel item
 router.put('/:carouselId/items/:itemId', upload.single('image'), (req, res) => {
-  const { carouselId, itemId } = req.params; // Get carouselId and itemId from URL
+  const { carouselId, itemId } = req.params;  // Extract carouselId and itemId from URL
+  const { icon, heading, caption, status } = req.body;  // Extract text fields from the body
 
-  // Validate if carouselId is a valid ObjectId
-  if (!mongoose.Types.ObjectId.isValid(carouselId)) {
-    return res.status(400).json({ message: 'Invalid carousel ID format' });
-  }
+  const image = req.file ? req.file.filename : null;  // Handle image if uploaded
 
-  // Validate if itemId is a valid ObjectId
-  if (!mongoose.Types.ObjectId.isValid(itemId)) {
-    return res.status(400).json({ message: 'Invalid item ID format' });
-  }
+  // Log the received data for debugging
+  console.log("Received data:", req.body);
+  console.log("Received image:", req.file);
 
-  const { icon, heading, caption, status } = req.body;  // Get form data
-  const image = req.file ? req.file.filename : null;  // Handle image upload if exists
-
-  // Find the carousel by carouselId
-  Carousel.findById(carouselId)
+  Carousel.findById(carouselId)  // Find the carousel by ID
     .then(carousel => {
       if (!carousel) {
         return res.status(404).json({ message: 'Carousel not found' });
       }
 
-      // Find the item by itemId inside the carousel
-      const item = carousel.items.id(itemId);  // Use the `id` method to find the item inside the array
+      const item = carousel.items.id(itemId);  // Find the item by its ID
       if (!item) {
         return res.status(404).json({ message: 'Item not found' });
       }
 
-      // Update the item fields
+      // Update the item's fields
       item.icon = icon;
       item.heading = heading;
       item.caption = caption;
       item.status = status;
+
+      // If an image was uploaded, update the image path
       if (image) {
-        item.imagePath = image;  // If an image is provided, update its path
+        // Save the path relative to the public folder for serving
+        item.imagePath = `uploads/${image}`;
       }
 
-      // Save the updated carousel document
+      // Save the updated carousel
       return carousel.save();
     })
     .then(updatedCarousel => {
@@ -262,10 +256,6 @@ router.put('/:carouselId/items/:itemId', upload.single('image'), (req, res) => {
       res.status(500).json({ message: 'Server error' });
     });
 });
-
-
-
-
 
 
 

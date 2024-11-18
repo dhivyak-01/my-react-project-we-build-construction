@@ -1740,24 +1740,28 @@ const ManageBanner = ({ carousel }) => {
   };
 
   // Handle item update request
-  const handleItemUpdate = async (e, itemId) => {
+  const handleItemUpdate = async (e, carouselId, itemId, index) => {
     e.preventDefault();
   
+    // Extract the updated item data from the state
+    const updatedItem = itemFormState[index];
+  
+    // Create FormData object for the request (to handle file uploads)
     const formData = new FormData();
-    const carouselId = formState.id;  // This should be the _id of the carousel document
+    formData.append('carouselId', carouselId);
+    formData.append('itemId', itemId);
+    formData.append('icon', updatedItem.icon); // Assuming 'icon' is just text or a value
+    formData.append('heading', updatedItem.heading);
+    formData.append('caption', updatedItem.caption);
+    formData.append('status', updatedItem.status); // It could be 'enabled' or 'disabled'
   
-    formData.append("carouselId", carouselId); // Passing carouselId
-    formData.append("itemId", itemId); // Passing itemId dynamically
-    formData.append("icon", itemFormState.icon);
-    formData.append("heading", itemFormState.heading);
-    formData.append("caption", itemFormState.caption);
-    formData.append("status", itemFormState.status);
-  
-    if (itemFormState.image) {
-      formData.append("image", itemFormState.image);
+    // If there's an image file, append it to the FormData
+    if (updatedItem.image) {
+      formData.append('image', updatedItem.image);  // 'image' should be a file object from the file input
     }
   
     try {
+      // Send the PUT request to update the item
       const response = await fetch(
         `http://localhost:5000/api/carousels/${carouselId}/items/${itemId}`,
         {
@@ -1768,10 +1772,13 @@ const ManageBanner = ({ carousel }) => {
   
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Error:', errorText);
+        console.error('Error updating item:', errorText);
         alert(`Failed to update item: ${errorText}`);
       } else {
+        const updatedCarousel = await response.json();
         alert('Item updated successfully!');
+        // Optionally, update the state here to reflect the updated data
+        // e.g., you can update `carouselData` to show the newly updated item
       }
     } catch (err) {
       console.error('Error in handleItemUpdate:', err);
@@ -1988,7 +1995,11 @@ const ManageBanner = ({ carousel }) => {
                       onChange={(e) => handleItemFormChange(e, index)}
                     >
                       <option value="">Select Icon</option>
-                      <option value={item.icon}>{item.icon}</option>
+                      {Object.keys(iconMap).map((iconName) => (
+                        <option key={iconName} value={iconName}>
+                          {iconName}
+                        </option>
+                      ))}
                     </select>
                   </td>
                   <td>
@@ -2024,12 +2035,14 @@ const ManageBanner = ({ carousel }) => {
                     <Button
                       type="button"
                       variant="primary"
-                      onClick={(e) => handleItemUpdate(e, item._id)} // Pass the itemId to update
+                      style={{ marginRight: "15px" }}
+                      onClick={(e) => handleItemUpdate(e, carouselData._id, item._id, index)} // Pass the itemId to update
                     >
                       <FaSave />
                     </Button>
                     <Button
                       type="button"
+                      onClick={handleCancel}
                       variant="secondary"
                       style={{ marginRight: "15px" }}
                     >
