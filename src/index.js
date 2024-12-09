@@ -20,9 +20,15 @@ import Adminlogin from "./admin/adminlogin";
 import Admin from "./admin/admin"
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './context/ProtectedRoute';
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import cartReducer from "./redux/reducers/cartReducer";
+import CartPage from './pages/CartPage';
+const store = createStore(cartReducer);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
+  <Provider store={store}>
   <AuthProvider>
     <Router>
       <Routes>
@@ -39,9 +45,11 @@ root.render(
         <Route path="/blog" element={<Bloggrid />} />
         <Route path="/detail" element={<Blogdetail />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
     </Router>
   </AuthProvider>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -29,7 +29,7 @@ import blog_3 from "./img/blog-3.jpg";
 import user from "./img/user.jpg";
 
 // icons
-import { BsGeoAlt, BsEnvelopeOpen, BsPhoneVibrate } from "react-icons/bs";
+import { BsGeoAlt, BsEnvelopeOpen, BsPhoneVibrate } from 'react-icons/bs';
 import {
   FaArrowRight,
   FaArrowUp,
@@ -45,6 +45,7 @@ import {
   FaAngleRight,
   FaDraftingCompass,
 } from "react-icons/fa";
+import { FaShoppingCart } from 'react-icons/fa';
 import {
   FaTwitter,
   FaFacebookF,
@@ -87,6 +88,7 @@ const iconMap = {
   menu: FaBars,
   dashboardicon: AiFillDashboard,
   angleRight: faAngleRight,
+  cart: FaShoppingCart,
 };
 
 export default iconMap;
@@ -134,14 +136,11 @@ export const navbar = [
       ],
     },
     links1: [{ to: "/contact", label: "Contact" }],
+    links2: [{ to: "/cart", label: <FaShoppingCart size={24} /> }],
     button: [
       { to: "/signup", label: "Signup" },
       { to: "/Signin", label: "Signin" }
     ],
-    quoteButton: {
-      label: "Signup/Login",
-      link: "",
-    },
   },
 ];
 
@@ -284,7 +283,7 @@ export const thebest = {
       content:
         "Two with pain and a diam, but he himself will stand two diam. I'm going to do it as I'm going to do it but it was but it's going to be a big elitr amet kasd diam two",
       icon: "building_2",
-      button: "read more",
+      button: "Book now",
       arrowicon: "right_arrow",
     },
     {
@@ -294,7 +293,7 @@ export const thebest = {
       content:
         "Two with pain and a diam, but he himself will stand two diam. I'm going to do it as I'm going to do it but it was but it's going to be a big elitr amet kasd diam two",
       icon: "home",
-      button: "read more",
+      button: "Book now",
       arrowicon: "right_arrow",
     },
     {
@@ -304,7 +303,7 @@ export const thebest = {
       content:
         "Two with pain and a diam, but he himself will stand two diam. I'm going to do it as I'm going to do it but it was but it's going to be a big elitr amet kasd diam two",
       icon: "compass",
-      button: "read more",
+      button: "Book now",
       arrowicon: "right_arrow",
     },
     {
@@ -314,7 +313,7 @@ export const thebest = {
       content:
         "Two with pain and a diam, but he himself will stand two diam. I'm going to do it as I'm going to do it but it was but it's going to be a big elitr amet kasd diam two",
       icon: "paintplate",
-      button: "read more",
+      button: "Book now",
       arrowicon: "right_arrow",
     },
     {
@@ -324,7 +323,7 @@ export const thebest = {
       content:
         "Two with pain and a diam, but he himself will stand two diam. I'm going to do it as I'm going to do it but it was but it's going to be a big elitr amet kasd diam two",
       icon: "tool",
-      button: "read more",
+      button: "Book now",
       arrowicon: "right_arrow",
     },
     {
@@ -334,7 +333,7 @@ export const thebest = {
       content:
         "Two with pain and a diam, but he himself will stand two diam. I'm going to do it as I'm going to do it but it was but it's going to be a big elitr amet kasd diam two",
       icon: "brush",
-      button: "read more",
+      button: "Book now",
       arrowicon: "right_arrow",
     },
   ],
@@ -449,6 +448,30 @@ export const professional = {
     },
     {
       id: "4",
+      image: team_4,
+      contenttitle: "Josh Dunn",
+      content: "Painter",
+    },
+    {
+      id: "5",
+      image: team_1,
+      contenttitle: "Adam Phillips",
+      content: "CEO & Founder",
+    },
+    {
+      id: "6",
+      image: team_2,
+      contenttitle: "Dylan Adams",
+      content: "Civil Engineer",
+    },
+    {
+      id: "7",
+      image: team_3,
+      contenttitle: "Jhon Doe",
+      content: "Interior Designer",
+    },
+    {
+      id: "8",
       image: team_4,
       contenttitle: "Josh Dunn",
       content: "Painter",
@@ -908,6 +931,22 @@ export const AdminpanelData = {
         { id: "1", label: "Carousel List" },
         { id: "2", label: "Add Carousel Item" },
         { id: "3", label: "Manage Banner" },
+      ],
+    },
+    {
+      id: "7",
+      icon: "menu",
+      button: "Emails",
+      dropdown: [
+        { id: "1", label: "Manage Emails" },
+      ],
+    },
+    {
+      id: "8",
+      icon: "menu",
+      button: "Booking",
+      dropdown: [
+        { id: "1", label: "Manage Booking" },
       ],
     },
   ],

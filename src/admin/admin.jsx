@@ -1742,47 +1742,47 @@ const ManageBanner = ({ carousel }) => {
   // Handle item update request
   const handleItemUpdate = async (e, carouselId, itemId, index) => {
     e.preventDefault();
-  
+
     // Extract the updated item data from the state
     const updatedItem = itemFormState[index];
-  
+
     // Create FormData object for the request (to handle file uploads)
     const formData = new FormData();
-    formData.append('carouselId', carouselId);
-    formData.append('itemId', itemId);
-    formData.append('icon', updatedItem.icon); // Assuming 'icon' is just text or a value
-    formData.append('heading', updatedItem.heading);
-    formData.append('caption', updatedItem.caption);
-    formData.append('status', updatedItem.status); // It could be 'enabled' or 'disabled'
-  
+    formData.append("carouselId", carouselId);
+    formData.append("itemId", itemId);
+    formData.append("icon", updatedItem.icon); // Assuming 'icon' is just text or a value
+    formData.append("heading", updatedItem.heading);
+    formData.append("caption", updatedItem.caption);
+    formData.append("status", updatedItem.status); // It could be 'enabled' or 'disabled'
+
     // If there's an image file, append it to the FormData
     if (updatedItem.image) {
-      formData.append('image', updatedItem.image);  // 'image' should be a file object from the file input
+      formData.append("image", updatedItem.image); // 'image' should be a file object from the file input
     }
-  
+
     try {
       // Send the PUT request to update the item
       const response = await fetch(
         `http://localhost:5000/api/carousels/${carouselId}/items/${itemId}`,
         {
-          method: 'PUT',
+          method: "PUT",
           body: formData,
         }
       );
-  
+
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Error updating item:', errorText);
+        console.error("Error updating item:", errorText);
         alert(`Failed to update item: ${errorText}`);
       } else {
         const updatedCarousel = await response.json();
-        alert('Item updated successfully!');
+        alert("Item updated successfully!");
         // Optionally, update the state here to reflect the updated data
         // e.g., you can update `carouselData` to show the newly updated item
       }
     } catch (err) {
-      console.error('Error in handleItemUpdate:', err);
-      alert('Error updating item');
+      console.error("Error in handleItemUpdate:", err);
+      alert("Error updating item");
     }
   };
 
@@ -2036,7 +2036,9 @@ const ManageBanner = ({ carousel }) => {
                       type="button"
                       variant="primary"
                       style={{ marginRight: "15px" }}
-                      onClick={(e) => handleItemUpdate(e, carouselData._id, item._id, index)} // Pass the itemId to update
+                      onClick={(e) =>
+                        handleItemUpdate(e, carouselData._id, item._id, index)
+                      } // Pass the itemId to update
                     >
                       <FaSave />
                     </Button>
@@ -2588,6 +2590,427 @@ const CarouselManager = () => {
   );
 };
 
+const EmailManager = () => {
+  const [emails, setEmails] = useState([]);
+  const [viewedEmail, setViewedEmail] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+
+  useEffect(() => {
+    const fetchEmails = async () => {
+      try {
+        // Change the URL to match your correct backend endpoint
+        const response = await fetch("http://localhost:5000/api/quickcontact");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("Fetched emails:", data);
+
+        // Ensure the data is an array and contains the expected fields
+        if (Array.isArray(data)) {
+          setEmails(data.reverse()); // Optionally reverse the order if needed
+        } else {
+          console.error("Expected an array of emails but got:", data);
+          setEmails([]); // Reset to an empty array if data is not valid
+        }
+      } catch (error) {
+        console.error("Failed to fetch Emails:", error);
+        setEmails([]); // Handle error by resetting state
+      }
+    };
+
+    fetchEmails();
+  }, []);
+
+  const handleDelete = async (id) => {
+    const response = await fetch(
+      `http://localhost:5000/api/quickcontact/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (response.ok) {
+      setEmails((prev) => prev.filter((email) => email._id !== id));
+      if (viewedEmail && viewedEmail._id === id) {
+        setViewedEmail(null);
+      }
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    for (const id of selectedIds) {
+      await handleDelete(id);
+    }
+    setSelectedIds([]);
+  };
+
+  const handleSelectAll = (event) => {
+    if (event.target.checked) {
+      setSelectedIds(emails.map((email) => email._id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleSelect = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleView = (email) => {
+    setViewedEmail(email);
+  };
+
+  const handleClose = () => {
+    setViewedEmail(null);
+  };
+
+  // Pagination Logic
+  const totalPages = Math.ceil(emails.length / itemsPerPage);
+  const paginatedEmails = emails.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  return (
+    <Col xs lg="12" className="custom-padding !bg-back2">
+      <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
+        <div className="d-flex justify-content-between align-items-start">
+          <h1 className="pt-1 text-25px mb-0">Manage Users Emails</h1>
+          <Button
+            variant="danger"
+            onClick={handleDeleteSelected}
+            disabled={selectedIds.length === 0}
+            style={{ marginLeft: "10px" }}
+          >
+            <FaTrash />
+          </Button>
+        </div>
+      </Card>
+      <Table striped bordered hover style={{ marginTop: "47px" }}>
+        <thead className="table-header">
+          <tr>
+            <th>
+              <input
+                type="checkbox"
+                checked={
+                  selectedIds.length === emails.length && emails.length > 0
+                }
+                onChange={handleSelectAll}
+              />
+            </th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Date</th>
+            <th>Message</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {paginatedEmails.map((email) => (
+            <tr key={email._id}>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={selectedIds.includes(email._id)}
+                  onChange={() => handleSelect(email._id)}
+                />
+              </td>
+              <td>{email.name}</td>
+              <td>{email.email}</td>
+              <td>{new Date(email.date).toLocaleDateString("en-GB")}</td>
+              <td>{email.message}</td>
+              <td>
+                <Button variant="primary" onClick={() => handleView(email)}>
+                  View
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => handleDelete(email._id)}
+                  style={{ marginLeft: "5px" }}
+                >
+                  Delete
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+
+      {/* Pagination */}
+      <div className="d-flex justify-content-center mt-3">
+        <Pagination>
+          <Pagination.Prev
+            onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+          />
+          {[...Array(totalPages)].map((_, index) => (
+            <Pagination.Item
+              key={index + 1}
+              active={index + 1 === currentPage}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            onClick={() =>
+              currentPage < totalPages && setCurrentPage(currentPage + 1)
+            }
+          />
+        </Pagination>
+      </div>
+
+      {/* Modal for viewing Email details */}
+      <Modal show={viewedEmail !== null} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Email Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {viewedEmail && (
+            <div>
+              <p>
+                <strong>Name:</strong> {viewedEmail.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {viewedEmail.email}
+              </p>
+              <p>
+                <strong>Message:</strong> {viewedEmail.message}
+              </p>
+              <p>
+                <strong>Date:</strong>{" "}
+                {new Date(viewedEmail.date).toLocaleString()}
+              </p>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Col>
+  );
+};
+
+const BookingManager = () => {
+  const [bookings, setBookings] = useState([]);
+  const [viewedBooking, setViewedBooking] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/booking");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("Fetched bookings:", data);
+
+        // Make sure the data is what you expect
+        if (Array.isArray(data)) {
+          setBookings(data.reverse()); // Adjust this if data structure is different
+        } else {
+          console.error("Expected an array of bookings but got:", data);
+          setBookings([]); // Reset to an empty array if not valid
+        }
+      } catch (error) {
+        console.error("Failed to fetch bookings:", error);
+        setBookings([]); // Handle error by resetting state
+      }
+    };
+
+    fetchBookings();
+  }, []);
+
+  const handleDelete = async (id) => {
+    const response = await fetch(`http://localhost:5000/api/booking/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      setBookings((prev) => prev.filter((booking) => booking._id !== id));
+      if (viewedBooking && viewedBooking._id === id) {
+        setViewedBooking(null);
+      }
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    for (const id of selectedIds) {
+      await handleDelete(id);
+    }
+    setSelectedIds([]);
+  };
+
+  const handleSelectAll = (event) => {
+    if (event.target.checked) {
+      setSelectedIds(bookings.map((booking) => booking._id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleSelect = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleView = (booking) => {
+    setViewedBooking(booking);
+  };
+
+  const handleClose = () => {
+    setViewedBooking(null);
+  };
+
+  // Pagination Logic
+  const totalPages = Math.ceil(bookings.length / itemsPerPage);
+  const paginatedoBookings = bookings.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  return (
+    <Col xs lg="12" className="custom-padding !bg-back2">
+      <Card className="!bg-back ps-3" style={{ padding: "10px" }}>
+        <div className="d-flex justify-content-between align-items-start">
+          <h1 className="pt-1 text-25px mb-0">Manage Bookings</h1>
+          <Button
+            variant="danger"
+            onClick={handleDeleteSelected}
+            disabled={selectedIds.length === 0}
+            style={{ marginLeft: "10px" }}
+          >
+            <FaTrash />
+          </Button>
+        </div>
+      </Card>
+      <Table striped bordered hover style={{ marginTop: "47px" }}>
+        <thead className="table-header">
+          <tr>
+            <th>
+              <input
+                type="checkbox"
+                checked={
+                  selectedIds.length === bookings.length && bookings.length > 0
+                }
+                onChange={handleSelectAll}
+              />
+            </th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Number</th>
+            <th>Address</th>
+            <th>Service</th>
+            <th>Description</th>
+            <th style={{ width : '15%' }}>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookings.map((booking) => (
+            <tr key={booking._id}>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={selectedIds.includes(booking._id)}
+                  onChange={() => handleSelect(booking._id)}
+                />
+              </td>
+              <td>{booking.name}</td>
+              <td>{booking.email}</td>
+              <td>{booking.number}</td>
+            <td>{booking.address}</td>
+            <td>{booking.service}</td>
+            <td>{booking.description}</td>
+              <td>
+                <Button variant="primary" onClick={() => handleView(booking)}>
+                  View
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => handleDelete(booking._id)}
+                  style={{ marginLeft: "5px" }}
+                >
+                  Delete
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+
+      {/* Pagination */}
+      <div className="d-flex justify-content-center mt-3">
+        <Pagination>
+          <Pagination.Prev
+            onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+          />
+          {[...Array(totalPages)].map((_, index) => (
+            <Pagination.Item
+              key={index + 1}
+              active={index + 1 === currentPage}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            onClick={() =>
+              currentPage < totalPages && setCurrentPage(currentPage + 1)
+            }
+          />
+        </Pagination>
+      </div>
+
+      {/* Modal for viewing Booking details */}
+      <Modal show={viewedBooking !== null} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Booking Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {viewedBooking && (
+            <div>
+              <p>
+                <strong>Name:</strong> {viewedBooking.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {viewedBooking.email}
+              </p>
+              <p>
+                <strong>Number:</strong> {viewedBooking.number}
+              </p>
+              <p>
+                <strong>Address:</strong> {viewedBooking.address}
+              </p>
+              <p>
+                <strong>Service:</strong> {viewedBooking.service}
+              </p>
+              <p>
+                <strong>Description:</strong> {viewedBooking.description}
+              </p>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Col>
+  );
+};
+
 const Admin = () => {
   const [activeButton, setActiveButton] = useState("Dashboard");
   const [users, setUsers] = useState([]);
@@ -2775,6 +3198,10 @@ const Admin = () => {
         return <CarouselList onEditCarousel={handleEditCarousel} />;
       case "Add Carousel Item":
         return <CarouselManager />;
+      case "Manage Emails":
+        return <EmailManager />;
+      case "Manage Booking":
+        return <BookingManager />;
       default:
         console.log(`No content found for: ${activeButton}`);
         return null;
